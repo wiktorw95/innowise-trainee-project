@@ -94,3 +94,5 @@ temp/
 
 # Docker
 .dockerignore
+.gitignore
+.turbo/
