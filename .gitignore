@@ -16,6 +16,7 @@ out/
 .env.development.local
 .env.test.local
 .env.production.local
+.env.example
 
 # IDE
 .vscode/
@@ -93,3 +94,4 @@ temp/
 
 # Docker
 .dockerignore
+.turbo/
