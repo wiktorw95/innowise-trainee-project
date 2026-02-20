@@ -1,0 +1,11 @@
+{
+  "name": "@innogram/types",
+  "version": "1.0.0",
+  "private": true,
+  "main": "src/index.ts",
+  "scripts": {
+    "type-check": "tsc --noEmit",
+    "lint": "eslint . --max-warnings 0",
+    "build": "echo 'Building types...'"
+  }
+}

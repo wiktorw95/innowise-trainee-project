@@ -1,0 +1,12 @@
+{
+  "name": "@innogram/notifications_consumer_microservice",
+  "version": "1.0.0",
+  "private": true,
+  "scripts": {
+    "dev": "echo 'Starting notifications_consumer_microservice...'",
+    "build": "echo 'Building notifications_consumer_microservice...'",
+    "test": "echo 'Testing notifications_consumer_microservice...'",
+    "lint": "eslint . --max-warnings 0",
+    "type-check": "tsc --noEmit"
+  }
+}

@@ -3,7 +3,10 @@
   "version": "1.0.0",
   "description": "Innogram - Social Media Application",
   "private": true,
-  "workspaces": ["apps/*", "packages/*"],
+  "workspaces": [
+    "apps/*",
+    "packages/*"
+  ],
   "scripts": {
     "dev": "turbo run dev",
     "build": "turbo run build",
@@ -17,13 +20,17 @@
     "db:seed": "turbo run db:seed"
   },
   "devDependencies": {
-    "turbo": "^1.10.0",
+    "@types/express": "^5.0.6",
     "@types/node": "^20.0.0",
-    "typescript": "^5.0.0",
-    "eslint": "^8.0.0",
-    "@typescript-eslint/eslint-plugin": "^6.0.0",
-    "@typescript-eslint/parser": "^6.0.0",
-    "eslint-config-prettier": "^9.0.0",
-    "eslint-plugin-prettier": "^5.0.0"
+    "@typescript-eslint/eslint-plugin": "^6.21.0",
+    "@typescript-eslint/parser": "^6.21.0",
+    "eslint": "^8.57.1",
+    "eslint-config-prettier": "^9.1.2",
+    "eslint-plugin-prettier": "^5.5.5",
+    "turbo": "^1.10.0",
+    "typescript": "^5.9.3"
+  },
+  "dependencies": {
+    "express": "^5.2.1"
   }
 }
