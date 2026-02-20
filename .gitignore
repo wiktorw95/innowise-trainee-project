@@ -94,5 +94,8 @@ temp/
 
 # Docker
 .dockerignore
-.gitignore
+
 .turbo/
+.gitignore
+.tsbuildinfo
+
