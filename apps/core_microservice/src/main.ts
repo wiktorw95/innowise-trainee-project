@@ -1,9 +1,4 @@
-import * as dotenv from 'dotenv';
-import * as path from 'path';
-
-// This path targets the .env inside apps/core_microservice
-dotenv.config({ path: path.resolve(__dirname, '../../.env') });
-
+import 'dotenv/config'; // Must be the very first line
 import { NestFactory } from '@nestjs/core';
 import { AppModule } from './app.module';
 

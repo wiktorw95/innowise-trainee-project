@@ -1,6 +1,7 @@
 generator client {
   provider        = "prisma-client-js"
-  previewFeatures = ["multiSchema"]
+  output          = "../../node_modules/@generated/prisma"
+  previewFeatures = ["multiSchema", "driverAdapters"] // Add driverAdapters here
 }
 
 datasource db {
@@ -34,6 +35,6 @@ model Notification {
   message String
   isRead  Boolean @default(false)
 
-  @@map("notifocation")
+  @@map("notifcation")
   @@schema("notification")
 }

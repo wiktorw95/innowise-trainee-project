@@ -9,16 +9,43 @@ on:
 jobs:
   build-and-test:
     runs-on: ubuntu-latest
+
+    services:
+      # We add a postgres service so Prisma can validate the schema if needed
+      postgres:
+        image: postgres:15
+        env:
+          POSTGRES_USER: innogram_user
+          POSTGRES_PASSWORD: innogram_password
+          POSTGRES_DB: innogram
+        ports:
+          - 5432:5432
+        options: >-
+          --health-cmd pg_isready
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+
     steps:
       - uses: actions/checkout@v4
-      - uses: actions/setup-node@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
         with:
           node-version: '22'
           cache: 'npm'
 
       - name: Install dependencies
+        # This installs pg and @prisma/adapter-pg needed for Prisma 7
         run: npm ci
 
-      # Turbo only runs tasks for changed packages (fast!)
+      - name: Generate Prisma Client
+        # Directs output to the custom path defined in your schema
+        run: npx prisma generate --schema=apps/core_microservice/prisma/schema.prisma
+        env:
+          # CI needs a dummy URL to generate the client logic correctly
+          DATABASE_URL: "postgresql://innogram_user:innogram_password@localhost:5432/innogram"
+
       - name: Lint and Build
+        # Turbo will now find the generated types in node_modules/@generated
         run: npx turbo run lint build
