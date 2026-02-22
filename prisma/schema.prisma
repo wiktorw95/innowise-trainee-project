@@ -1,0 +1,65 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
+generator client {
+  provider        = "prisma-client"
+  output          = "../generated/prisma"
+  previewFeatures = ["multiSchema", "driverAdapters"]
+}
+
+datasource db {
+  provider = "postgresql"
+  schemas  = ["auth", "main", "notification"]
+}
+
+// --- AUTH SCHEMA ---
+model User {
+  id        String    @id @default(uuid())
+  email     String    @unique
+  password  String
+  profiles  Profile[]
+  createdAt DateTime  @default(now())
+
+  @@map("users")
+  @@schema("auth")
+}
+
+// --- MAIN SCHEMA ---
+model Profile {
+  id       String  @id @default(uuid())
+  username String  @unique
+  bio      String?
+  userId   String
+  user     User    @relation(fields: [userId], references: [id])
+  posts    Post[]
+
+  @@map("profiles")
+  @@schema("main")
+}
+
+model Post {
+  id        String   @id @default(uuid())
+  content   String
+  authorId  String
+  author    Profile  @relation(fields: [authorId], references: [id])
+  createdAt DateTime @default(now())
+
+  @@map("posts")
+  @@schema("main")
+}
+
+// --- NOTIFICATION SCHEMA ---
+model Notification {
+  id          String   @id @default(uuid())
+  recipientId String
+  type        String
+  content     String
+  isRead      Boolean  @default(false)
+  createdAt   DateTime @default(now())
+
+  @@map("notifications")
+  @@schema("notification")
+}
