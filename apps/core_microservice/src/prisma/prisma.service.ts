@@ -8,14 +8,8 @@ export class PrismaService extends PrismaClient implements OnModuleInit, OnModul
   private readonly logger = new Logger(PrismaService.name);
 
   constructor() {
-    // 1. Create a connection pool using the driver directly
     const pool = new Pool({ connectionString: process.env.DATABASE_URL });
-
-    // 2. Wrap it in the Prisma adapter
     const adapter = new PrismaPg(pool);
-
-    // 3. Pass the adapter to the constructor
-    // This satisfies the "non-empty options" requirement perfectly
     super({ adapter });
   }
 
