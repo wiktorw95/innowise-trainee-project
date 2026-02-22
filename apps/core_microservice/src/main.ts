@@ -8,4 +8,8 @@ async function bootstrap() {
   const app = await NestFactory.create(AppModule);
   await app.listen(3000);
 }
-bootstrap();
+// Replace bootstrap(); with:
+bootstrap().catch((err) => {
+  console.error('Application failed:', err);
+  process.exit(1);
+});
