@@ -1,0 +1,39 @@
+generator client {
+  provider        = "prisma-client-js"
+  previewFeatures = ["multiSchema"]
+}
+
+datasource db {
+  provider = "postgresql"
+  schemas  = ["auth", "main", "notification"]
+}
+
+// --- Auth Schema ---
+model User {
+  id       String @id @default(uuid())
+  email    String @unique
+  password String
+
+  @@map("user")
+  @@schema("auth")
+}
+
+// --- Main Schema ---
+model Post {
+  id        Int      @id @default(autoincrement())
+  content   String
+  createdAt DateTime @default(now())
+
+  @@map("post")
+  @@schema("main")
+}
+
+// --- Notification Schema ---
+model Notification {
+  id      Int     @id @default(autoincrement())
+  message String
+  isRead  Boolean @default(false)
+
+  @@map("notifocation")
+  @@schema("notification")
+}
