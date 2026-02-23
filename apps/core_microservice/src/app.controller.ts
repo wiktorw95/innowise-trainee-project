@@ -7,7 +7,11 @@ export class AppController {
 
   @Get('debug-db')
   async debugDb() {
-    const time = await this.prisma.$queryRaw`SELECT NOW()`;
-    return { status: 'ok', serverTime: time };
+    const result = await this.prisma.$queryRaw<{ now: Date }[]>`SELECT NOW()`;
+
+    return {
+      status: 'ok',
+      serverTime: result[0]?.now,
+    };
   }
 }

@@ -31,6 +31,7 @@
     "typescript": "^5.9.3"
   },
   "dependencies": {
+    "@nestjs/common": "^11.1.14",
     "@nestjs/config": "^4.0.3",
     "express": "^5.2.1"
   }
