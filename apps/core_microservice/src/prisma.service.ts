@@ -29,7 +29,7 @@ export class PrismaService
   async onModuleInit() {
     try {
       await this.$connect();
-      await this.$executeRaw`SELECT 1`; // Verified handshake
+      await this.$executeRaw`SELECT 1`;
       this.logger.log(
         'Successfully connected to PostgreSQL via Driver Adapter',
       );

@@ -7,7 +7,8 @@ import { PrismaService } from './prisma.service.js';
 @Module({
   imports: [
     ConfigModule.forRoot({
-      isGlobal: true, // Makes variables available in PrismaService
+      isGlobal: true,
+      envFilePath: '.env',
     }),
   ],
   controllers: [AppController],
