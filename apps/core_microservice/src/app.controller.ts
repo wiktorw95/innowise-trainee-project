@@ -1,17 +1,17 @@
 import { Controller, Get } from '@nestjs/common';
-import { PrismaService } from './prisma.service.js';
+import { AppService } from './app.service.js';
 
 @Controller()
 export class AppController {
-  constructor(private readonly prisma: PrismaService) {}
+  constructor(private readonly appService: AppService) {}
 
   @Get('debug-db')
   async debugDb() {
-    const result = await this.prisma.$queryRaw<{ now: Date }[]>`SELECT NOW()`;
+    const dbData = await this.appService.getDbStatus();
 
     return {
       status: 'ok',
-      serverTime: result[0]?.now,
+      ...dbData,
     };
   }
 }

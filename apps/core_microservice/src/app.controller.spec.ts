@@ -2,6 +2,7 @@ import { Test, TestingModule } from '@nestjs/testing';
 import { AppController } from './app.controller.js';
 import { AppService } from './app.service.js';
 import { PrismaService } from './prisma.service.js';
+import { jest } from '@jest/globals';
 
 describe('AppController', () => {
   let appController: AppController;
@@ -14,7 +15,9 @@ describe('AppController', () => {
         {
           provide: PrismaService,
           useValue: {
-            $queryRaw: jest.fn().mockResolvedValue([{ now: new Date() }]),
+            $queryRaw: jest
+              .fn()
+              .mockResolvedValue([{ now: new Date() }] as unknown as never),
           },
         },
       ],
