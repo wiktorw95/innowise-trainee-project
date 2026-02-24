@@ -10,25 +10,177 @@ datasource db {
 }
 
 model User {
-  id       String @id @default(uuid())
-  email    String @unique
+  id       String    @id @default(uuid())
+  email    String    @unique
   password String
+  accounts Account[]
+  profile  Profile?
 
   @@schema("auth")
 }
 
-model Post {
-  id        Int      @id @default(autoincrement())
-  content   String
-  createdAt DateTime @default(now())
+model Account {
+  id                String @id @default(uuid())
+  userId            String
+  type              String
+  provider          String
+  providerAccountId String
+  user              User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([provider, providerAccountId])
+  @@schema("auth")
+}
+
+// --- MAIN SCHEMA (Core Entities) ---
+model Profile {
+  id       String @id @default(uuid())
+  username String @unique
+  userId   String @unique
+  user     User   @relation(fields: [userId], references: [id])
+
+  posts     Post[]
+  comments  Comment[]
+  likes     PostLike[]
+  chatParts ChatParticipant[]
+
+  // Self-relation for Following
+  followers    ProfileFollow[] @relation("following")
+  following    ProfileFollow[] @relation("follower")
+  commentLikes CommentLike[]
 
   @@schema("main")
 }
 
+model Post {
+  id       String      @id @default(uuid())
+  content  String
+  authorId String
+  author   Profile     @relation(fields: [authorId], references: [id])
+  assets   PostAsset[]
+  comments Comment[]
+  likes    PostLike[]
+
+  @@schema("main")
+}
+
+model Asset {
+  id       String         @id @default(uuid())
+  url      String
+  type     String
+  posts    PostAsset[]
+  messages MessageAsset[]
+
+  @@schema("main")
+}
+
+model PostAsset {
+  postId  String
+  assetId String
+  post    Post   @relation(fields: [postId], references: [id])
+  asset   Asset  @relation(fields: [assetId], references: [id])
+
+  @@id([postId, assetId])
+  @@schema("main")
+}
+
+model ProfileFollow {
+  followerId  String
+  followingId String
+  follower    Profile @relation("follower", fields: [followerId], references: [id])
+  following   Profile @relation("following", fields: [followingId], references: [id])
+
+  @@id([followerId, followingId])
+  @@schema("main")
+}
+
+model Chat {
+  id           String            @id @default(uuid())
+  participants ChatParticipant[]
+  messages     Message[]
+
+  @@schema("main")
+}
+
+model ChatParticipant {
+  chatId    String
+  profileId String
+  chat      Chat    @relation(fields: [chatId], references: [id])
+  profile   Profile @relation(fields: [profileId], references: [id])
+
+  @@id([chatId, profileId])
+  @@schema("main")
+}
+
+model Message {
+  id      String         @id @default(uuid())
+  content String
+  chatId  String
+  chat    Chat           @relation(fields: [chatId], references: [id])
+  assets  MessageAsset[]
+
+  @@schema("main")
+}
+
+model MessageAsset {
+  messageId String
+  assetId   String
+  message   Message @relation(fields: [messageId], references: [id])
+  asset     Asset   @relation(fields: [assetId], references: [id])
+
+  @@id([messageId, assetId])
+  @@schema("main")
+}
+
 model Notification {
-  id      Int     @id @default(autoincrement())
-  message String
-  isRead  Boolean @default(false)
+  id        String   @id @default(uuid())
+  targetId  String
+  type      String
+  content   String
+  isRead    Boolean  @default(false)
+  createdAt DateTime @default(now())
 
   @@schema("notification")
+}
+
+model Comment {
+  id        String   @id @default(uuid())
+  content   String
+  createdAt DateTime @default(now())
+
+  authorId String
+  postId   String
+  author   Profile @relation(fields: [authorId], references: [id])
+  post     Post    @relation(fields: [postId], references: [id], onDelete: Cascade)
+
+  parentId String?
+  parent   Comment?  @relation("CommentReplies", fields: [parentId], references: [id])
+  replies  Comment[] @relation("CommentReplies")
+
+  likes CommentLike[]
+
+  @@schema("main")
+}
+
+model PostLike {
+  profileId String
+  postId    String
+  createdAt DateTime @default(now())
+
+  profile Profile @relation(fields: [profileId], references: [id])
+  post    Post    @relation(fields: [postId], references: [id], onDelete: Cascade)
+
+  @@id([profileId, postId])
+  @@schema("main")
+}
+
+model CommentLike {
+  profileId String
+  commentId String
+  createdAt DateTime @default(now())
+
+  profile Profile @relation(fields: [profileId], references: [id])
+  comment Comment @relation(fields: [commentId], references: [id], onDelete: Cascade)
+
+  @@id([profileId, commentId])
+  @@schema("main")
 }

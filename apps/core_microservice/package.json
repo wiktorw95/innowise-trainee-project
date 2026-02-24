@@ -84,5 +84,8 @@
     "moduleNameMapper": {
       "^(\\.\\.?\\/.+)\\.js$": "$1"
     }
+  },
+  "prisma": {
+    "seed": "ts-node prisma/seed.ts"
   }
 }
