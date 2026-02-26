@@ -13,49 +13,38 @@ const adapter = new PrismaPg(pool);
 const prisma = new PrismaClient({ adapter });
 
 async function testDatabase() {
-  console.log('--- Start testu PR 2.2 (Driver Adapter Mode) ---');
+  console.log('Running database...');
 
   try {
-    // 1. Relacja 1:1 (Auth -> Main)
     const newUser = await prisma.user.create({
       data: {
-        email: `dev_${Date.now()}@innowise.com`,
-        password: 'hash_password',
+        email: `user_${Date.now()}@innowise.com`,
+        password: `hashed_password`,
         profile: {
-          create: { username: `dev_user_${Math.floor(Math.random() * 1000)}` },
+          create: { username: `dev_user_${Date.now()}` },
         },
       },
       include: { profile: true },
     });
-    console.log('✅ User (auth) i Profile (main) utworzone');
+    console.log('User and Profile created!');
+    console.log('User: ', newUser);
 
-    // 2. Asset
     const asset = await prisma.asset.create({
-      data: { url: 'https://cdn.com/img.jpg', type: 'IMAGE' },
+      data: { url: 'https://cdn.com/img.jpg', type: 'image/png' },
     });
 
-    // 3. Many-to-Many (Post -> PostAsset -> Asset)
-    const post = await prisma.post.create({
-      data: {
-        content: 'Test relacji many-to-many',
-        authorId: newUser.profile!.id,
-        assets: {
-          create: [{ assetId: asset.id }],
-        },
-      },
-    });
-    console.log('✅ Relacja Many-to-Many (Post-Asset) działa');
+    console.log('Asset: ', asset);
 
     await prisma.notification.create({
       data: {
         targetId: newUser.profile!.id,
         type: 'SYSTEM',
-        content: 'Weryfikacja zakończona',
+        content: 'Finalized verification',
       },
     });
-    console.log('✅ Schemat notification działa');
-  } catch (e) {
-    console.error('❌ Test nieudany. Sprawdź czy tablice istnieją:', e);
+    console.log('Successfully created notification!');
+  } catch (err) {
+    console.error('Error! Check if tables exist: ', err);
   }
 }
 
