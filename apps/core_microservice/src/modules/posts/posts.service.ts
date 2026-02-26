@@ -11,7 +11,7 @@ export class PostsService {
         content,
         authorId: profileId,
         assets: {
-          create: assetIds.map((id) => ({ assetId: id })),
+          connect: assetIds.map((id) => ({ id })),
         },
       },
     });
