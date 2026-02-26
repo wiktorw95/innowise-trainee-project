@@ -56,12 +56,8 @@ export const ModelName = {
   Profile: 'Profile',
   Post: 'Post',
   Asset: 'Asset',
-  PostAsset: 'PostAsset',
-  ProfileFollow: 'ProfileFollow',
   Chat: 'Chat',
-  ChatParticipant: 'ChatParticipant',
   Message: 'Message',
-  MessageAsset: 'MessageAsset',
   Notification: 'Notification',
   Comment: 'Comment',
   PostLike: 'PostLike',
@@ -131,35 +127,11 @@ export const AssetScalarFieldEnum = {
 export type AssetScalarFieldEnum = (typeof AssetScalarFieldEnum)[keyof typeof AssetScalarFieldEnum]
 
 
-export const PostAssetScalarFieldEnum = {
-  postId: 'postId',
-  assetId: 'assetId'
-} as const
-
-export type PostAssetScalarFieldEnum = (typeof PostAssetScalarFieldEnum)[keyof typeof PostAssetScalarFieldEnum]
-
-
-export const ProfileFollowScalarFieldEnum = {
-  followerId: 'followerId',
-  followingId: 'followingId'
-} as const
-
-export type ProfileFollowScalarFieldEnum = (typeof ProfileFollowScalarFieldEnum)[keyof typeof ProfileFollowScalarFieldEnum]
-
-
 export const ChatScalarFieldEnum = {
   id: 'id'
 } as const
 
 export type ChatScalarFieldEnum = (typeof ChatScalarFieldEnum)[keyof typeof ChatScalarFieldEnum]
-
-
-export const ChatParticipantScalarFieldEnum = {
-  chatId: 'chatId',
-  profileId: 'profileId'
-} as const
-
-export type ChatParticipantScalarFieldEnum = (typeof ChatParticipantScalarFieldEnum)[keyof typeof ChatParticipantScalarFieldEnum]
 
 
 export const MessageScalarFieldEnum = {
@@ -169,14 +141,6 @@ export const MessageScalarFieldEnum = {
 } as const
 
 export type MessageScalarFieldEnum = (typeof MessageScalarFieldEnum)[keyof typeof MessageScalarFieldEnum]
-
-
-export const MessageAssetScalarFieldEnum = {
-  messageId: 'messageId',
-  assetId: 'assetId'
-} as const
-
-export type MessageAssetScalarFieldEnum = (typeof MessageAssetScalarFieldEnum)[keyof typeof MessageAssetScalarFieldEnum]
 
 
 export const NotificationScalarFieldEnum = {

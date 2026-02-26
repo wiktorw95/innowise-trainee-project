@@ -43,35 +43,15 @@ export type Post = Prisma.PostModel
  */
 export type Asset = Prisma.AssetModel
 /**
- * Model PostAsset
- * 
- */
-export type PostAsset = Prisma.PostAssetModel
-/**
- * Model ProfileFollow
- * 
- */
-export type ProfileFollow = Prisma.ProfileFollowModel
-/**
  * Model Chat
  * 
  */
 export type Chat = Prisma.ChatModel
 /**
- * Model ChatParticipant
- * 
- */
-export type ChatParticipant = Prisma.ChatParticipantModel
-/**
  * Model Message
  * 
  */
 export type Message = Prisma.MessageModel
-/**
- * Model MessageAsset
- * 
- */
-export type MessageAsset = Prisma.MessageAssetModel
 /**
  * Model Notification
  * 

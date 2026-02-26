@@ -210,7 +210,7 @@ export type PostLikeScalarWhereWithAggregatesInput = {
 
 export type PostLikeCreateInput = {
   createdAt?: Date | string
-  profile: Prisma.ProfileCreateNestedOneWithoutLikesInput
+  profile: Prisma.ProfileCreateNestedOneWithoutPostLikesInput
   post: Prisma.PostCreateNestedOneWithoutLikesInput
 }
 
@@ -222,7 +222,7 @@ export type PostLikeUncheckedCreateInput = {
 
 export type PostLikeUpdateInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  profile?: Prisma.ProfileUpdateOneRequiredWithoutLikesNestedInput
+  profile?: Prisma.ProfileUpdateOneRequiredWithoutPostLikesNestedInput
   post?: Prisma.PostUpdateOneRequiredWithoutLikesNestedInput
 }
 
@@ -412,7 +412,7 @@ export type PostLikeScalarWhereInput = {
 
 export type PostLikeCreateWithoutPostInput = {
   createdAt?: Date | string
-  profile: Prisma.ProfileCreateNestedOneWithoutLikesInput
+  profile: Prisma.ProfileCreateNestedOneWithoutPostLikesInput
 }
 
 export type PostLikeUncheckedCreateWithoutPostInput = {
@@ -473,7 +473,7 @@ export type PostLikeCreateManyPostInput = {
 
 export type PostLikeUpdateWithoutPostInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  profile?: Prisma.ProfileUpdateOneRequiredWithoutLikesNestedInput
+  profile?: Prisma.ProfileUpdateOneRequiredWithoutPostLikesNestedInput
 }
 
 export type PostLikeUncheckedUpdateWithoutPostInput = {

@@ -98,4 +98,4 @@ temp/
 .turbo/
 .gitignore
 .tsbuildinfo
-
+generated/prisma/client

@@ -169,11 +169,11 @@ export type ProfileWhereInput = {
   user?: Prisma.XOR<Prisma.UserScalarRelationFilter, Prisma.UserWhereInput>
   posts?: Prisma.PostListRelationFilter
   comments?: Prisma.CommentListRelationFilter
-  likes?: Prisma.PostLikeListRelationFilter
-  chatParts?: Prisma.ChatParticipantListRelationFilter
-  followers?: Prisma.ProfileFollowListRelationFilter
-  following?: Prisma.ProfileFollowListRelationFilter
+  postLikes?: Prisma.PostLikeListRelationFilter
   commentLikes?: Prisma.CommentLikeListRelationFilter
+  chats?: Prisma.ChatListRelationFilter
+  followers?: Prisma.ProfileListRelationFilter
+  following?: Prisma.ProfileListRelationFilter
 }
 
 export type ProfileOrderByWithRelationInput = {
@@ -183,11 +183,11 @@ export type ProfileOrderByWithRelationInput = {
   user?: Prisma.UserOrderByWithRelationInput
   posts?: Prisma.PostOrderByRelationAggregateInput
   comments?: Prisma.CommentOrderByRelationAggregateInput
-  likes?: Prisma.PostLikeOrderByRelationAggregateInput
-  chatParts?: Prisma.ChatParticipantOrderByRelationAggregateInput
-  followers?: Prisma.ProfileFollowOrderByRelationAggregateInput
-  following?: Prisma.ProfileFollowOrderByRelationAggregateInput
+  postLikes?: Prisma.PostLikeOrderByRelationAggregateInput
   commentLikes?: Prisma.CommentLikeOrderByRelationAggregateInput
+  chats?: Prisma.ChatOrderByRelationAggregateInput
+  followers?: Prisma.ProfileOrderByRelationAggregateInput
+  following?: Prisma.ProfileOrderByRelationAggregateInput
 }
 
 export type ProfileWhereUniqueInput = Prisma.AtLeast<{
@@ -200,11 +200,11 @@ export type ProfileWhereUniqueInput = Prisma.AtLeast<{
   user?: Prisma.XOR<Prisma.UserScalarRelationFilter, Prisma.UserWhereInput>
   posts?: Prisma.PostListRelationFilter
   comments?: Prisma.CommentListRelationFilter
-  likes?: Prisma.PostLikeListRelationFilter
-  chatParts?: Prisma.ChatParticipantListRelationFilter
-  followers?: Prisma.ProfileFollowListRelationFilter
-  following?: Prisma.ProfileFollowListRelationFilter
+  postLikes?: Prisma.PostLikeListRelationFilter
   commentLikes?: Prisma.CommentLikeListRelationFilter
+  chats?: Prisma.ChatListRelationFilter
+  followers?: Prisma.ProfileListRelationFilter
+  following?: Prisma.ProfileListRelationFilter
 }, "id" | "username" | "userId">
 
 export type ProfileOrderByWithAggregationInput = {
@@ -231,11 +231,11 @@ export type ProfileCreateInput = {
   user: Prisma.UserCreateNestedOneWithoutProfileInput
   posts?: Prisma.PostCreateNestedManyWithoutAuthorInput
   comments?: Prisma.CommentCreateNestedManyWithoutAuthorInput
-  likes?: Prisma.PostLikeCreateNestedManyWithoutProfileInput
-  chatParts?: Prisma.ChatParticipantCreateNestedManyWithoutProfileInput
-  followers?: Prisma.ProfileFollowCreateNestedManyWithoutFollowingInput
-  following?: Prisma.ProfileFollowCreateNestedManyWithoutFollowerInput
+  postLikes?: Prisma.PostLikeCreateNestedManyWithoutProfileInput
   commentLikes?: Prisma.CommentLikeCreateNestedManyWithoutProfileInput
+  chats?: Prisma.ChatCreateNestedManyWithoutParticipantsInput
+  followers?: Prisma.ProfileCreateNestedManyWithoutFollowingInput
+  following?: Prisma.ProfileCreateNestedManyWithoutFollowersInput
 }
 
 export type ProfileUncheckedCreateInput = {
@@ -244,11 +244,11 @@ export type ProfileUncheckedCreateInput = {
   userId: string
   posts?: Prisma.PostUncheckedCreateNestedManyWithoutAuthorInput
   comments?: Prisma.CommentUncheckedCreateNestedManyWithoutAuthorInput
-  likes?: Prisma.PostLikeUncheckedCreateNestedManyWithoutProfileInput
-  chatParts?: Prisma.ChatParticipantUncheckedCreateNestedManyWithoutProfileInput
-  followers?: Prisma.ProfileFollowUncheckedCreateNestedManyWithoutFollowingInput
-  following?: Prisma.ProfileFollowUncheckedCreateNestedManyWithoutFollowerInput
+  postLikes?: Prisma.PostLikeUncheckedCreateNestedManyWithoutProfileInput
   commentLikes?: Prisma.CommentLikeUncheckedCreateNestedManyWithoutProfileInput
+  chats?: Prisma.ChatUncheckedCreateNestedManyWithoutParticipantsInput
+  followers?: Prisma.ProfileUncheckedCreateNestedManyWithoutFollowingInput
+  following?: Prisma.ProfileUncheckedCreateNestedManyWithoutFollowersInput
 }
 
 export type ProfileUpdateInput = {
@@ -257,11 +257,11 @@ export type ProfileUpdateInput = {
   user?: Prisma.UserUpdateOneRequiredWithoutProfileNestedInput
   posts?: Prisma.PostUpdateManyWithoutAuthorNestedInput
   comments?: Prisma.CommentUpdateManyWithoutAuthorNestedInput
-  likes?: Prisma.PostLikeUpdateManyWithoutProfileNestedInput
-  chatParts?: Prisma.ChatParticipantUpdateManyWithoutProfileNestedInput
-  followers?: Prisma.ProfileFollowUpdateManyWithoutFollowingNestedInput
-  following?: Prisma.ProfileFollowUpdateManyWithoutFollowerNestedInput
+  postLikes?: Prisma.PostLikeUpdateManyWithoutProfileNestedInput
   commentLikes?: Prisma.CommentLikeUpdateManyWithoutProfileNestedInput
+  chats?: Prisma.ChatUpdateManyWithoutParticipantsNestedInput
+  followers?: Prisma.ProfileUpdateManyWithoutFollowingNestedInput
+  following?: Prisma.ProfileUpdateManyWithoutFollowersNestedInput
 }
 
 export type ProfileUncheckedUpdateInput = {
@@ -270,11 +270,11 @@ export type ProfileUncheckedUpdateInput = {
   userId?: Prisma.StringFieldUpdateOperationsInput | string
   posts?: Prisma.PostUncheckedUpdateManyWithoutAuthorNestedInput
   comments?: Prisma.CommentUncheckedUpdateManyWithoutAuthorNestedInput
-  likes?: Prisma.PostLikeUncheckedUpdateManyWithoutProfileNestedInput
-  chatParts?: Prisma.ChatParticipantUncheckedUpdateManyWithoutProfileNestedInput
-  followers?: Prisma.ProfileFollowUncheckedUpdateManyWithoutFollowingNestedInput
-  following?: Prisma.ProfileFollowUncheckedUpdateManyWithoutFollowerNestedInput
+  postLikes?: Prisma.PostLikeUncheckedUpdateManyWithoutProfileNestedInput
   commentLikes?: Prisma.CommentLikeUncheckedUpdateManyWithoutProfileNestedInput
+  chats?: Prisma.ChatUncheckedUpdateManyWithoutParticipantsNestedInput
+  followers?: Prisma.ProfileUncheckedUpdateManyWithoutFollowingNestedInput
+  following?: Prisma.ProfileUncheckedUpdateManyWithoutFollowersNestedInput
 }
 
 export type ProfileCreateManyInput = {
@@ -297,6 +297,16 @@ export type ProfileUncheckedUpdateManyInput = {
 export type ProfileNullableScalarRelationFilter = {
   is?: Prisma.ProfileWhereInput | null
   isNot?: Prisma.ProfileWhereInput | null
+}
+
+export type ProfileListRelationFilter = {
+  every?: Prisma.ProfileWhereInput
+  some?: Prisma.ProfileWhereInput
+  none?: Prisma.ProfileWhereInput
+}
+
+export type ProfileOrderByRelationAggregateInput = {
+  _count?: Prisma.SortOrder
 }
 
 export type ProfileCountOrderByAggregateInput = {
@@ -354,6 +364,82 @@ export type ProfileUncheckedUpdateOneWithoutUserNestedInput = {
   update?: Prisma.XOR<Prisma.XOR<Prisma.ProfileUpdateToOneWithWhereWithoutUserInput, Prisma.ProfileUpdateWithoutUserInput>, Prisma.ProfileUncheckedUpdateWithoutUserInput>
 }
 
+export type ProfileCreateNestedManyWithoutFollowingInput = {
+  create?: Prisma.XOR<Prisma.ProfileCreateWithoutFollowingInput, Prisma.ProfileUncheckedCreateWithoutFollowingInput> | Prisma.ProfileCreateWithoutFollowingInput[] | Prisma.ProfileUncheckedCreateWithoutFollowingInput[]
+  connectOrCreate?: Prisma.ProfileCreateOrConnectWithoutFollowingInput | Prisma.ProfileCreateOrConnectWithoutFollowingInput[]
+  connect?: Prisma.ProfileWhereUniqueInput | Prisma.ProfileWhereUniqueInput[]
+}
+
+export type ProfileCreateNestedManyWithoutFollowersInput = {
+  create?: Prisma.XOR<Prisma.ProfileCreateWithoutFollowersInput, Prisma.ProfileUncheckedCreateWithoutFollowersInput> | Prisma.ProfileCreateWithoutFollowersInput[] | Prisma.ProfileUncheckedCreateWithoutFollowersInput[]
+  connectOrCreate?: Prisma.ProfileCreateOrConnectWithoutFollowersInput | Prisma.ProfileCreateOrConnectWithoutFollowersInput[]
+  connect?: Prisma.ProfileWhereUniqueInput | Prisma.ProfileWhereUniqueInput[]
+}
+
+export type ProfileUncheckedCreateNestedManyWithoutFollowingInput = {
+  create?: Prisma.XOR<Prisma.ProfileCreateWithoutFollowingInput, Prisma.ProfileUncheckedCreateWithoutFollowingInput> | Prisma.ProfileCreateWithoutFollowingInput[] | Prisma.ProfileUncheckedCreateWithoutFollowingInput[]
+  connectOrCreate?: Prisma.ProfileCreateOrConnectWithoutFollowingInput | Prisma.ProfileCreateOrConnectWithoutFollowingInput[]
+  connect?: Prisma.ProfileWhereUniqueInput | Prisma.ProfileWhereUniqueInput[]
+}
+
+export type ProfileUncheckedCreateNestedManyWithoutFollowersInput = {
+  create?: Prisma.XOR<Prisma.ProfileCreateWithoutFollowersInput, Prisma.ProfileUncheckedCreateWithoutFollowersInput> | Prisma.ProfileCreateWithoutFollowersInput[] | Prisma.ProfileUncheckedCreateWithoutFollowersInput[]
+  connectOrCreate?: Prisma.ProfileCreateOrConnectWithoutFollowersInput | Prisma.ProfileCreateOrConnectWithoutFollowersInput[]
+  connect?: Prisma.ProfileWhereUniqueInput | Prisma.ProfileWhereUniqueInput[]
+}
+
+export type ProfileUpdateManyWithoutFollowingNestedInput = {
+  create?: Prisma.XOR<Prisma.ProfileCreateWithoutFollowingInput, Prisma.ProfileUncheckedCreateWithoutFollowingInput> | Prisma.ProfileCreateWithoutFollowingInput[] | Prisma.ProfileUncheckedCreateWithoutFollowingInput[]
+  connectOrCreate?: Prisma.ProfileCreateOrConnectWithoutFollowingInput | Prisma.ProfileCreateOrConnectWithoutFollowingInput[]
+  upsert?: Prisma.ProfileUpsertWithWhereUniqueWithoutFollowingInput | Prisma.ProfileUpsertWithWhereUniqueWithoutFollowingInput[]
+  set?: Prisma.ProfileWhereUniqueInput | Prisma.ProfileWhereUniqueInput[]
+  disconnect?: Prisma.ProfileWhereUniqueInput | Prisma.ProfileWhereUniqueInput[]
+  delete?: Prisma.ProfileWhereUniqueInput | Prisma.ProfileWhereUniqueInput[]
+  connect?: Prisma.ProfileWhereUniqueInput | Prisma.ProfileWhereUniqueInput[]
+  update?: Prisma.ProfileUpdateWithWhereUniqueWithoutFollowingInput | Prisma.ProfileUpdateWithWhereUniqueWithoutFollowingInput[]
+  updateMany?: Prisma.ProfileUpdateManyWithWhereWithoutFollowingInput | Prisma.ProfileUpdateManyWithWhereWithoutFollowingInput[]
+  deleteMany?: Prisma.ProfileScalarWhereInput | Prisma.ProfileScalarWhereInput[]
+}
+
+export type ProfileUpdateManyWithoutFollowersNestedInput = {
+  create?: Prisma.XOR<Prisma.ProfileCreateWithoutFollowersInput, Prisma.ProfileUncheckedCreateWithoutFollowersInput> | Prisma.ProfileCreateWithoutFollowersInput[] | Prisma.ProfileUncheckedCreateWithoutFollowersInput[]
+  connectOrCreate?: Prisma.ProfileCreateOrConnectWithoutFollowersInput | Prisma.ProfileCreateOrConnectWithoutFollowersInput[]
+  upsert?: Prisma.ProfileUpsertWithWhereUniqueWithoutFollowersInput | Prisma.ProfileUpsertWithWhereUniqueWithoutFollowersInput[]
+  set?: Prisma.ProfileWhereUniqueInput | Prisma.ProfileWhereUniqueInput[]
+  disconnect?: Prisma.ProfileWhereUniqueInput | Prisma.ProfileWhereUniqueInput[]
+  delete?: Prisma.ProfileWhereUniqueInput | Prisma.ProfileWhereUniqueInput[]
+  connect?: Prisma.ProfileWhereUniqueInput | Prisma.ProfileWhereUniqueInput[]
+  update?: Prisma.ProfileUpdateWithWhereUniqueWithoutFollowersInput | Prisma.ProfileUpdateWithWhereUniqueWithoutFollowersInput[]
+  updateMany?: Prisma.ProfileUpdateManyWithWhereWithoutFollowersInput | Prisma.ProfileUpdateManyWithWhereWithoutFollowersInput[]
+  deleteMany?: Prisma.ProfileScalarWhereInput | Prisma.ProfileScalarWhereInput[]
+}
+
+export type ProfileUncheckedUpdateManyWithoutFollowingNestedInput = {
+  create?: Prisma.XOR<Prisma.ProfileCreateWithoutFollowingInput, Prisma.ProfileUncheckedCreateWithoutFollowingInput> | Prisma.ProfileCreateWithoutFollowingInput[] | Prisma.ProfileUncheckedCreateWithoutFollowingInput[]
+  connectOrCreate?: Prisma.ProfileCreateOrConnectWithoutFollowingInput | Prisma.ProfileCreateOrConnectWithoutFollowingInput[]
+  upsert?: Prisma.ProfileUpsertWithWhereUniqueWithoutFollowingInput | Prisma.ProfileUpsertWithWhereUniqueWithoutFollowingInput[]
+  set?: Prisma.ProfileWhereUniqueInput | Prisma.ProfileWhereUniqueInput[]
+  disconnect?: Prisma.ProfileWhereUniqueInput | Prisma.ProfileWhereUniqueInput[]
+  delete?: Prisma.ProfileWhereUniqueInput | Prisma.ProfileWhereUniqueInput[]
+  connect?: Prisma.ProfileWhereUniqueInput | Prisma.ProfileWhereUniqueInput[]
+  update?: Prisma.ProfileUpdateWithWhereUniqueWithoutFollowingInput | Prisma.ProfileUpdateWithWhereUniqueWithoutFollowingInput[]
+  updateMany?: Prisma.ProfileUpdateManyWithWhereWithoutFollowingInput | Prisma.ProfileUpdateManyWithWhereWithoutFollowingInput[]
+  deleteMany?: Prisma.ProfileScalarWhereInput | Prisma.ProfileScalarWhereInput[]
+}
+
+export type ProfileUncheckedUpdateManyWithoutFollowersNestedInput = {
+  create?: Prisma.XOR<Prisma.ProfileCreateWithoutFollowersInput, Prisma.ProfileUncheckedCreateWithoutFollowersInput> | Prisma.ProfileCreateWithoutFollowersInput[] | Prisma.ProfileUncheckedCreateWithoutFollowersInput[]
+  connectOrCreate?: Prisma.ProfileCreateOrConnectWithoutFollowersInput | Prisma.ProfileCreateOrConnectWithoutFollowersInput[]
+  upsert?: Prisma.ProfileUpsertWithWhereUniqueWithoutFollowersInput | Prisma.ProfileUpsertWithWhereUniqueWithoutFollowersInput[]
+  set?: Prisma.ProfileWhereUniqueInput | Prisma.ProfileWhereUniqueInput[]
+  disconnect?: Prisma.ProfileWhereUniqueInput | Prisma.ProfileWhereUniqueInput[]
+  delete?: Prisma.ProfileWhereUniqueInput | Prisma.ProfileWhereUniqueInput[]
+  connect?: Prisma.ProfileWhereUniqueInput | Prisma.ProfileWhereUniqueInput[]
+  update?: Prisma.ProfileUpdateWithWhereUniqueWithoutFollowersInput | Prisma.ProfileUpdateWithWhereUniqueWithoutFollowersInput[]
+  updateMany?: Prisma.ProfileUpdateManyWithWhereWithoutFollowersInput | Prisma.ProfileUpdateManyWithWhereWithoutFollowersInput[]
+  deleteMany?: Prisma.ProfileScalarWhereInput | Prisma.ProfileScalarWhereInput[]
+}
+
 export type ProfileCreateNestedOneWithoutPostsInput = {
   create?: Prisma.XOR<Prisma.ProfileCreateWithoutPostsInput, Prisma.ProfileUncheckedCreateWithoutPostsInput>
   connectOrCreate?: Prisma.ProfileCreateOrConnectWithoutPostsInput
@@ -368,46 +454,42 @@ export type ProfileUpdateOneRequiredWithoutPostsNestedInput = {
   update?: Prisma.XOR<Prisma.XOR<Prisma.ProfileUpdateToOneWithWhereWithoutPostsInput, Prisma.ProfileUpdateWithoutPostsInput>, Prisma.ProfileUncheckedUpdateWithoutPostsInput>
 }
 
-export type ProfileCreateNestedOneWithoutFollowingInput = {
-  create?: Prisma.XOR<Prisma.ProfileCreateWithoutFollowingInput, Prisma.ProfileUncheckedCreateWithoutFollowingInput>
-  connectOrCreate?: Prisma.ProfileCreateOrConnectWithoutFollowingInput
-  connect?: Prisma.ProfileWhereUniqueInput
+export type ProfileCreateNestedManyWithoutChatsInput = {
+  create?: Prisma.XOR<Prisma.ProfileCreateWithoutChatsInput, Prisma.ProfileUncheckedCreateWithoutChatsInput> | Prisma.ProfileCreateWithoutChatsInput[] | Prisma.ProfileUncheckedCreateWithoutChatsInput[]
+  connectOrCreate?: Prisma.ProfileCreateOrConnectWithoutChatsInput | Prisma.ProfileCreateOrConnectWithoutChatsInput[]
+  connect?: Prisma.ProfileWhereUniqueInput | Prisma.ProfileWhereUniqueInput[]
 }
 
-export type ProfileCreateNestedOneWithoutFollowersInput = {
-  create?: Prisma.XOR<Prisma.ProfileCreateWithoutFollowersInput, Prisma.ProfileUncheckedCreateWithoutFollowersInput>
-  connectOrCreate?: Prisma.ProfileCreateOrConnectWithoutFollowersInput
-  connect?: Prisma.ProfileWhereUniqueInput
+export type ProfileUncheckedCreateNestedManyWithoutChatsInput = {
+  create?: Prisma.XOR<Prisma.ProfileCreateWithoutChatsInput, Prisma.ProfileUncheckedCreateWithoutChatsInput> | Prisma.ProfileCreateWithoutChatsInput[] | Prisma.ProfileUncheckedCreateWithoutChatsInput[]
+  connectOrCreate?: Prisma.ProfileCreateOrConnectWithoutChatsInput | Prisma.ProfileCreateOrConnectWithoutChatsInput[]
+  connect?: Prisma.ProfileWhereUniqueInput | Prisma.ProfileWhereUniqueInput[]
 }
 
-export type ProfileUpdateOneRequiredWithoutFollowingNestedInput = {
-  create?: Prisma.XOR<Prisma.ProfileCreateWithoutFollowingInput, Prisma.ProfileUncheckedCreateWithoutFollowingInput>
-  connectOrCreate?: Prisma.ProfileCreateOrConnectWithoutFollowingInput
-  upsert?: Prisma.ProfileUpsertWithoutFollowingInput
-  connect?: Prisma.ProfileWhereUniqueInput
-  update?: Prisma.XOR<Prisma.XOR<Prisma.ProfileUpdateToOneWithWhereWithoutFollowingInput, Prisma.ProfileUpdateWithoutFollowingInput>, Prisma.ProfileUncheckedUpdateWithoutFollowingInput>
+export type ProfileUpdateManyWithoutChatsNestedInput = {
+  create?: Prisma.XOR<Prisma.ProfileCreateWithoutChatsInput, Prisma.ProfileUncheckedCreateWithoutChatsInput> | Prisma.ProfileCreateWithoutChatsInput[] | Prisma.ProfileUncheckedCreateWithoutChatsInput[]
+  connectOrCreate?: Prisma.ProfileCreateOrConnectWithoutChatsInput | Prisma.ProfileCreateOrConnectWithoutChatsInput[]
+  upsert?: Prisma.ProfileUpsertWithWhereUniqueWithoutChatsInput | Prisma.ProfileUpsertWithWhereUniqueWithoutChatsInput[]
+  set?: Prisma.ProfileWhereUniqueInput | Prisma.ProfileWhereUniqueInput[]
+  disconnect?: Prisma.ProfileWhereUniqueInput | Prisma.ProfileWhereUniqueInput[]
+  delete?: Prisma.ProfileWhereUniqueInput | Prisma.ProfileWhereUniqueInput[]
+  connect?: Prisma.ProfileWhereUniqueInput | Prisma.ProfileWhereUniqueInput[]
+  update?: Prisma.ProfileUpdateWithWhereUniqueWithoutChatsInput | Prisma.ProfileUpdateWithWhereUniqueWithoutChatsInput[]
+  updateMany?: Prisma.ProfileUpdateManyWithWhereWithoutChatsInput | Prisma.ProfileUpdateManyWithWhereWithoutChatsInput[]
+  deleteMany?: Prisma.ProfileScalarWhereInput | Prisma.ProfileScalarWhereInput[]
 }
 
-export type ProfileUpdateOneRequiredWithoutFollowersNestedInput = {
-  create?: Prisma.XOR<Prisma.ProfileCreateWithoutFollowersInput, Prisma.ProfileUncheckedCreateWithoutFollowersInput>
-  connectOrCreate?: Prisma.ProfileCreateOrConnectWithoutFollowersInput
-  upsert?: Prisma.ProfileUpsertWithoutFollowersInput
-  connect?: Prisma.ProfileWhereUniqueInput
-  update?: Prisma.XOR<Prisma.XOR<Prisma.ProfileUpdateToOneWithWhereWithoutFollowersInput, Prisma.ProfileUpdateWithoutFollowersInput>, Prisma.ProfileUncheckedUpdateWithoutFollowersInput>
-}
-
-export type ProfileCreateNestedOneWithoutChatPartsInput = {
-  create?: Prisma.XOR<Prisma.ProfileCreateWithoutChatPartsInput, Prisma.ProfileUncheckedCreateWithoutChatPartsInput>
-  connectOrCreate?: Prisma.ProfileCreateOrConnectWithoutChatPartsInput
-  connect?: Prisma.ProfileWhereUniqueInput
-}
-
-export type ProfileUpdateOneRequiredWithoutChatPartsNestedInput = {
-  create?: Prisma.XOR<Prisma.ProfileCreateWithoutChatPartsInput, Prisma.ProfileUncheckedCreateWithoutChatPartsInput>
-  connectOrCreate?: Prisma.ProfileCreateOrConnectWithoutChatPartsInput
-  upsert?: Prisma.ProfileUpsertWithoutChatPartsInput
-  connect?: Prisma.ProfileWhereUniqueInput
-  update?: Prisma.XOR<Prisma.XOR<Prisma.ProfileUpdateToOneWithWhereWithoutChatPartsInput, Prisma.ProfileUpdateWithoutChatPartsInput>, Prisma.ProfileUncheckedUpdateWithoutChatPartsInput>
+export type ProfileUncheckedUpdateManyWithoutChatsNestedInput = {
+  create?: Prisma.XOR<Prisma.ProfileCreateWithoutChatsInput, Prisma.ProfileUncheckedCreateWithoutChatsInput> | Prisma.ProfileCreateWithoutChatsInput[] | Prisma.ProfileUncheckedCreateWithoutChatsInput[]
+  connectOrCreate?: Prisma.ProfileCreateOrConnectWithoutChatsInput | Prisma.ProfileCreateOrConnectWithoutChatsInput[]
+  upsert?: Prisma.ProfileUpsertWithWhereUniqueWithoutChatsInput | Prisma.ProfileUpsertWithWhereUniqueWithoutChatsInput[]
+  set?: Prisma.ProfileWhereUniqueInput | Prisma.ProfileWhereUniqueInput[]
+  disconnect?: Prisma.ProfileWhereUniqueInput | Prisma.ProfileWhereUniqueInput[]
+  delete?: Prisma.ProfileWhereUniqueInput | Prisma.ProfileWhereUniqueInput[]
+  connect?: Prisma.ProfileWhereUniqueInput | Prisma.ProfileWhereUniqueInput[]
+  update?: Prisma.ProfileUpdateWithWhereUniqueWithoutChatsInput | Prisma.ProfileUpdateWithWhereUniqueWithoutChatsInput[]
+  updateMany?: Prisma.ProfileUpdateManyWithWhereWithoutChatsInput | Prisma.ProfileUpdateManyWithWhereWithoutChatsInput[]
+  deleteMany?: Prisma.ProfileScalarWhereInput | Prisma.ProfileScalarWhereInput[]
 }
 
 export type ProfileCreateNestedOneWithoutCommentsInput = {
@@ -424,18 +506,18 @@ export type ProfileUpdateOneRequiredWithoutCommentsNestedInput = {
   update?: Prisma.XOR<Prisma.XOR<Prisma.ProfileUpdateToOneWithWhereWithoutCommentsInput, Prisma.ProfileUpdateWithoutCommentsInput>, Prisma.ProfileUncheckedUpdateWithoutCommentsInput>
 }
 
-export type ProfileCreateNestedOneWithoutLikesInput = {
-  create?: Prisma.XOR<Prisma.ProfileCreateWithoutLikesInput, Prisma.ProfileUncheckedCreateWithoutLikesInput>
-  connectOrCreate?: Prisma.ProfileCreateOrConnectWithoutLikesInput
+export type ProfileCreateNestedOneWithoutPostLikesInput = {
+  create?: Prisma.XOR<Prisma.ProfileCreateWithoutPostLikesInput, Prisma.ProfileUncheckedCreateWithoutPostLikesInput>
+  connectOrCreate?: Prisma.ProfileCreateOrConnectWithoutPostLikesInput
   connect?: Prisma.ProfileWhereUniqueInput
 }
 
-export type ProfileUpdateOneRequiredWithoutLikesNestedInput = {
-  create?: Prisma.XOR<Prisma.ProfileCreateWithoutLikesInput, Prisma.ProfileUncheckedCreateWithoutLikesInput>
-  connectOrCreate?: Prisma.ProfileCreateOrConnectWithoutLikesInput
-  upsert?: Prisma.ProfileUpsertWithoutLikesInput
+export type ProfileUpdateOneRequiredWithoutPostLikesNestedInput = {
+  create?: Prisma.XOR<Prisma.ProfileCreateWithoutPostLikesInput, Prisma.ProfileUncheckedCreateWithoutPostLikesInput>
+  connectOrCreate?: Prisma.ProfileCreateOrConnectWithoutPostLikesInput
+  upsert?: Prisma.ProfileUpsertWithoutPostLikesInput
   connect?: Prisma.ProfileWhereUniqueInput
-  update?: Prisma.XOR<Prisma.XOR<Prisma.ProfileUpdateToOneWithWhereWithoutLikesInput, Prisma.ProfileUpdateWithoutLikesInput>, Prisma.ProfileUncheckedUpdateWithoutLikesInput>
+  update?: Prisma.XOR<Prisma.XOR<Prisma.ProfileUpdateToOneWithWhereWithoutPostLikesInput, Prisma.ProfileUpdateWithoutPostLikesInput>, Prisma.ProfileUncheckedUpdateWithoutPostLikesInput>
 }
 
 export type ProfileCreateNestedOneWithoutCommentLikesInput = {
@@ -457,11 +539,11 @@ export type ProfileCreateWithoutUserInput = {
   username: string
   posts?: Prisma.PostCreateNestedManyWithoutAuthorInput
   comments?: Prisma.CommentCreateNestedManyWithoutAuthorInput
-  likes?: Prisma.PostLikeCreateNestedManyWithoutProfileInput
-  chatParts?: Prisma.ChatParticipantCreateNestedManyWithoutProfileInput
-  followers?: Prisma.ProfileFollowCreateNestedManyWithoutFollowingInput
-  following?: Prisma.ProfileFollowCreateNestedManyWithoutFollowerInput
+  postLikes?: Prisma.PostLikeCreateNestedManyWithoutProfileInput
   commentLikes?: Prisma.CommentLikeCreateNestedManyWithoutProfileInput
+  chats?: Prisma.ChatCreateNestedManyWithoutParticipantsInput
+  followers?: Prisma.ProfileCreateNestedManyWithoutFollowingInput
+  following?: Prisma.ProfileCreateNestedManyWithoutFollowersInput
 }
 
 export type ProfileUncheckedCreateWithoutUserInput = {
@@ -469,11 +551,11 @@ export type ProfileUncheckedCreateWithoutUserInput = {
   username: string
   posts?: Prisma.PostUncheckedCreateNestedManyWithoutAuthorInput
   comments?: Prisma.CommentUncheckedCreateNestedManyWithoutAuthorInput
-  likes?: Prisma.PostLikeUncheckedCreateNestedManyWithoutProfileInput
-  chatParts?: Prisma.ChatParticipantUncheckedCreateNestedManyWithoutProfileInput
-  followers?: Prisma.ProfileFollowUncheckedCreateNestedManyWithoutFollowingInput
-  following?: Prisma.ProfileFollowUncheckedCreateNestedManyWithoutFollowerInput
+  postLikes?: Prisma.PostLikeUncheckedCreateNestedManyWithoutProfileInput
   commentLikes?: Prisma.CommentLikeUncheckedCreateNestedManyWithoutProfileInput
+  chats?: Prisma.ChatUncheckedCreateNestedManyWithoutParticipantsInput
+  followers?: Prisma.ProfileUncheckedCreateNestedManyWithoutFollowingInput
+  following?: Prisma.ProfileUncheckedCreateNestedManyWithoutFollowersInput
 }
 
 export type ProfileCreateOrConnectWithoutUserInput = {
@@ -497,11 +579,11 @@ export type ProfileUpdateWithoutUserInput = {
   username?: Prisma.StringFieldUpdateOperationsInput | string
   posts?: Prisma.PostUpdateManyWithoutAuthorNestedInput
   comments?: Prisma.CommentUpdateManyWithoutAuthorNestedInput
-  likes?: Prisma.PostLikeUpdateManyWithoutProfileNestedInput
-  chatParts?: Prisma.ChatParticipantUpdateManyWithoutProfileNestedInput
-  followers?: Prisma.ProfileFollowUpdateManyWithoutFollowingNestedInput
-  following?: Prisma.ProfileFollowUpdateManyWithoutFollowerNestedInput
+  postLikes?: Prisma.PostLikeUpdateManyWithoutProfileNestedInput
   commentLikes?: Prisma.CommentLikeUpdateManyWithoutProfileNestedInput
+  chats?: Prisma.ChatUpdateManyWithoutParticipantsNestedInput
+  followers?: Prisma.ProfileUpdateManyWithoutFollowingNestedInput
+  following?: Prisma.ProfileUpdateManyWithoutFollowersNestedInput
 }
 
 export type ProfileUncheckedUpdateWithoutUserInput = {
@@ -509,11 +591,110 @@ export type ProfileUncheckedUpdateWithoutUserInput = {
   username?: Prisma.StringFieldUpdateOperationsInput | string
   posts?: Prisma.PostUncheckedUpdateManyWithoutAuthorNestedInput
   comments?: Prisma.CommentUncheckedUpdateManyWithoutAuthorNestedInput
-  likes?: Prisma.PostLikeUncheckedUpdateManyWithoutProfileNestedInput
-  chatParts?: Prisma.ChatParticipantUncheckedUpdateManyWithoutProfileNestedInput
-  followers?: Prisma.ProfileFollowUncheckedUpdateManyWithoutFollowingNestedInput
-  following?: Prisma.ProfileFollowUncheckedUpdateManyWithoutFollowerNestedInput
+  postLikes?: Prisma.PostLikeUncheckedUpdateManyWithoutProfileNestedInput
   commentLikes?: Prisma.CommentLikeUncheckedUpdateManyWithoutProfileNestedInput
+  chats?: Prisma.ChatUncheckedUpdateManyWithoutParticipantsNestedInput
+  followers?: Prisma.ProfileUncheckedUpdateManyWithoutFollowingNestedInput
+  following?: Prisma.ProfileUncheckedUpdateManyWithoutFollowersNestedInput
+}
+
+export type ProfileCreateWithoutFollowingInput = {
+  id?: string
+  username: string
+  user: Prisma.UserCreateNestedOneWithoutProfileInput
+  posts?: Prisma.PostCreateNestedManyWithoutAuthorInput
+  comments?: Prisma.CommentCreateNestedManyWithoutAuthorInput
+  postLikes?: Prisma.PostLikeCreateNestedManyWithoutProfileInput
+  commentLikes?: Prisma.CommentLikeCreateNestedManyWithoutProfileInput
+  chats?: Prisma.ChatCreateNestedManyWithoutParticipantsInput
+  followers?: Prisma.ProfileCreateNestedManyWithoutFollowingInput
+}
+
+export type ProfileUncheckedCreateWithoutFollowingInput = {
+  id?: string
+  username: string
+  userId: string
+  posts?: Prisma.PostUncheckedCreateNestedManyWithoutAuthorInput
+  comments?: Prisma.CommentUncheckedCreateNestedManyWithoutAuthorInput
+  postLikes?: Prisma.PostLikeUncheckedCreateNestedManyWithoutProfileInput
+  commentLikes?: Prisma.CommentLikeUncheckedCreateNestedManyWithoutProfileInput
+  chats?: Prisma.ChatUncheckedCreateNestedManyWithoutParticipantsInput
+  followers?: Prisma.ProfileUncheckedCreateNestedManyWithoutFollowingInput
+}
+
+export type ProfileCreateOrConnectWithoutFollowingInput = {
+  where: Prisma.ProfileWhereUniqueInput
+  create: Prisma.XOR<Prisma.ProfileCreateWithoutFollowingInput, Prisma.ProfileUncheckedCreateWithoutFollowingInput>
+}
+
+export type ProfileCreateWithoutFollowersInput = {
+  id?: string
+  username: string
+  user: Prisma.UserCreateNestedOneWithoutProfileInput
+  posts?: Prisma.PostCreateNestedManyWithoutAuthorInput
+  comments?: Prisma.CommentCreateNestedManyWithoutAuthorInput
+  postLikes?: Prisma.PostLikeCreateNestedManyWithoutProfileInput
+  commentLikes?: Prisma.CommentLikeCreateNestedManyWithoutProfileInput
+  chats?: Prisma.ChatCreateNestedManyWithoutParticipantsInput
+  following?: Prisma.ProfileCreateNestedManyWithoutFollowersInput
+}
+
+export type ProfileUncheckedCreateWithoutFollowersInput = {
+  id?: string
+  username: string
+  userId: string
+  posts?: Prisma.PostUncheckedCreateNestedManyWithoutAuthorInput
+  comments?: Prisma.CommentUncheckedCreateNestedManyWithoutAuthorInput
+  postLikes?: Prisma.PostLikeUncheckedCreateNestedManyWithoutProfileInput
+  commentLikes?: Prisma.CommentLikeUncheckedCreateNestedManyWithoutProfileInput
+  chats?: Prisma.ChatUncheckedCreateNestedManyWithoutParticipantsInput
+  following?: Prisma.ProfileUncheckedCreateNestedManyWithoutFollowersInput
+}
+
+export type ProfileCreateOrConnectWithoutFollowersInput = {
+  where: Prisma.ProfileWhereUniqueInput
+  create: Prisma.XOR<Prisma.ProfileCreateWithoutFollowersInput, Prisma.ProfileUncheckedCreateWithoutFollowersInput>
+}
+
+export type ProfileUpsertWithWhereUniqueWithoutFollowingInput = {
+  where: Prisma.ProfileWhereUniqueInput
+  update: Prisma.XOR<Prisma.ProfileUpdateWithoutFollowingInput, Prisma.ProfileUncheckedUpdateWithoutFollowingInput>
+  create: Prisma.XOR<Prisma.ProfileCreateWithoutFollowingInput, Prisma.ProfileUncheckedCreateWithoutFollowingInput>
+}
+
+export type ProfileUpdateWithWhereUniqueWithoutFollowingInput = {
+  where: Prisma.ProfileWhereUniqueInput
+  data: Prisma.XOR<Prisma.ProfileUpdateWithoutFollowingInput, Prisma.ProfileUncheckedUpdateWithoutFollowingInput>
+}
+
+export type ProfileUpdateManyWithWhereWithoutFollowingInput = {
+  where: Prisma.ProfileScalarWhereInput
+  data: Prisma.XOR<Prisma.ProfileUpdateManyMutationInput, Prisma.ProfileUncheckedUpdateManyWithoutFollowingInput>
+}
+
+export type ProfileScalarWhereInput = {
+  AND?: Prisma.ProfileScalarWhereInput | Prisma.ProfileScalarWhereInput[]
+  OR?: Prisma.ProfileScalarWhereInput[]
+  NOT?: Prisma.ProfileScalarWhereInput | Prisma.ProfileScalarWhereInput[]
+  id?: Prisma.StringFilter<"Profile"> | string
+  username?: Prisma.StringFilter<"Profile"> | string
+  userId?: Prisma.StringFilter<"Profile"> | string
+}
+
+export type ProfileUpsertWithWhereUniqueWithoutFollowersInput = {
+  where: Prisma.ProfileWhereUniqueInput
+  update: Prisma.XOR<Prisma.ProfileUpdateWithoutFollowersInput, Prisma.ProfileUncheckedUpdateWithoutFollowersInput>
+  create: Prisma.XOR<Prisma.ProfileCreateWithoutFollowersInput, Prisma.ProfileUncheckedCreateWithoutFollowersInput>
+}
+
+export type ProfileUpdateWithWhereUniqueWithoutFollowersInput = {
+  where: Prisma.ProfileWhereUniqueInput
+  data: Prisma.XOR<Prisma.ProfileUpdateWithoutFollowersInput, Prisma.ProfileUncheckedUpdateWithoutFollowersInput>
+}
+
+export type ProfileUpdateManyWithWhereWithoutFollowersInput = {
+  where: Prisma.ProfileScalarWhereInput
+  data: Prisma.XOR<Prisma.ProfileUpdateManyMutationInput, Prisma.ProfileUncheckedUpdateManyWithoutFollowersInput>
 }
 
 export type ProfileCreateWithoutPostsInput = {
@@ -521,11 +702,11 @@ export type ProfileCreateWithoutPostsInput = {
   username: string
   user: Prisma.UserCreateNestedOneWithoutProfileInput
   comments?: Prisma.CommentCreateNestedManyWithoutAuthorInput
-  likes?: Prisma.PostLikeCreateNestedManyWithoutProfileInput
-  chatParts?: Prisma.ChatParticipantCreateNestedManyWithoutProfileInput
-  followers?: Prisma.ProfileFollowCreateNestedManyWithoutFollowingInput
-  following?: Prisma.ProfileFollowCreateNestedManyWithoutFollowerInput
+  postLikes?: Prisma.PostLikeCreateNestedManyWithoutProfileInput
   commentLikes?: Prisma.CommentLikeCreateNestedManyWithoutProfileInput
+  chats?: Prisma.ChatCreateNestedManyWithoutParticipantsInput
+  followers?: Prisma.ProfileCreateNestedManyWithoutFollowingInput
+  following?: Prisma.ProfileCreateNestedManyWithoutFollowersInput
 }
 
 export type ProfileUncheckedCreateWithoutPostsInput = {
@@ -533,11 +714,11 @@ export type ProfileUncheckedCreateWithoutPostsInput = {
   username: string
   userId: string
   comments?: Prisma.CommentUncheckedCreateNestedManyWithoutAuthorInput
-  likes?: Prisma.PostLikeUncheckedCreateNestedManyWithoutProfileInput
-  chatParts?: Prisma.ChatParticipantUncheckedCreateNestedManyWithoutProfileInput
-  followers?: Prisma.ProfileFollowUncheckedCreateNestedManyWithoutFollowingInput
-  following?: Prisma.ProfileFollowUncheckedCreateNestedManyWithoutFollowerInput
+  postLikes?: Prisma.PostLikeUncheckedCreateNestedManyWithoutProfileInput
   commentLikes?: Prisma.CommentLikeUncheckedCreateNestedManyWithoutProfileInput
+  chats?: Prisma.ChatUncheckedCreateNestedManyWithoutParticipantsInput
+  followers?: Prisma.ProfileUncheckedCreateNestedManyWithoutFollowingInput
+  following?: Prisma.ProfileUncheckedCreateNestedManyWithoutFollowersInput
 }
 
 export type ProfileCreateOrConnectWithoutPostsInput = {
@@ -561,11 +742,11 @@ export type ProfileUpdateWithoutPostsInput = {
   username?: Prisma.StringFieldUpdateOperationsInput | string
   user?: Prisma.UserUpdateOneRequiredWithoutProfileNestedInput
   comments?: Prisma.CommentUpdateManyWithoutAuthorNestedInput
-  likes?: Prisma.PostLikeUpdateManyWithoutProfileNestedInput
-  chatParts?: Prisma.ChatParticipantUpdateManyWithoutProfileNestedInput
-  followers?: Prisma.ProfileFollowUpdateManyWithoutFollowingNestedInput
-  following?: Prisma.ProfileFollowUpdateManyWithoutFollowerNestedInput
+  postLikes?: Prisma.PostLikeUpdateManyWithoutProfileNestedInput
   commentLikes?: Prisma.CommentLikeUpdateManyWithoutProfileNestedInput
+  chats?: Prisma.ChatUpdateManyWithoutParticipantsNestedInput
+  followers?: Prisma.ProfileUpdateManyWithoutFollowingNestedInput
+  following?: Prisma.ProfileUpdateManyWithoutFollowersNestedInput
 }
 
 export type ProfileUncheckedUpdateWithoutPostsInput = {
@@ -573,203 +754,56 @@ export type ProfileUncheckedUpdateWithoutPostsInput = {
   username?: Prisma.StringFieldUpdateOperationsInput | string
   userId?: Prisma.StringFieldUpdateOperationsInput | string
   comments?: Prisma.CommentUncheckedUpdateManyWithoutAuthorNestedInput
-  likes?: Prisma.PostLikeUncheckedUpdateManyWithoutProfileNestedInput
-  chatParts?: Prisma.ChatParticipantUncheckedUpdateManyWithoutProfileNestedInput
-  followers?: Prisma.ProfileFollowUncheckedUpdateManyWithoutFollowingNestedInput
-  following?: Prisma.ProfileFollowUncheckedUpdateManyWithoutFollowerNestedInput
+  postLikes?: Prisma.PostLikeUncheckedUpdateManyWithoutProfileNestedInput
   commentLikes?: Prisma.CommentLikeUncheckedUpdateManyWithoutProfileNestedInput
+  chats?: Prisma.ChatUncheckedUpdateManyWithoutParticipantsNestedInput
+  followers?: Prisma.ProfileUncheckedUpdateManyWithoutFollowingNestedInput
+  following?: Prisma.ProfileUncheckedUpdateManyWithoutFollowersNestedInput
 }
 
-export type ProfileCreateWithoutFollowingInput = {
+export type ProfileCreateWithoutChatsInput = {
   id?: string
   username: string
   user: Prisma.UserCreateNestedOneWithoutProfileInput
   posts?: Prisma.PostCreateNestedManyWithoutAuthorInput
   comments?: Prisma.CommentCreateNestedManyWithoutAuthorInput
-  likes?: Prisma.PostLikeCreateNestedManyWithoutProfileInput
-  chatParts?: Prisma.ChatParticipantCreateNestedManyWithoutProfileInput
-  followers?: Prisma.ProfileFollowCreateNestedManyWithoutFollowingInput
+  postLikes?: Prisma.PostLikeCreateNestedManyWithoutProfileInput
   commentLikes?: Prisma.CommentLikeCreateNestedManyWithoutProfileInput
+  followers?: Prisma.ProfileCreateNestedManyWithoutFollowingInput
+  following?: Prisma.ProfileCreateNestedManyWithoutFollowersInput
 }
 
-export type ProfileUncheckedCreateWithoutFollowingInput = {
+export type ProfileUncheckedCreateWithoutChatsInput = {
   id?: string
   username: string
   userId: string
   posts?: Prisma.PostUncheckedCreateNestedManyWithoutAuthorInput
   comments?: Prisma.CommentUncheckedCreateNestedManyWithoutAuthorInput
-  likes?: Prisma.PostLikeUncheckedCreateNestedManyWithoutProfileInput
-  chatParts?: Prisma.ChatParticipantUncheckedCreateNestedManyWithoutProfileInput
-  followers?: Prisma.ProfileFollowUncheckedCreateNestedManyWithoutFollowingInput
+  postLikes?: Prisma.PostLikeUncheckedCreateNestedManyWithoutProfileInput
   commentLikes?: Prisma.CommentLikeUncheckedCreateNestedManyWithoutProfileInput
+  followers?: Prisma.ProfileUncheckedCreateNestedManyWithoutFollowingInput
+  following?: Prisma.ProfileUncheckedCreateNestedManyWithoutFollowersInput
 }
 
-export type ProfileCreateOrConnectWithoutFollowingInput = {
+export type ProfileCreateOrConnectWithoutChatsInput = {
   where: Prisma.ProfileWhereUniqueInput
-  create: Prisma.XOR<Prisma.ProfileCreateWithoutFollowingInput, Prisma.ProfileUncheckedCreateWithoutFollowingInput>
+  create: Prisma.XOR<Prisma.ProfileCreateWithoutChatsInput, Prisma.ProfileUncheckedCreateWithoutChatsInput>
 }
 
-export type ProfileCreateWithoutFollowersInput = {
-  id?: string
-  username: string
-  user: Prisma.UserCreateNestedOneWithoutProfileInput
-  posts?: Prisma.PostCreateNestedManyWithoutAuthorInput
-  comments?: Prisma.CommentCreateNestedManyWithoutAuthorInput
-  likes?: Prisma.PostLikeCreateNestedManyWithoutProfileInput
-  chatParts?: Prisma.ChatParticipantCreateNestedManyWithoutProfileInput
-  following?: Prisma.ProfileFollowCreateNestedManyWithoutFollowerInput
-  commentLikes?: Prisma.CommentLikeCreateNestedManyWithoutProfileInput
-}
-
-export type ProfileUncheckedCreateWithoutFollowersInput = {
-  id?: string
-  username: string
-  userId: string
-  posts?: Prisma.PostUncheckedCreateNestedManyWithoutAuthorInput
-  comments?: Prisma.CommentUncheckedCreateNestedManyWithoutAuthorInput
-  likes?: Prisma.PostLikeUncheckedCreateNestedManyWithoutProfileInput
-  chatParts?: Prisma.ChatParticipantUncheckedCreateNestedManyWithoutProfileInput
-  following?: Prisma.ProfileFollowUncheckedCreateNestedManyWithoutFollowerInput
-  commentLikes?: Prisma.CommentLikeUncheckedCreateNestedManyWithoutProfileInput
-}
-
-export type ProfileCreateOrConnectWithoutFollowersInput = {
+export type ProfileUpsertWithWhereUniqueWithoutChatsInput = {
   where: Prisma.ProfileWhereUniqueInput
-  create: Prisma.XOR<Prisma.ProfileCreateWithoutFollowersInput, Prisma.ProfileUncheckedCreateWithoutFollowersInput>
+  update: Prisma.XOR<Prisma.ProfileUpdateWithoutChatsInput, Prisma.ProfileUncheckedUpdateWithoutChatsInput>
+  create: Prisma.XOR<Prisma.ProfileCreateWithoutChatsInput, Prisma.ProfileUncheckedCreateWithoutChatsInput>
 }
 
-export type ProfileUpsertWithoutFollowingInput = {
-  update: Prisma.XOR<Prisma.ProfileUpdateWithoutFollowingInput, Prisma.ProfileUncheckedUpdateWithoutFollowingInput>
-  create: Prisma.XOR<Prisma.ProfileCreateWithoutFollowingInput, Prisma.ProfileUncheckedCreateWithoutFollowingInput>
-  where?: Prisma.ProfileWhereInput
-}
-
-export type ProfileUpdateToOneWithWhereWithoutFollowingInput = {
-  where?: Prisma.ProfileWhereInput
-  data: Prisma.XOR<Prisma.ProfileUpdateWithoutFollowingInput, Prisma.ProfileUncheckedUpdateWithoutFollowingInput>
-}
-
-export type ProfileUpdateWithoutFollowingInput = {
-  id?: Prisma.StringFieldUpdateOperationsInput | string
-  username?: Prisma.StringFieldUpdateOperationsInput | string
-  user?: Prisma.UserUpdateOneRequiredWithoutProfileNestedInput
-  posts?: Prisma.PostUpdateManyWithoutAuthorNestedInput
-  comments?: Prisma.CommentUpdateManyWithoutAuthorNestedInput
-  likes?: Prisma.PostLikeUpdateManyWithoutProfileNestedInput
-  chatParts?: Prisma.ChatParticipantUpdateManyWithoutProfileNestedInput
-  followers?: Prisma.ProfileFollowUpdateManyWithoutFollowingNestedInput
-  commentLikes?: Prisma.CommentLikeUpdateManyWithoutProfileNestedInput
-}
-
-export type ProfileUncheckedUpdateWithoutFollowingInput = {
-  id?: Prisma.StringFieldUpdateOperationsInput | string
-  username?: Prisma.StringFieldUpdateOperationsInput | string
-  userId?: Prisma.StringFieldUpdateOperationsInput | string
-  posts?: Prisma.PostUncheckedUpdateManyWithoutAuthorNestedInput
-  comments?: Prisma.CommentUncheckedUpdateManyWithoutAuthorNestedInput
-  likes?: Prisma.PostLikeUncheckedUpdateManyWithoutProfileNestedInput
-  chatParts?: Prisma.ChatParticipantUncheckedUpdateManyWithoutProfileNestedInput
-  followers?: Prisma.ProfileFollowUncheckedUpdateManyWithoutFollowingNestedInput
-  commentLikes?: Prisma.CommentLikeUncheckedUpdateManyWithoutProfileNestedInput
-}
-
-export type ProfileUpsertWithoutFollowersInput = {
-  update: Prisma.XOR<Prisma.ProfileUpdateWithoutFollowersInput, Prisma.ProfileUncheckedUpdateWithoutFollowersInput>
-  create: Prisma.XOR<Prisma.ProfileCreateWithoutFollowersInput, Prisma.ProfileUncheckedCreateWithoutFollowersInput>
-  where?: Prisma.ProfileWhereInput
-}
-
-export type ProfileUpdateToOneWithWhereWithoutFollowersInput = {
-  where?: Prisma.ProfileWhereInput
-  data: Prisma.XOR<Prisma.ProfileUpdateWithoutFollowersInput, Prisma.ProfileUncheckedUpdateWithoutFollowersInput>
-}
-
-export type ProfileUpdateWithoutFollowersInput = {
-  id?: Prisma.StringFieldUpdateOperationsInput | string
-  username?: Prisma.StringFieldUpdateOperationsInput | string
-  user?: Prisma.UserUpdateOneRequiredWithoutProfileNestedInput
-  posts?: Prisma.PostUpdateManyWithoutAuthorNestedInput
-  comments?: Prisma.CommentUpdateManyWithoutAuthorNestedInput
-  likes?: Prisma.PostLikeUpdateManyWithoutProfileNestedInput
-  chatParts?: Prisma.ChatParticipantUpdateManyWithoutProfileNestedInput
-  following?: Prisma.ProfileFollowUpdateManyWithoutFollowerNestedInput
-  commentLikes?: Prisma.CommentLikeUpdateManyWithoutProfileNestedInput
-}
-
-export type ProfileUncheckedUpdateWithoutFollowersInput = {
-  id?: Prisma.StringFieldUpdateOperationsInput | string
-  username?: Prisma.StringFieldUpdateOperationsInput | string
-  userId?: Prisma.StringFieldUpdateOperationsInput | string
-  posts?: Prisma.PostUncheckedUpdateManyWithoutAuthorNestedInput
-  comments?: Prisma.CommentUncheckedUpdateManyWithoutAuthorNestedInput
-  likes?: Prisma.PostLikeUncheckedUpdateManyWithoutProfileNestedInput
-  chatParts?: Prisma.ChatParticipantUncheckedUpdateManyWithoutProfileNestedInput
-  following?: Prisma.ProfileFollowUncheckedUpdateManyWithoutFollowerNestedInput
-  commentLikes?: Prisma.CommentLikeUncheckedUpdateManyWithoutProfileNestedInput
-}
-
-export type ProfileCreateWithoutChatPartsInput = {
-  id?: string
-  username: string
-  user: Prisma.UserCreateNestedOneWithoutProfileInput
-  posts?: Prisma.PostCreateNestedManyWithoutAuthorInput
-  comments?: Prisma.CommentCreateNestedManyWithoutAuthorInput
-  likes?: Prisma.PostLikeCreateNestedManyWithoutProfileInput
-  followers?: Prisma.ProfileFollowCreateNestedManyWithoutFollowingInput
-  following?: Prisma.ProfileFollowCreateNestedManyWithoutFollowerInput
-  commentLikes?: Prisma.CommentLikeCreateNestedManyWithoutProfileInput
-}
-
-export type ProfileUncheckedCreateWithoutChatPartsInput = {
-  id?: string
-  username: string
-  userId: string
-  posts?: Prisma.PostUncheckedCreateNestedManyWithoutAuthorInput
-  comments?: Prisma.CommentUncheckedCreateNestedManyWithoutAuthorInput
-  likes?: Prisma.PostLikeUncheckedCreateNestedManyWithoutProfileInput
-  followers?: Prisma.ProfileFollowUncheckedCreateNestedManyWithoutFollowingInput
-  following?: Prisma.ProfileFollowUncheckedCreateNestedManyWithoutFollowerInput
-  commentLikes?: Prisma.CommentLikeUncheckedCreateNestedManyWithoutProfileInput
-}
-
-export type ProfileCreateOrConnectWithoutChatPartsInput = {
+export type ProfileUpdateWithWhereUniqueWithoutChatsInput = {
   where: Prisma.ProfileWhereUniqueInput
-  create: Prisma.XOR<Prisma.ProfileCreateWithoutChatPartsInput, Prisma.ProfileUncheckedCreateWithoutChatPartsInput>
+  data: Prisma.XOR<Prisma.ProfileUpdateWithoutChatsInput, Prisma.ProfileUncheckedUpdateWithoutChatsInput>
 }
 
-export type ProfileUpsertWithoutChatPartsInput = {
-  update: Prisma.XOR<Prisma.ProfileUpdateWithoutChatPartsInput, Prisma.ProfileUncheckedUpdateWithoutChatPartsInput>
-  create: Prisma.XOR<Prisma.ProfileCreateWithoutChatPartsInput, Prisma.ProfileUncheckedCreateWithoutChatPartsInput>
-  where?: Prisma.ProfileWhereInput
-}
-
-export type ProfileUpdateToOneWithWhereWithoutChatPartsInput = {
-  where?: Prisma.ProfileWhereInput
-  data: Prisma.XOR<Prisma.ProfileUpdateWithoutChatPartsInput, Prisma.ProfileUncheckedUpdateWithoutChatPartsInput>
-}
-
-export type ProfileUpdateWithoutChatPartsInput = {
-  id?: Prisma.StringFieldUpdateOperationsInput | string
-  username?: Prisma.StringFieldUpdateOperationsInput | string
-  user?: Prisma.UserUpdateOneRequiredWithoutProfileNestedInput
-  posts?: Prisma.PostUpdateManyWithoutAuthorNestedInput
-  comments?: Prisma.CommentUpdateManyWithoutAuthorNestedInput
-  likes?: Prisma.PostLikeUpdateManyWithoutProfileNestedInput
-  followers?: Prisma.ProfileFollowUpdateManyWithoutFollowingNestedInput
-  following?: Prisma.ProfileFollowUpdateManyWithoutFollowerNestedInput
-  commentLikes?: Prisma.CommentLikeUpdateManyWithoutProfileNestedInput
-}
-
-export type ProfileUncheckedUpdateWithoutChatPartsInput = {
-  id?: Prisma.StringFieldUpdateOperationsInput | string
-  username?: Prisma.StringFieldUpdateOperationsInput | string
-  userId?: Prisma.StringFieldUpdateOperationsInput | string
-  posts?: Prisma.PostUncheckedUpdateManyWithoutAuthorNestedInput
-  comments?: Prisma.CommentUncheckedUpdateManyWithoutAuthorNestedInput
-  likes?: Prisma.PostLikeUncheckedUpdateManyWithoutProfileNestedInput
-  followers?: Prisma.ProfileFollowUncheckedUpdateManyWithoutFollowingNestedInput
-  following?: Prisma.ProfileFollowUncheckedUpdateManyWithoutFollowerNestedInput
-  commentLikes?: Prisma.CommentLikeUncheckedUpdateManyWithoutProfileNestedInput
+export type ProfileUpdateManyWithWhereWithoutChatsInput = {
+  where: Prisma.ProfileScalarWhereInput
+  data: Prisma.XOR<Prisma.ProfileUpdateManyMutationInput, Prisma.ProfileUncheckedUpdateManyWithoutChatsInput>
 }
 
 export type ProfileCreateWithoutCommentsInput = {
@@ -777,11 +811,11 @@ export type ProfileCreateWithoutCommentsInput = {
   username: string
   user: Prisma.UserCreateNestedOneWithoutProfileInput
   posts?: Prisma.PostCreateNestedManyWithoutAuthorInput
-  likes?: Prisma.PostLikeCreateNestedManyWithoutProfileInput
-  chatParts?: Prisma.ChatParticipantCreateNestedManyWithoutProfileInput
-  followers?: Prisma.ProfileFollowCreateNestedManyWithoutFollowingInput
-  following?: Prisma.ProfileFollowCreateNestedManyWithoutFollowerInput
+  postLikes?: Prisma.PostLikeCreateNestedManyWithoutProfileInput
   commentLikes?: Prisma.CommentLikeCreateNestedManyWithoutProfileInput
+  chats?: Prisma.ChatCreateNestedManyWithoutParticipantsInput
+  followers?: Prisma.ProfileCreateNestedManyWithoutFollowingInput
+  following?: Prisma.ProfileCreateNestedManyWithoutFollowersInput
 }
 
 export type ProfileUncheckedCreateWithoutCommentsInput = {
@@ -789,11 +823,11 @@ export type ProfileUncheckedCreateWithoutCommentsInput = {
   username: string
   userId: string
   posts?: Prisma.PostUncheckedCreateNestedManyWithoutAuthorInput
-  likes?: Prisma.PostLikeUncheckedCreateNestedManyWithoutProfileInput
-  chatParts?: Prisma.ChatParticipantUncheckedCreateNestedManyWithoutProfileInput
-  followers?: Prisma.ProfileFollowUncheckedCreateNestedManyWithoutFollowingInput
-  following?: Prisma.ProfileFollowUncheckedCreateNestedManyWithoutFollowerInput
+  postLikes?: Prisma.PostLikeUncheckedCreateNestedManyWithoutProfileInput
   commentLikes?: Prisma.CommentLikeUncheckedCreateNestedManyWithoutProfileInput
+  chats?: Prisma.ChatUncheckedCreateNestedManyWithoutParticipantsInput
+  followers?: Prisma.ProfileUncheckedCreateNestedManyWithoutFollowingInput
+  following?: Prisma.ProfileUncheckedCreateNestedManyWithoutFollowersInput
 }
 
 export type ProfileCreateOrConnectWithoutCommentsInput = {
@@ -817,11 +851,11 @@ export type ProfileUpdateWithoutCommentsInput = {
   username?: Prisma.StringFieldUpdateOperationsInput | string
   user?: Prisma.UserUpdateOneRequiredWithoutProfileNestedInput
   posts?: Prisma.PostUpdateManyWithoutAuthorNestedInput
-  likes?: Prisma.PostLikeUpdateManyWithoutProfileNestedInput
-  chatParts?: Prisma.ChatParticipantUpdateManyWithoutProfileNestedInput
-  followers?: Prisma.ProfileFollowUpdateManyWithoutFollowingNestedInput
-  following?: Prisma.ProfileFollowUpdateManyWithoutFollowerNestedInput
+  postLikes?: Prisma.PostLikeUpdateManyWithoutProfileNestedInput
   commentLikes?: Prisma.CommentLikeUpdateManyWithoutProfileNestedInput
+  chats?: Prisma.ChatUpdateManyWithoutParticipantsNestedInput
+  followers?: Prisma.ProfileUpdateManyWithoutFollowingNestedInput
+  following?: Prisma.ProfileUpdateManyWithoutFollowersNestedInput
 }
 
 export type ProfileUncheckedUpdateWithoutCommentsInput = {
@@ -829,75 +863,75 @@ export type ProfileUncheckedUpdateWithoutCommentsInput = {
   username?: Prisma.StringFieldUpdateOperationsInput | string
   userId?: Prisma.StringFieldUpdateOperationsInput | string
   posts?: Prisma.PostUncheckedUpdateManyWithoutAuthorNestedInput
-  likes?: Prisma.PostLikeUncheckedUpdateManyWithoutProfileNestedInput
-  chatParts?: Prisma.ChatParticipantUncheckedUpdateManyWithoutProfileNestedInput
-  followers?: Prisma.ProfileFollowUncheckedUpdateManyWithoutFollowingNestedInput
-  following?: Prisma.ProfileFollowUncheckedUpdateManyWithoutFollowerNestedInput
+  postLikes?: Prisma.PostLikeUncheckedUpdateManyWithoutProfileNestedInput
   commentLikes?: Prisma.CommentLikeUncheckedUpdateManyWithoutProfileNestedInput
+  chats?: Prisma.ChatUncheckedUpdateManyWithoutParticipantsNestedInput
+  followers?: Prisma.ProfileUncheckedUpdateManyWithoutFollowingNestedInput
+  following?: Prisma.ProfileUncheckedUpdateManyWithoutFollowersNestedInput
 }
 
-export type ProfileCreateWithoutLikesInput = {
+export type ProfileCreateWithoutPostLikesInput = {
   id?: string
   username: string
   user: Prisma.UserCreateNestedOneWithoutProfileInput
   posts?: Prisma.PostCreateNestedManyWithoutAuthorInput
   comments?: Prisma.CommentCreateNestedManyWithoutAuthorInput
-  chatParts?: Prisma.ChatParticipantCreateNestedManyWithoutProfileInput
-  followers?: Prisma.ProfileFollowCreateNestedManyWithoutFollowingInput
-  following?: Prisma.ProfileFollowCreateNestedManyWithoutFollowerInput
   commentLikes?: Prisma.CommentLikeCreateNestedManyWithoutProfileInput
+  chats?: Prisma.ChatCreateNestedManyWithoutParticipantsInput
+  followers?: Prisma.ProfileCreateNestedManyWithoutFollowingInput
+  following?: Prisma.ProfileCreateNestedManyWithoutFollowersInput
 }
 
-export type ProfileUncheckedCreateWithoutLikesInput = {
+export type ProfileUncheckedCreateWithoutPostLikesInput = {
   id?: string
   username: string
   userId: string
   posts?: Prisma.PostUncheckedCreateNestedManyWithoutAuthorInput
   comments?: Prisma.CommentUncheckedCreateNestedManyWithoutAuthorInput
-  chatParts?: Prisma.ChatParticipantUncheckedCreateNestedManyWithoutProfileInput
-  followers?: Prisma.ProfileFollowUncheckedCreateNestedManyWithoutFollowingInput
-  following?: Prisma.ProfileFollowUncheckedCreateNestedManyWithoutFollowerInput
   commentLikes?: Prisma.CommentLikeUncheckedCreateNestedManyWithoutProfileInput
+  chats?: Prisma.ChatUncheckedCreateNestedManyWithoutParticipantsInput
+  followers?: Prisma.ProfileUncheckedCreateNestedManyWithoutFollowingInput
+  following?: Prisma.ProfileUncheckedCreateNestedManyWithoutFollowersInput
 }
 
-export type ProfileCreateOrConnectWithoutLikesInput = {
+export type ProfileCreateOrConnectWithoutPostLikesInput = {
   where: Prisma.ProfileWhereUniqueInput
-  create: Prisma.XOR<Prisma.ProfileCreateWithoutLikesInput, Prisma.ProfileUncheckedCreateWithoutLikesInput>
+  create: Prisma.XOR<Prisma.ProfileCreateWithoutPostLikesInput, Prisma.ProfileUncheckedCreateWithoutPostLikesInput>
 }
 
-export type ProfileUpsertWithoutLikesInput = {
-  update: Prisma.XOR<Prisma.ProfileUpdateWithoutLikesInput, Prisma.ProfileUncheckedUpdateWithoutLikesInput>
-  create: Prisma.XOR<Prisma.ProfileCreateWithoutLikesInput, Prisma.ProfileUncheckedCreateWithoutLikesInput>
+export type ProfileUpsertWithoutPostLikesInput = {
+  update: Prisma.XOR<Prisma.ProfileUpdateWithoutPostLikesInput, Prisma.ProfileUncheckedUpdateWithoutPostLikesInput>
+  create: Prisma.XOR<Prisma.ProfileCreateWithoutPostLikesInput, Prisma.ProfileUncheckedCreateWithoutPostLikesInput>
   where?: Prisma.ProfileWhereInput
 }
 
-export type ProfileUpdateToOneWithWhereWithoutLikesInput = {
+export type ProfileUpdateToOneWithWhereWithoutPostLikesInput = {
   where?: Prisma.ProfileWhereInput
-  data: Prisma.XOR<Prisma.ProfileUpdateWithoutLikesInput, Prisma.ProfileUncheckedUpdateWithoutLikesInput>
+  data: Prisma.XOR<Prisma.ProfileUpdateWithoutPostLikesInput, Prisma.ProfileUncheckedUpdateWithoutPostLikesInput>
 }
 
-export type ProfileUpdateWithoutLikesInput = {
+export type ProfileUpdateWithoutPostLikesInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   username?: Prisma.StringFieldUpdateOperationsInput | string
   user?: Prisma.UserUpdateOneRequiredWithoutProfileNestedInput
   posts?: Prisma.PostUpdateManyWithoutAuthorNestedInput
   comments?: Prisma.CommentUpdateManyWithoutAuthorNestedInput
-  chatParts?: Prisma.ChatParticipantUpdateManyWithoutProfileNestedInput
-  followers?: Prisma.ProfileFollowUpdateManyWithoutFollowingNestedInput
-  following?: Prisma.ProfileFollowUpdateManyWithoutFollowerNestedInput
   commentLikes?: Prisma.CommentLikeUpdateManyWithoutProfileNestedInput
+  chats?: Prisma.ChatUpdateManyWithoutParticipantsNestedInput
+  followers?: Prisma.ProfileUpdateManyWithoutFollowingNestedInput
+  following?: Prisma.ProfileUpdateManyWithoutFollowersNestedInput
 }
 
-export type ProfileUncheckedUpdateWithoutLikesInput = {
+export type ProfileUncheckedUpdateWithoutPostLikesInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   username?: Prisma.StringFieldUpdateOperationsInput | string
   userId?: Prisma.StringFieldUpdateOperationsInput | string
   posts?: Prisma.PostUncheckedUpdateManyWithoutAuthorNestedInput
   comments?: Prisma.CommentUncheckedUpdateManyWithoutAuthorNestedInput
-  chatParts?: Prisma.ChatParticipantUncheckedUpdateManyWithoutProfileNestedInput
-  followers?: Prisma.ProfileFollowUncheckedUpdateManyWithoutFollowingNestedInput
-  following?: Prisma.ProfileFollowUncheckedUpdateManyWithoutFollowerNestedInput
   commentLikes?: Prisma.CommentLikeUncheckedUpdateManyWithoutProfileNestedInput
+  chats?: Prisma.ChatUncheckedUpdateManyWithoutParticipantsNestedInput
+  followers?: Prisma.ProfileUncheckedUpdateManyWithoutFollowingNestedInput
+  following?: Prisma.ProfileUncheckedUpdateManyWithoutFollowersNestedInput
 }
 
 export type ProfileCreateWithoutCommentLikesInput = {
@@ -906,10 +940,10 @@ export type ProfileCreateWithoutCommentLikesInput = {
   user: Prisma.UserCreateNestedOneWithoutProfileInput
   posts?: Prisma.PostCreateNestedManyWithoutAuthorInput
   comments?: Prisma.CommentCreateNestedManyWithoutAuthorInput
-  likes?: Prisma.PostLikeCreateNestedManyWithoutProfileInput
-  chatParts?: Prisma.ChatParticipantCreateNestedManyWithoutProfileInput
-  followers?: Prisma.ProfileFollowCreateNestedManyWithoutFollowingInput
-  following?: Prisma.ProfileFollowCreateNestedManyWithoutFollowerInput
+  postLikes?: Prisma.PostLikeCreateNestedManyWithoutProfileInput
+  chats?: Prisma.ChatCreateNestedManyWithoutParticipantsInput
+  followers?: Prisma.ProfileCreateNestedManyWithoutFollowingInput
+  following?: Prisma.ProfileCreateNestedManyWithoutFollowersInput
 }
 
 export type ProfileUncheckedCreateWithoutCommentLikesInput = {
@@ -918,10 +952,10 @@ export type ProfileUncheckedCreateWithoutCommentLikesInput = {
   userId: string
   posts?: Prisma.PostUncheckedCreateNestedManyWithoutAuthorInput
   comments?: Prisma.CommentUncheckedCreateNestedManyWithoutAuthorInput
-  likes?: Prisma.PostLikeUncheckedCreateNestedManyWithoutProfileInput
-  chatParts?: Prisma.ChatParticipantUncheckedCreateNestedManyWithoutProfileInput
-  followers?: Prisma.ProfileFollowUncheckedCreateNestedManyWithoutFollowingInput
-  following?: Prisma.ProfileFollowUncheckedCreateNestedManyWithoutFollowerInput
+  postLikes?: Prisma.PostLikeUncheckedCreateNestedManyWithoutProfileInput
+  chats?: Prisma.ChatUncheckedCreateNestedManyWithoutParticipantsInput
+  followers?: Prisma.ProfileUncheckedCreateNestedManyWithoutFollowingInput
+  following?: Prisma.ProfileUncheckedCreateNestedManyWithoutFollowersInput
 }
 
 export type ProfileCreateOrConnectWithoutCommentLikesInput = {
@@ -946,10 +980,10 @@ export type ProfileUpdateWithoutCommentLikesInput = {
   user?: Prisma.UserUpdateOneRequiredWithoutProfileNestedInput
   posts?: Prisma.PostUpdateManyWithoutAuthorNestedInput
   comments?: Prisma.CommentUpdateManyWithoutAuthorNestedInput
-  likes?: Prisma.PostLikeUpdateManyWithoutProfileNestedInput
-  chatParts?: Prisma.ChatParticipantUpdateManyWithoutProfileNestedInput
-  followers?: Prisma.ProfileFollowUpdateManyWithoutFollowingNestedInput
-  following?: Prisma.ProfileFollowUpdateManyWithoutFollowerNestedInput
+  postLikes?: Prisma.PostLikeUpdateManyWithoutProfileNestedInput
+  chats?: Prisma.ChatUpdateManyWithoutParticipantsNestedInput
+  followers?: Prisma.ProfileUpdateManyWithoutFollowingNestedInput
+  following?: Prisma.ProfileUpdateManyWithoutFollowersNestedInput
 }
 
 export type ProfileUncheckedUpdateWithoutCommentLikesInput = {
@@ -958,10 +992,100 @@ export type ProfileUncheckedUpdateWithoutCommentLikesInput = {
   userId?: Prisma.StringFieldUpdateOperationsInput | string
   posts?: Prisma.PostUncheckedUpdateManyWithoutAuthorNestedInput
   comments?: Prisma.CommentUncheckedUpdateManyWithoutAuthorNestedInput
-  likes?: Prisma.PostLikeUncheckedUpdateManyWithoutProfileNestedInput
-  chatParts?: Prisma.ChatParticipantUncheckedUpdateManyWithoutProfileNestedInput
-  followers?: Prisma.ProfileFollowUncheckedUpdateManyWithoutFollowingNestedInput
-  following?: Prisma.ProfileFollowUncheckedUpdateManyWithoutFollowerNestedInput
+  postLikes?: Prisma.PostLikeUncheckedUpdateManyWithoutProfileNestedInput
+  chats?: Prisma.ChatUncheckedUpdateManyWithoutParticipantsNestedInput
+  followers?: Prisma.ProfileUncheckedUpdateManyWithoutFollowingNestedInput
+  following?: Prisma.ProfileUncheckedUpdateManyWithoutFollowersNestedInput
+}
+
+export type ProfileUpdateWithoutFollowingInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  username?: Prisma.StringFieldUpdateOperationsInput | string
+  user?: Prisma.UserUpdateOneRequiredWithoutProfileNestedInput
+  posts?: Prisma.PostUpdateManyWithoutAuthorNestedInput
+  comments?: Prisma.CommentUpdateManyWithoutAuthorNestedInput
+  postLikes?: Prisma.PostLikeUpdateManyWithoutProfileNestedInput
+  commentLikes?: Prisma.CommentLikeUpdateManyWithoutProfileNestedInput
+  chats?: Prisma.ChatUpdateManyWithoutParticipantsNestedInput
+  followers?: Prisma.ProfileUpdateManyWithoutFollowingNestedInput
+}
+
+export type ProfileUncheckedUpdateWithoutFollowingInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  username?: Prisma.StringFieldUpdateOperationsInput | string
+  userId?: Prisma.StringFieldUpdateOperationsInput | string
+  posts?: Prisma.PostUncheckedUpdateManyWithoutAuthorNestedInput
+  comments?: Prisma.CommentUncheckedUpdateManyWithoutAuthorNestedInput
+  postLikes?: Prisma.PostLikeUncheckedUpdateManyWithoutProfileNestedInput
+  commentLikes?: Prisma.CommentLikeUncheckedUpdateManyWithoutProfileNestedInput
+  chats?: Prisma.ChatUncheckedUpdateManyWithoutParticipantsNestedInput
+  followers?: Prisma.ProfileUncheckedUpdateManyWithoutFollowingNestedInput
+}
+
+export type ProfileUncheckedUpdateManyWithoutFollowingInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  username?: Prisma.StringFieldUpdateOperationsInput | string
+  userId?: Prisma.StringFieldUpdateOperationsInput | string
+}
+
+export type ProfileUpdateWithoutFollowersInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  username?: Prisma.StringFieldUpdateOperationsInput | string
+  user?: Prisma.UserUpdateOneRequiredWithoutProfileNestedInput
+  posts?: Prisma.PostUpdateManyWithoutAuthorNestedInput
+  comments?: Prisma.CommentUpdateManyWithoutAuthorNestedInput
+  postLikes?: Prisma.PostLikeUpdateManyWithoutProfileNestedInput
+  commentLikes?: Prisma.CommentLikeUpdateManyWithoutProfileNestedInput
+  chats?: Prisma.ChatUpdateManyWithoutParticipantsNestedInput
+  following?: Prisma.ProfileUpdateManyWithoutFollowersNestedInput
+}
+
+export type ProfileUncheckedUpdateWithoutFollowersInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  username?: Prisma.StringFieldUpdateOperationsInput | string
+  userId?: Prisma.StringFieldUpdateOperationsInput | string
+  posts?: Prisma.PostUncheckedUpdateManyWithoutAuthorNestedInput
+  comments?: Prisma.CommentUncheckedUpdateManyWithoutAuthorNestedInput
+  postLikes?: Prisma.PostLikeUncheckedUpdateManyWithoutProfileNestedInput
+  commentLikes?: Prisma.CommentLikeUncheckedUpdateManyWithoutProfileNestedInput
+  chats?: Prisma.ChatUncheckedUpdateManyWithoutParticipantsNestedInput
+  following?: Prisma.ProfileUncheckedUpdateManyWithoutFollowersNestedInput
+}
+
+export type ProfileUncheckedUpdateManyWithoutFollowersInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  username?: Prisma.StringFieldUpdateOperationsInput | string
+  userId?: Prisma.StringFieldUpdateOperationsInput | string
+}
+
+export type ProfileUpdateWithoutChatsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  username?: Prisma.StringFieldUpdateOperationsInput | string
+  user?: Prisma.UserUpdateOneRequiredWithoutProfileNestedInput
+  posts?: Prisma.PostUpdateManyWithoutAuthorNestedInput
+  comments?: Prisma.CommentUpdateManyWithoutAuthorNestedInput
+  postLikes?: Prisma.PostLikeUpdateManyWithoutProfileNestedInput
+  commentLikes?: Prisma.CommentLikeUpdateManyWithoutProfileNestedInput
+  followers?: Prisma.ProfileUpdateManyWithoutFollowingNestedInput
+  following?: Prisma.ProfileUpdateManyWithoutFollowersNestedInput
+}
+
+export type ProfileUncheckedUpdateWithoutChatsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  username?: Prisma.StringFieldUpdateOperationsInput | string
+  userId?: Prisma.StringFieldUpdateOperationsInput | string
+  posts?: Prisma.PostUncheckedUpdateManyWithoutAuthorNestedInput
+  comments?: Prisma.CommentUncheckedUpdateManyWithoutAuthorNestedInput
+  postLikes?: Prisma.PostLikeUncheckedUpdateManyWithoutProfileNestedInput
+  commentLikes?: Prisma.CommentLikeUncheckedUpdateManyWithoutProfileNestedInput
+  followers?: Prisma.ProfileUncheckedUpdateManyWithoutFollowingNestedInput
+  following?: Prisma.ProfileUncheckedUpdateManyWithoutFollowersNestedInput
+}
+
+export type ProfileUncheckedUpdateManyWithoutChatsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  username?: Prisma.StringFieldUpdateOperationsInput | string
+  userId?: Prisma.StringFieldUpdateOperationsInput | string
 }
 
 
@@ -972,21 +1096,21 @@ export type ProfileUncheckedUpdateWithoutCommentLikesInput = {
 export type ProfileCountOutputType = {
   posts: number
   comments: number
-  likes: number
-  chatParts: number
+  postLikes: number
+  commentLikes: number
+  chats: number
   followers: number
   following: number
-  commentLikes: number
 }
 
 export type ProfileCountOutputTypeSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   posts?: boolean | ProfileCountOutputTypeCountPostsArgs
   comments?: boolean | ProfileCountOutputTypeCountCommentsArgs
-  likes?: boolean | ProfileCountOutputTypeCountLikesArgs
-  chatParts?: boolean | ProfileCountOutputTypeCountChatPartsArgs
+  postLikes?: boolean | ProfileCountOutputTypeCountPostLikesArgs
+  commentLikes?: boolean | ProfileCountOutputTypeCountCommentLikesArgs
+  chats?: boolean | ProfileCountOutputTypeCountChatsArgs
   followers?: boolean | ProfileCountOutputTypeCountFollowersArgs
   following?: boolean | ProfileCountOutputTypeCountFollowingArgs
-  commentLikes?: boolean | ProfileCountOutputTypeCountCommentLikesArgs
 }
 
 /**
@@ -1016,29 +1140,8 @@ export type ProfileCountOutputTypeCountCommentsArgs<ExtArgs extends runtime.Type
 /**
  * ProfileCountOutputType without action
  */
-export type ProfileCountOutputTypeCountLikesArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+export type ProfileCountOutputTypeCountPostLikesArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   where?: Prisma.PostLikeWhereInput
-}
-
-/**
- * ProfileCountOutputType without action
- */
-export type ProfileCountOutputTypeCountChatPartsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
-  where?: Prisma.ChatParticipantWhereInput
-}
-
-/**
- * ProfileCountOutputType without action
- */
-export type ProfileCountOutputTypeCountFollowersArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
-  where?: Prisma.ProfileFollowWhereInput
-}
-
-/**
- * ProfileCountOutputType without action
- */
-export type ProfileCountOutputTypeCountFollowingArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
-  where?: Prisma.ProfileFollowWhereInput
 }
 
 /**
@@ -1046,6 +1149,27 @@ export type ProfileCountOutputTypeCountFollowingArgs<ExtArgs extends runtime.Typ
  */
 export type ProfileCountOutputTypeCountCommentLikesArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   where?: Prisma.CommentLikeWhereInput
+}
+
+/**
+ * ProfileCountOutputType without action
+ */
+export type ProfileCountOutputTypeCountChatsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.ChatWhereInput
+}
+
+/**
+ * ProfileCountOutputType without action
+ */
+export type ProfileCountOutputTypeCountFollowersArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.ProfileWhereInput
+}
+
+/**
+ * ProfileCountOutputType without action
+ */
+export type ProfileCountOutputTypeCountFollowingArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.ProfileWhereInput
 }
 
 
@@ -1056,11 +1180,11 @@ export type ProfileSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs 
   user?: boolean | Prisma.UserDefaultArgs<ExtArgs>
   posts?: boolean | Prisma.Profile$postsArgs<ExtArgs>
   comments?: boolean | Prisma.Profile$commentsArgs<ExtArgs>
-  likes?: boolean | Prisma.Profile$likesArgs<ExtArgs>
-  chatParts?: boolean | Prisma.Profile$chatPartsArgs<ExtArgs>
+  postLikes?: boolean | Prisma.Profile$postLikesArgs<ExtArgs>
+  commentLikes?: boolean | Prisma.Profile$commentLikesArgs<ExtArgs>
+  chats?: boolean | Prisma.Profile$chatsArgs<ExtArgs>
   followers?: boolean | Prisma.Profile$followersArgs<ExtArgs>
   following?: boolean | Prisma.Profile$followingArgs<ExtArgs>
-  commentLikes?: boolean | Prisma.Profile$commentLikesArgs<ExtArgs>
   _count?: boolean | Prisma.ProfileCountOutputTypeDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["profile"]>
 
@@ -1089,11 +1213,11 @@ export type ProfileInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs
   user?: boolean | Prisma.UserDefaultArgs<ExtArgs>
   posts?: boolean | Prisma.Profile$postsArgs<ExtArgs>
   comments?: boolean | Prisma.Profile$commentsArgs<ExtArgs>
-  likes?: boolean | Prisma.Profile$likesArgs<ExtArgs>
-  chatParts?: boolean | Prisma.Profile$chatPartsArgs<ExtArgs>
+  postLikes?: boolean | Prisma.Profile$postLikesArgs<ExtArgs>
+  commentLikes?: boolean | Prisma.Profile$commentLikesArgs<ExtArgs>
+  chats?: boolean | Prisma.Profile$chatsArgs<ExtArgs>
   followers?: boolean | Prisma.Profile$followersArgs<ExtArgs>
   following?: boolean | Prisma.Profile$followingArgs<ExtArgs>
-  commentLikes?: boolean | Prisma.Profile$commentLikesArgs<ExtArgs>
   _count?: boolean | Prisma.ProfileCountOutputTypeDefaultArgs<ExtArgs>
 }
 export type ProfileIncludeCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
@@ -1109,11 +1233,11 @@ export type $ProfilePayload<ExtArgs extends runtime.Types.Extensions.InternalArg
     user: Prisma.$UserPayload<ExtArgs>
     posts: Prisma.$PostPayload<ExtArgs>[]
     comments: Prisma.$CommentPayload<ExtArgs>[]
-    likes: Prisma.$PostLikePayload<ExtArgs>[]
-    chatParts: Prisma.$ChatParticipantPayload<ExtArgs>[]
-    followers: Prisma.$ProfileFollowPayload<ExtArgs>[]
-    following: Prisma.$ProfileFollowPayload<ExtArgs>[]
+    postLikes: Prisma.$PostLikePayload<ExtArgs>[]
     commentLikes: Prisma.$CommentLikePayload<ExtArgs>[]
+    chats: Prisma.$ChatPayload<ExtArgs>[]
+    followers: Prisma.$ProfilePayload<ExtArgs>[]
+    following: Prisma.$ProfilePayload<ExtArgs>[]
   }
   scalars: runtime.Types.Extensions.GetPayloadResult<{
     id: string
@@ -1516,11 +1640,11 @@ export interface Prisma__ProfileClient<T, Null = never, ExtArgs extends runtime.
   user<T extends Prisma.UserDefaultArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.UserDefaultArgs<ExtArgs>>): Prisma.Prisma__UserClient<runtime.Types.Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
   posts<T extends Prisma.Profile$postsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Profile$postsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$PostPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   comments<T extends Prisma.Profile$commentsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Profile$commentsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$CommentPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
-  likes<T extends Prisma.Profile$likesArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Profile$likesArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$PostLikePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
-  chatParts<T extends Prisma.Profile$chatPartsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Profile$chatPartsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$ChatParticipantPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
-  followers<T extends Prisma.Profile$followersArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Profile$followersArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$ProfileFollowPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
-  following<T extends Prisma.Profile$followingArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Profile$followingArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$ProfileFollowPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  postLikes<T extends Prisma.Profile$postLikesArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Profile$postLikesArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$PostLikePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   commentLikes<T extends Prisma.Profile$commentLikesArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Profile$commentLikesArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$CommentLikePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  chats<T extends Prisma.Profile$chatsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Profile$chatsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$ChatPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  followers<T extends Prisma.Profile$followersArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Profile$followersArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$ProfilePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  following<T extends Prisma.Profile$followingArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Profile$followingArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$ProfilePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   /**
    * Attaches callbacks for the resolution and/or rejection of the Promise.
    * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -1997,9 +2121,9 @@ export type Profile$commentsArgs<ExtArgs extends runtime.Types.Extensions.Intern
 }
 
 /**
- * Profile.likes
+ * Profile.postLikes
  */
-export type Profile$likesArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+export type Profile$postLikesArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   /**
    * Select specific fields to fetch from the PostLike
    */
@@ -2018,78 +2142,6 @@ export type Profile$likesArgs<ExtArgs extends runtime.Types.Extensions.InternalA
   take?: number
   skip?: number
   distinct?: Prisma.PostLikeScalarFieldEnum | Prisma.PostLikeScalarFieldEnum[]
-}
-
-/**
- * Profile.chatParts
- */
-export type Profile$chatPartsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
-  /**
-   * Select specific fields to fetch from the ChatParticipant
-   */
-  select?: Prisma.ChatParticipantSelect<ExtArgs> | null
-  /**
-   * Omit specific fields from the ChatParticipant
-   */
-  omit?: Prisma.ChatParticipantOmit<ExtArgs> | null
-  /**
-   * Choose, which related nodes to fetch as well
-   */
-  include?: Prisma.ChatParticipantInclude<ExtArgs> | null
-  where?: Prisma.ChatParticipantWhereInput
-  orderBy?: Prisma.ChatParticipantOrderByWithRelationInput | Prisma.ChatParticipantOrderByWithRelationInput[]
-  cursor?: Prisma.ChatParticipantWhereUniqueInput
-  take?: number
-  skip?: number
-  distinct?: Prisma.ChatParticipantScalarFieldEnum | Prisma.ChatParticipantScalarFieldEnum[]
-}
-
-/**
- * Profile.followers
- */
-export type Profile$followersArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
-  /**
-   * Select specific fields to fetch from the ProfileFollow
-   */
-  select?: Prisma.ProfileFollowSelect<ExtArgs> | null
-  /**
-   * Omit specific fields from the ProfileFollow
-   */
-  omit?: Prisma.ProfileFollowOmit<ExtArgs> | null
-  /**
-   * Choose, which related nodes to fetch as well
-   */
-  include?: Prisma.ProfileFollowInclude<ExtArgs> | null
-  where?: Prisma.ProfileFollowWhereInput
-  orderBy?: Prisma.ProfileFollowOrderByWithRelationInput | Prisma.ProfileFollowOrderByWithRelationInput[]
-  cursor?: Prisma.ProfileFollowWhereUniqueInput
-  take?: number
-  skip?: number
-  distinct?: Prisma.ProfileFollowScalarFieldEnum | Prisma.ProfileFollowScalarFieldEnum[]
-}
-
-/**
- * Profile.following
- */
-export type Profile$followingArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
-  /**
-   * Select specific fields to fetch from the ProfileFollow
-   */
-  select?: Prisma.ProfileFollowSelect<ExtArgs> | null
-  /**
-   * Omit specific fields from the ProfileFollow
-   */
-  omit?: Prisma.ProfileFollowOmit<ExtArgs> | null
-  /**
-   * Choose, which related nodes to fetch as well
-   */
-  include?: Prisma.ProfileFollowInclude<ExtArgs> | null
-  where?: Prisma.ProfileFollowWhereInput
-  orderBy?: Prisma.ProfileFollowOrderByWithRelationInput | Prisma.ProfileFollowOrderByWithRelationInput[]
-  cursor?: Prisma.ProfileFollowWhereUniqueInput
-  take?: number
-  skip?: number
-  distinct?: Prisma.ProfileFollowScalarFieldEnum | Prisma.ProfileFollowScalarFieldEnum[]
 }
 
 /**
@@ -2114,6 +2166,78 @@ export type Profile$commentLikesArgs<ExtArgs extends runtime.Types.Extensions.In
   take?: number
   skip?: number
   distinct?: Prisma.CommentLikeScalarFieldEnum | Prisma.CommentLikeScalarFieldEnum[]
+}
+
+/**
+ * Profile.chats
+ */
+export type Profile$chatsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the Chat
+   */
+  select?: Prisma.ChatSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the Chat
+   */
+  omit?: Prisma.ChatOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.ChatInclude<ExtArgs> | null
+  where?: Prisma.ChatWhereInput
+  orderBy?: Prisma.ChatOrderByWithRelationInput | Prisma.ChatOrderByWithRelationInput[]
+  cursor?: Prisma.ChatWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.ChatScalarFieldEnum | Prisma.ChatScalarFieldEnum[]
+}
+
+/**
+ * Profile.followers
+ */
+export type Profile$followersArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the Profile
+   */
+  select?: Prisma.ProfileSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the Profile
+   */
+  omit?: Prisma.ProfileOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.ProfileInclude<ExtArgs> | null
+  where?: Prisma.ProfileWhereInput
+  orderBy?: Prisma.ProfileOrderByWithRelationInput | Prisma.ProfileOrderByWithRelationInput[]
+  cursor?: Prisma.ProfileWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.ProfileScalarFieldEnum | Prisma.ProfileScalarFieldEnum[]
+}
+
+/**
+ * Profile.following
+ */
+export type Profile$followingArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the Profile
+   */
+  select?: Prisma.ProfileSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the Profile
+   */
+  omit?: Prisma.ProfileOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.ProfileInclude<ExtArgs> | null
+  where?: Prisma.ProfileWhereInput
+  orderBy?: Prisma.ProfileOrderByWithRelationInput | Prisma.ProfileOrderByWithRelationInput[]
+  cursor?: Prisma.ProfileWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.ProfileScalarFieldEnum | Prisma.ProfileScalarFieldEnum[]
 }
 
 /**

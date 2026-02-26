@@ -31,103 +31,65 @@ model Account {
   @@schema("auth")
 }
 
-// --- MAIN SCHEMA (Core Entities) ---
 model Profile {
   id       String @id @default(uuid())
   username String @unique
   userId   String @unique
   user     User   @relation(fields: [userId], references: [id])
 
-  posts     Post[]
-  comments  Comment[]
-  likes     PostLike[]
-  chatParts ChatParticipant[]
-
-  // Self-relation for Following
-  followers    ProfileFollow[] @relation("following")
-  following    ProfileFollow[] @relation("follower")
+  posts        Post[]
+  comments     Comment[]
+  postLikes    PostLike[]
   commentLikes CommentLike[]
+
+  chats Chat[]
+
+  followers Profile[] @relation("FollowRelation")
+  following Profile[] @relation("FollowRelation")
 
   @@schema("main")
 }
 
 model Post {
-  id       String      @id @default(uuid())
+  id       String     @id @default(uuid())
   content  String
   authorId String
-  author   Profile     @relation(fields: [authorId], references: [id])
-  assets   PostAsset[]
+  author   Profile    @relation(fields: [authorId], references: [id])
   comments Comment[]
   likes    PostLike[]
+
+  assets Asset[] @relation("PostAssets")
 
   @@schema("main")
 }
 
 model Asset {
-  id       String         @id @default(uuid())
-  url      String
-  type     String
-  posts    PostAsset[]
-  messages MessageAsset[]
+  id   String @id @default(uuid())
+  url  String
+  type String
 
-  @@schema("main")
-}
+  posts    Post[]    @relation("PostAssets")
+  messages Message[] @relation("MessageAssets")
 
-model PostAsset {
-  postId  String
-  assetId String
-  post    Post   @relation(fields: [postId], references: [id])
-  asset   Asset  @relation(fields: [assetId], references: [id])
-
-  @@id([postId, assetId])
-  @@schema("main")
-}
-
-model ProfileFollow {
-  followerId  String
-  followingId String
-  follower    Profile @relation("follower", fields: [followerId], references: [id])
-  following   Profile @relation("following", fields: [followingId], references: [id])
-
-  @@id([followerId, followingId])
   @@schema("main")
 }
 
 model Chat {
-  id           String            @id @default(uuid())
-  participants ChatParticipant[]
+  id           String    @id @default(uuid())
+  participants Profile[]
   messages     Message[]
 
   @@schema("main")
 }
 
-model ChatParticipant {
-  chatId    String
-  profileId String
-  chat      Chat    @relation(fields: [chatId], references: [id])
-  profile   Profile @relation(fields: [profileId], references: [id])
-
-  @@id([chatId, profileId])
-  @@schema("main")
-}
-
 model Message {
-  id      String         @id @default(uuid())
+  id      String @id @default(uuid())
   content String
   chatId  String
-  chat    Chat           @relation(fields: [chatId], references: [id])
-  assets  MessageAsset[]
+  chat    Chat   @relation(fields: [chatId], references: [id])
 
-  @@schema("main")
-}
+  assets Asset[] @relation("MessageAssets")
 
-model MessageAsset {
-  messageId String
-  assetId   String
-  message   Message @relation(fields: [messageId], references: [id])
-  asset     Asset   @relation(fields: [assetId], references: [id])
-
-  @@id([messageId, assetId])
   @@schema("main")
 }
 

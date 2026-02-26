@@ -167,9 +167,9 @@ export type PostWhereInput = {
   content?: Prisma.StringFilter<"Post"> | string
   authorId?: Prisma.StringFilter<"Post"> | string
   author?: Prisma.XOR<Prisma.ProfileScalarRelationFilter, Prisma.ProfileWhereInput>
-  assets?: Prisma.PostAssetListRelationFilter
   comments?: Prisma.CommentListRelationFilter
   likes?: Prisma.PostLikeListRelationFilter
+  assets?: Prisma.AssetListRelationFilter
 }
 
 export type PostOrderByWithRelationInput = {
@@ -177,9 +177,9 @@ export type PostOrderByWithRelationInput = {
   content?: Prisma.SortOrder
   authorId?: Prisma.SortOrder
   author?: Prisma.ProfileOrderByWithRelationInput
-  assets?: Prisma.PostAssetOrderByRelationAggregateInput
   comments?: Prisma.CommentOrderByRelationAggregateInput
   likes?: Prisma.PostLikeOrderByRelationAggregateInput
+  assets?: Prisma.AssetOrderByRelationAggregateInput
 }
 
 export type PostWhereUniqueInput = Prisma.AtLeast<{
@@ -190,9 +190,9 @@ export type PostWhereUniqueInput = Prisma.AtLeast<{
   content?: Prisma.StringFilter<"Post"> | string
   authorId?: Prisma.StringFilter<"Post"> | string
   author?: Prisma.XOR<Prisma.ProfileScalarRelationFilter, Prisma.ProfileWhereInput>
-  assets?: Prisma.PostAssetListRelationFilter
   comments?: Prisma.CommentListRelationFilter
   likes?: Prisma.PostLikeListRelationFilter
+  assets?: Prisma.AssetListRelationFilter
 }, "id">
 
 export type PostOrderByWithAggregationInput = {
@@ -217,36 +217,36 @@ export type PostCreateInput = {
   id?: string
   content: string
   author: Prisma.ProfileCreateNestedOneWithoutPostsInput
-  assets?: Prisma.PostAssetCreateNestedManyWithoutPostInput
   comments?: Prisma.CommentCreateNestedManyWithoutPostInput
   likes?: Prisma.PostLikeCreateNestedManyWithoutPostInput
+  assets?: Prisma.AssetCreateNestedManyWithoutPostsInput
 }
 
 export type PostUncheckedCreateInput = {
   id?: string
   content: string
   authorId: string
-  assets?: Prisma.PostAssetUncheckedCreateNestedManyWithoutPostInput
   comments?: Prisma.CommentUncheckedCreateNestedManyWithoutPostInput
   likes?: Prisma.PostLikeUncheckedCreateNestedManyWithoutPostInput
+  assets?: Prisma.AssetUncheckedCreateNestedManyWithoutPostsInput
 }
 
 export type PostUpdateInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   content?: Prisma.StringFieldUpdateOperationsInput | string
   author?: Prisma.ProfileUpdateOneRequiredWithoutPostsNestedInput
-  assets?: Prisma.PostAssetUpdateManyWithoutPostNestedInput
   comments?: Prisma.CommentUpdateManyWithoutPostNestedInput
   likes?: Prisma.PostLikeUpdateManyWithoutPostNestedInput
+  assets?: Prisma.AssetUpdateManyWithoutPostsNestedInput
 }
 
 export type PostUncheckedUpdateInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   content?: Prisma.StringFieldUpdateOperationsInput | string
   authorId?: Prisma.StringFieldUpdateOperationsInput | string
-  assets?: Prisma.PostAssetUncheckedUpdateManyWithoutPostNestedInput
   comments?: Prisma.CommentUncheckedUpdateManyWithoutPostNestedInput
   likes?: Prisma.PostLikeUncheckedUpdateManyWithoutPostNestedInput
+  assets?: Prisma.AssetUncheckedUpdateManyWithoutPostsNestedInput
 }
 
 export type PostCreateManyInput = {
@@ -341,18 +341,42 @@ export type PostUncheckedUpdateManyWithoutAuthorNestedInput = {
   deleteMany?: Prisma.PostScalarWhereInput | Prisma.PostScalarWhereInput[]
 }
 
-export type PostCreateNestedOneWithoutAssetsInput = {
-  create?: Prisma.XOR<Prisma.PostCreateWithoutAssetsInput, Prisma.PostUncheckedCreateWithoutAssetsInput>
-  connectOrCreate?: Prisma.PostCreateOrConnectWithoutAssetsInput
-  connect?: Prisma.PostWhereUniqueInput
+export type PostCreateNestedManyWithoutAssetsInput = {
+  create?: Prisma.XOR<Prisma.PostCreateWithoutAssetsInput, Prisma.PostUncheckedCreateWithoutAssetsInput> | Prisma.PostCreateWithoutAssetsInput[] | Prisma.PostUncheckedCreateWithoutAssetsInput[]
+  connectOrCreate?: Prisma.PostCreateOrConnectWithoutAssetsInput | Prisma.PostCreateOrConnectWithoutAssetsInput[]
+  connect?: Prisma.PostWhereUniqueInput | Prisma.PostWhereUniqueInput[]
 }
 
-export type PostUpdateOneRequiredWithoutAssetsNestedInput = {
-  create?: Prisma.XOR<Prisma.PostCreateWithoutAssetsInput, Prisma.PostUncheckedCreateWithoutAssetsInput>
-  connectOrCreate?: Prisma.PostCreateOrConnectWithoutAssetsInput
-  upsert?: Prisma.PostUpsertWithoutAssetsInput
-  connect?: Prisma.PostWhereUniqueInput
-  update?: Prisma.XOR<Prisma.XOR<Prisma.PostUpdateToOneWithWhereWithoutAssetsInput, Prisma.PostUpdateWithoutAssetsInput>, Prisma.PostUncheckedUpdateWithoutAssetsInput>
+export type PostUncheckedCreateNestedManyWithoutAssetsInput = {
+  create?: Prisma.XOR<Prisma.PostCreateWithoutAssetsInput, Prisma.PostUncheckedCreateWithoutAssetsInput> | Prisma.PostCreateWithoutAssetsInput[] | Prisma.PostUncheckedCreateWithoutAssetsInput[]
+  connectOrCreate?: Prisma.PostCreateOrConnectWithoutAssetsInput | Prisma.PostCreateOrConnectWithoutAssetsInput[]
+  connect?: Prisma.PostWhereUniqueInput | Prisma.PostWhereUniqueInput[]
+}
+
+export type PostUpdateManyWithoutAssetsNestedInput = {
+  create?: Prisma.XOR<Prisma.PostCreateWithoutAssetsInput, Prisma.PostUncheckedCreateWithoutAssetsInput> | Prisma.PostCreateWithoutAssetsInput[] | Prisma.PostUncheckedCreateWithoutAssetsInput[]
+  connectOrCreate?: Prisma.PostCreateOrConnectWithoutAssetsInput | Prisma.PostCreateOrConnectWithoutAssetsInput[]
+  upsert?: Prisma.PostUpsertWithWhereUniqueWithoutAssetsInput | Prisma.PostUpsertWithWhereUniqueWithoutAssetsInput[]
+  set?: Prisma.PostWhereUniqueInput | Prisma.PostWhereUniqueInput[]
+  disconnect?: Prisma.PostWhereUniqueInput | Prisma.PostWhereUniqueInput[]
+  delete?: Prisma.PostWhereUniqueInput | Prisma.PostWhereUniqueInput[]
+  connect?: Prisma.PostWhereUniqueInput | Prisma.PostWhereUniqueInput[]
+  update?: Prisma.PostUpdateWithWhereUniqueWithoutAssetsInput | Prisma.PostUpdateWithWhereUniqueWithoutAssetsInput[]
+  updateMany?: Prisma.PostUpdateManyWithWhereWithoutAssetsInput | Prisma.PostUpdateManyWithWhereWithoutAssetsInput[]
+  deleteMany?: Prisma.PostScalarWhereInput | Prisma.PostScalarWhereInput[]
+}
+
+export type PostUncheckedUpdateManyWithoutAssetsNestedInput = {
+  create?: Prisma.XOR<Prisma.PostCreateWithoutAssetsInput, Prisma.PostUncheckedCreateWithoutAssetsInput> | Prisma.PostCreateWithoutAssetsInput[] | Prisma.PostUncheckedCreateWithoutAssetsInput[]
+  connectOrCreate?: Prisma.PostCreateOrConnectWithoutAssetsInput | Prisma.PostCreateOrConnectWithoutAssetsInput[]
+  upsert?: Prisma.PostUpsertWithWhereUniqueWithoutAssetsInput | Prisma.PostUpsertWithWhereUniqueWithoutAssetsInput[]
+  set?: Prisma.PostWhereUniqueInput | Prisma.PostWhereUniqueInput[]
+  disconnect?: Prisma.PostWhereUniqueInput | Prisma.PostWhereUniqueInput[]
+  delete?: Prisma.PostWhereUniqueInput | Prisma.PostWhereUniqueInput[]
+  connect?: Prisma.PostWhereUniqueInput | Prisma.PostWhereUniqueInput[]
+  update?: Prisma.PostUpdateWithWhereUniqueWithoutAssetsInput | Prisma.PostUpdateWithWhereUniqueWithoutAssetsInput[]
+  updateMany?: Prisma.PostUpdateManyWithWhereWithoutAssetsInput | Prisma.PostUpdateManyWithWhereWithoutAssetsInput[]
+  deleteMany?: Prisma.PostScalarWhereInput | Prisma.PostScalarWhereInput[]
 }
 
 export type PostCreateNestedOneWithoutCommentsInput = {
@@ -386,17 +410,17 @@ export type PostUpdateOneRequiredWithoutLikesNestedInput = {
 export type PostCreateWithoutAuthorInput = {
   id?: string
   content: string
-  assets?: Prisma.PostAssetCreateNestedManyWithoutPostInput
   comments?: Prisma.CommentCreateNestedManyWithoutPostInput
   likes?: Prisma.PostLikeCreateNestedManyWithoutPostInput
+  assets?: Prisma.AssetCreateNestedManyWithoutPostsInput
 }
 
 export type PostUncheckedCreateWithoutAuthorInput = {
   id?: string
   content: string
-  assets?: Prisma.PostAssetUncheckedCreateNestedManyWithoutPostInput
   comments?: Prisma.CommentUncheckedCreateNestedManyWithoutPostInput
   likes?: Prisma.PostLikeUncheckedCreateNestedManyWithoutPostInput
+  assets?: Prisma.AssetUncheckedCreateNestedManyWithoutPostsInput
 }
 
 export type PostCreateOrConnectWithoutAuthorInput = {
@@ -455,47 +479,36 @@ export type PostCreateOrConnectWithoutAssetsInput = {
   create: Prisma.XOR<Prisma.PostCreateWithoutAssetsInput, Prisma.PostUncheckedCreateWithoutAssetsInput>
 }
 
-export type PostUpsertWithoutAssetsInput = {
+export type PostUpsertWithWhereUniqueWithoutAssetsInput = {
+  where: Prisma.PostWhereUniqueInput
   update: Prisma.XOR<Prisma.PostUpdateWithoutAssetsInput, Prisma.PostUncheckedUpdateWithoutAssetsInput>
   create: Prisma.XOR<Prisma.PostCreateWithoutAssetsInput, Prisma.PostUncheckedCreateWithoutAssetsInput>
-  where?: Prisma.PostWhereInput
 }
 
-export type PostUpdateToOneWithWhereWithoutAssetsInput = {
-  where?: Prisma.PostWhereInput
+export type PostUpdateWithWhereUniqueWithoutAssetsInput = {
+  where: Prisma.PostWhereUniqueInput
   data: Prisma.XOR<Prisma.PostUpdateWithoutAssetsInput, Prisma.PostUncheckedUpdateWithoutAssetsInput>
 }
 
-export type PostUpdateWithoutAssetsInput = {
-  id?: Prisma.StringFieldUpdateOperationsInput | string
-  content?: Prisma.StringFieldUpdateOperationsInput | string
-  author?: Prisma.ProfileUpdateOneRequiredWithoutPostsNestedInput
-  comments?: Prisma.CommentUpdateManyWithoutPostNestedInput
-  likes?: Prisma.PostLikeUpdateManyWithoutPostNestedInput
-}
-
-export type PostUncheckedUpdateWithoutAssetsInput = {
-  id?: Prisma.StringFieldUpdateOperationsInput | string
-  content?: Prisma.StringFieldUpdateOperationsInput | string
-  authorId?: Prisma.StringFieldUpdateOperationsInput | string
-  comments?: Prisma.CommentUncheckedUpdateManyWithoutPostNestedInput
-  likes?: Prisma.PostLikeUncheckedUpdateManyWithoutPostNestedInput
+export type PostUpdateManyWithWhereWithoutAssetsInput = {
+  where: Prisma.PostScalarWhereInput
+  data: Prisma.XOR<Prisma.PostUpdateManyMutationInput, Prisma.PostUncheckedUpdateManyWithoutAssetsInput>
 }
 
 export type PostCreateWithoutCommentsInput = {
   id?: string
   content: string
   author: Prisma.ProfileCreateNestedOneWithoutPostsInput
-  assets?: Prisma.PostAssetCreateNestedManyWithoutPostInput
   likes?: Prisma.PostLikeCreateNestedManyWithoutPostInput
+  assets?: Prisma.AssetCreateNestedManyWithoutPostsInput
 }
 
 export type PostUncheckedCreateWithoutCommentsInput = {
   id?: string
   content: string
   authorId: string
-  assets?: Prisma.PostAssetUncheckedCreateNestedManyWithoutPostInput
   likes?: Prisma.PostLikeUncheckedCreateNestedManyWithoutPostInput
+  assets?: Prisma.AssetUncheckedCreateNestedManyWithoutPostsInput
 }
 
 export type PostCreateOrConnectWithoutCommentsInput = {
@@ -518,32 +531,32 @@ export type PostUpdateWithoutCommentsInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   content?: Prisma.StringFieldUpdateOperationsInput | string
   author?: Prisma.ProfileUpdateOneRequiredWithoutPostsNestedInput
-  assets?: Prisma.PostAssetUpdateManyWithoutPostNestedInput
   likes?: Prisma.PostLikeUpdateManyWithoutPostNestedInput
+  assets?: Prisma.AssetUpdateManyWithoutPostsNestedInput
 }
 
 export type PostUncheckedUpdateWithoutCommentsInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   content?: Prisma.StringFieldUpdateOperationsInput | string
   authorId?: Prisma.StringFieldUpdateOperationsInput | string
-  assets?: Prisma.PostAssetUncheckedUpdateManyWithoutPostNestedInput
   likes?: Prisma.PostLikeUncheckedUpdateManyWithoutPostNestedInput
+  assets?: Prisma.AssetUncheckedUpdateManyWithoutPostsNestedInput
 }
 
 export type PostCreateWithoutLikesInput = {
   id?: string
   content: string
   author: Prisma.ProfileCreateNestedOneWithoutPostsInput
-  assets?: Prisma.PostAssetCreateNestedManyWithoutPostInput
   comments?: Prisma.CommentCreateNestedManyWithoutPostInput
+  assets?: Prisma.AssetCreateNestedManyWithoutPostsInput
 }
 
 export type PostUncheckedCreateWithoutLikesInput = {
   id?: string
   content: string
   authorId: string
-  assets?: Prisma.PostAssetUncheckedCreateNestedManyWithoutPostInput
   comments?: Prisma.CommentUncheckedCreateNestedManyWithoutPostInput
+  assets?: Prisma.AssetUncheckedCreateNestedManyWithoutPostsInput
 }
 
 export type PostCreateOrConnectWithoutLikesInput = {
@@ -566,16 +579,16 @@ export type PostUpdateWithoutLikesInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   content?: Prisma.StringFieldUpdateOperationsInput | string
   author?: Prisma.ProfileUpdateOneRequiredWithoutPostsNestedInput
-  assets?: Prisma.PostAssetUpdateManyWithoutPostNestedInput
   comments?: Prisma.CommentUpdateManyWithoutPostNestedInput
+  assets?: Prisma.AssetUpdateManyWithoutPostsNestedInput
 }
 
 export type PostUncheckedUpdateWithoutLikesInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   content?: Prisma.StringFieldUpdateOperationsInput | string
   authorId?: Prisma.StringFieldUpdateOperationsInput | string
-  assets?: Prisma.PostAssetUncheckedUpdateManyWithoutPostNestedInput
   comments?: Prisma.CommentUncheckedUpdateManyWithoutPostNestedInput
+  assets?: Prisma.AssetUncheckedUpdateManyWithoutPostsNestedInput
 }
 
 export type PostCreateManyAuthorInput = {
@@ -586,22 +599,44 @@ export type PostCreateManyAuthorInput = {
 export type PostUpdateWithoutAuthorInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   content?: Prisma.StringFieldUpdateOperationsInput | string
-  assets?: Prisma.PostAssetUpdateManyWithoutPostNestedInput
   comments?: Prisma.CommentUpdateManyWithoutPostNestedInput
   likes?: Prisma.PostLikeUpdateManyWithoutPostNestedInput
+  assets?: Prisma.AssetUpdateManyWithoutPostsNestedInput
 }
 
 export type PostUncheckedUpdateWithoutAuthorInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   content?: Prisma.StringFieldUpdateOperationsInput | string
-  assets?: Prisma.PostAssetUncheckedUpdateManyWithoutPostNestedInput
   comments?: Prisma.CommentUncheckedUpdateManyWithoutPostNestedInput
   likes?: Prisma.PostLikeUncheckedUpdateManyWithoutPostNestedInput
+  assets?: Prisma.AssetUncheckedUpdateManyWithoutPostsNestedInput
 }
 
 export type PostUncheckedUpdateManyWithoutAuthorInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   content?: Prisma.StringFieldUpdateOperationsInput | string
+}
+
+export type PostUpdateWithoutAssetsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  content?: Prisma.StringFieldUpdateOperationsInput | string
+  author?: Prisma.ProfileUpdateOneRequiredWithoutPostsNestedInput
+  comments?: Prisma.CommentUpdateManyWithoutPostNestedInput
+  likes?: Prisma.PostLikeUpdateManyWithoutPostNestedInput
+}
+
+export type PostUncheckedUpdateWithoutAssetsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  content?: Prisma.StringFieldUpdateOperationsInput | string
+  authorId?: Prisma.StringFieldUpdateOperationsInput | string
+  comments?: Prisma.CommentUncheckedUpdateManyWithoutPostNestedInput
+  likes?: Prisma.PostLikeUncheckedUpdateManyWithoutPostNestedInput
+}
+
+export type PostUncheckedUpdateManyWithoutAssetsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  content?: Prisma.StringFieldUpdateOperationsInput | string
+  authorId?: Prisma.StringFieldUpdateOperationsInput | string
 }
 
 
@@ -610,15 +645,15 @@ export type PostUncheckedUpdateManyWithoutAuthorInput = {
  */
 
 export type PostCountOutputType = {
-  assets: number
   comments: number
   likes: number
+  assets: number
 }
 
 export type PostCountOutputTypeSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
-  assets?: boolean | PostCountOutputTypeCountAssetsArgs
   comments?: boolean | PostCountOutputTypeCountCommentsArgs
   likes?: boolean | PostCountOutputTypeCountLikesArgs
+  assets?: boolean | PostCountOutputTypeCountAssetsArgs
 }
 
 /**
@@ -629,13 +664,6 @@ export type PostCountOutputTypeDefaultArgs<ExtArgs extends runtime.Types.Extensi
    * Select specific fields to fetch from the PostCountOutputType
    */
   select?: Prisma.PostCountOutputTypeSelect<ExtArgs> | null
-}
-
-/**
- * PostCountOutputType without action
- */
-export type PostCountOutputTypeCountAssetsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
-  where?: Prisma.PostAssetWhereInput
 }
 
 /**
@@ -652,15 +680,22 @@ export type PostCountOutputTypeCountLikesArgs<ExtArgs extends runtime.Types.Exte
   where?: Prisma.PostLikeWhereInput
 }
 
+/**
+ * PostCountOutputType without action
+ */
+export type PostCountOutputTypeCountAssetsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.AssetWhereInput
+}
+
 
 export type PostSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
   content?: boolean
   authorId?: boolean
   author?: boolean | Prisma.ProfileDefaultArgs<ExtArgs>
-  assets?: boolean | Prisma.Post$assetsArgs<ExtArgs>
   comments?: boolean | Prisma.Post$commentsArgs<ExtArgs>
   likes?: boolean | Prisma.Post$likesArgs<ExtArgs>
+  assets?: boolean | Prisma.Post$assetsArgs<ExtArgs>
   _count?: boolean | Prisma.PostCountOutputTypeDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["post"]>
 
@@ -687,9 +722,9 @@ export type PostSelectScalar = {
 export type PostOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "content" | "authorId", ExtArgs["result"]["post"]>
 export type PostInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   author?: boolean | Prisma.ProfileDefaultArgs<ExtArgs>
-  assets?: boolean | Prisma.Post$assetsArgs<ExtArgs>
   comments?: boolean | Prisma.Post$commentsArgs<ExtArgs>
   likes?: boolean | Prisma.Post$likesArgs<ExtArgs>
+  assets?: boolean | Prisma.Post$assetsArgs<ExtArgs>
   _count?: boolean | Prisma.PostCountOutputTypeDefaultArgs<ExtArgs>
 }
 export type PostIncludeCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
@@ -703,9 +738,9 @@ export type $PostPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs =
   name: "Post"
   objects: {
     author: Prisma.$ProfilePayload<ExtArgs>
-    assets: Prisma.$PostAssetPayload<ExtArgs>[]
     comments: Prisma.$CommentPayload<ExtArgs>[]
     likes: Prisma.$PostLikePayload<ExtArgs>[]
+    assets: Prisma.$AssetPayload<ExtArgs>[]
   }
   scalars: runtime.Types.Extensions.GetPayloadResult<{
     id: string
@@ -1106,9 +1141,9 @@ readonly fields: PostFieldRefs;
 export interface Prisma__PostClient<T, Null = never, ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
   readonly [Symbol.toStringTag]: "PrismaPromise"
   author<T extends Prisma.ProfileDefaultArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.ProfileDefaultArgs<ExtArgs>>): Prisma.Prisma__ProfileClient<runtime.Types.Result.GetResult<Prisma.$ProfilePayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
-  assets<T extends Prisma.Post$assetsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Post$assetsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$PostAssetPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   comments<T extends Prisma.Post$commentsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Post$commentsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$CommentPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   likes<T extends Prisma.Post$likesArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Post$likesArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$PostLikePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  assets<T extends Prisma.Post$assetsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Post$assetsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$AssetPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   /**
    * Attaches callbacks for the resolution and/or rejection of the Promise.
    * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -1537,30 +1572,6 @@ export type PostDeleteManyArgs<ExtArgs extends runtime.Types.Extensions.Internal
 }
 
 /**
- * Post.assets
- */
-export type Post$assetsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
-  /**
-   * Select specific fields to fetch from the PostAsset
-   */
-  select?: Prisma.PostAssetSelect<ExtArgs> | null
-  /**
-   * Omit specific fields from the PostAsset
-   */
-  omit?: Prisma.PostAssetOmit<ExtArgs> | null
-  /**
-   * Choose, which related nodes to fetch as well
-   */
-  include?: Prisma.PostAssetInclude<ExtArgs> | null
-  where?: Prisma.PostAssetWhereInput
-  orderBy?: Prisma.PostAssetOrderByWithRelationInput | Prisma.PostAssetOrderByWithRelationInput[]
-  cursor?: Prisma.PostAssetWhereUniqueInput
-  take?: number
-  skip?: number
-  distinct?: Prisma.PostAssetScalarFieldEnum | Prisma.PostAssetScalarFieldEnum[]
-}
-
-/**
  * Post.comments
  */
 export type Post$commentsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
@@ -1606,6 +1617,30 @@ export type Post$likesArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs
   take?: number
   skip?: number
   distinct?: Prisma.PostLikeScalarFieldEnum | Prisma.PostLikeScalarFieldEnum[]
+}
+
+/**
+ * Post.assets
+ */
+export type Post$assetsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the Asset
+   */
+  select?: Prisma.AssetSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the Asset
+   */
+  omit?: Prisma.AssetOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.AssetInclude<ExtArgs> | null
+  where?: Prisma.AssetWhereInput
+  orderBy?: Prisma.AssetOrderByWithRelationInput | Prisma.AssetOrderByWithRelationInput[]
+  cursor?: Prisma.AssetWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.AssetScalarFieldEnum | Prisma.AssetScalarFieldEnum[]
 }
 
 /**

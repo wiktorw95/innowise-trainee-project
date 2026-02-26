@@ -167,7 +167,7 @@ export type MessageWhereInput = {
   content?: Prisma.StringFilter<"Message"> | string
   chatId?: Prisma.StringFilter<"Message"> | string
   chat?: Prisma.XOR<Prisma.ChatScalarRelationFilter, Prisma.ChatWhereInput>
-  assets?: Prisma.MessageAssetListRelationFilter
+  assets?: Prisma.AssetListRelationFilter
 }
 
 export type MessageOrderByWithRelationInput = {
@@ -175,7 +175,7 @@ export type MessageOrderByWithRelationInput = {
   content?: Prisma.SortOrder
   chatId?: Prisma.SortOrder
   chat?: Prisma.ChatOrderByWithRelationInput
-  assets?: Prisma.MessageAssetOrderByRelationAggregateInput
+  assets?: Prisma.AssetOrderByRelationAggregateInput
 }
 
 export type MessageWhereUniqueInput = Prisma.AtLeast<{
@@ -186,7 +186,7 @@ export type MessageWhereUniqueInput = Prisma.AtLeast<{
   content?: Prisma.StringFilter<"Message"> | string
   chatId?: Prisma.StringFilter<"Message"> | string
   chat?: Prisma.XOR<Prisma.ChatScalarRelationFilter, Prisma.ChatWhereInput>
-  assets?: Prisma.MessageAssetListRelationFilter
+  assets?: Prisma.AssetListRelationFilter
 }, "id">
 
 export type MessageOrderByWithAggregationInput = {
@@ -211,28 +211,28 @@ export type MessageCreateInput = {
   id?: string
   content: string
   chat: Prisma.ChatCreateNestedOneWithoutMessagesInput
-  assets?: Prisma.MessageAssetCreateNestedManyWithoutMessageInput
+  assets?: Prisma.AssetCreateNestedManyWithoutMessagesInput
 }
 
 export type MessageUncheckedCreateInput = {
   id?: string
   content: string
   chatId: string
-  assets?: Prisma.MessageAssetUncheckedCreateNestedManyWithoutMessageInput
+  assets?: Prisma.AssetUncheckedCreateNestedManyWithoutMessagesInput
 }
 
 export type MessageUpdateInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   content?: Prisma.StringFieldUpdateOperationsInput | string
   chat?: Prisma.ChatUpdateOneRequiredWithoutMessagesNestedInput
-  assets?: Prisma.MessageAssetUpdateManyWithoutMessageNestedInput
+  assets?: Prisma.AssetUpdateManyWithoutMessagesNestedInput
 }
 
 export type MessageUncheckedUpdateInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   content?: Prisma.StringFieldUpdateOperationsInput | string
   chatId?: Prisma.StringFieldUpdateOperationsInput | string
-  assets?: Prisma.MessageAssetUncheckedUpdateManyWithoutMessageNestedInput
+  assets?: Prisma.AssetUncheckedUpdateManyWithoutMessagesNestedInput
 }
 
 export type MessageCreateManyInput = {
@@ -280,9 +280,42 @@ export type MessageMinOrderByAggregateInput = {
   chatId?: Prisma.SortOrder
 }
 
-export type MessageScalarRelationFilter = {
-  is?: Prisma.MessageWhereInput
-  isNot?: Prisma.MessageWhereInput
+export type MessageCreateNestedManyWithoutAssetsInput = {
+  create?: Prisma.XOR<Prisma.MessageCreateWithoutAssetsInput, Prisma.MessageUncheckedCreateWithoutAssetsInput> | Prisma.MessageCreateWithoutAssetsInput[] | Prisma.MessageUncheckedCreateWithoutAssetsInput[]
+  connectOrCreate?: Prisma.MessageCreateOrConnectWithoutAssetsInput | Prisma.MessageCreateOrConnectWithoutAssetsInput[]
+  connect?: Prisma.MessageWhereUniqueInput | Prisma.MessageWhereUniqueInput[]
+}
+
+export type MessageUncheckedCreateNestedManyWithoutAssetsInput = {
+  create?: Prisma.XOR<Prisma.MessageCreateWithoutAssetsInput, Prisma.MessageUncheckedCreateWithoutAssetsInput> | Prisma.MessageCreateWithoutAssetsInput[] | Prisma.MessageUncheckedCreateWithoutAssetsInput[]
+  connectOrCreate?: Prisma.MessageCreateOrConnectWithoutAssetsInput | Prisma.MessageCreateOrConnectWithoutAssetsInput[]
+  connect?: Prisma.MessageWhereUniqueInput | Prisma.MessageWhereUniqueInput[]
+}
+
+export type MessageUpdateManyWithoutAssetsNestedInput = {
+  create?: Prisma.XOR<Prisma.MessageCreateWithoutAssetsInput, Prisma.MessageUncheckedCreateWithoutAssetsInput> | Prisma.MessageCreateWithoutAssetsInput[] | Prisma.MessageUncheckedCreateWithoutAssetsInput[]
+  connectOrCreate?: Prisma.MessageCreateOrConnectWithoutAssetsInput | Prisma.MessageCreateOrConnectWithoutAssetsInput[]
+  upsert?: Prisma.MessageUpsertWithWhereUniqueWithoutAssetsInput | Prisma.MessageUpsertWithWhereUniqueWithoutAssetsInput[]
+  set?: Prisma.MessageWhereUniqueInput | Prisma.MessageWhereUniqueInput[]
+  disconnect?: Prisma.MessageWhereUniqueInput | Prisma.MessageWhereUniqueInput[]
+  delete?: Prisma.MessageWhereUniqueInput | Prisma.MessageWhereUniqueInput[]
+  connect?: Prisma.MessageWhereUniqueInput | Prisma.MessageWhereUniqueInput[]
+  update?: Prisma.MessageUpdateWithWhereUniqueWithoutAssetsInput | Prisma.MessageUpdateWithWhereUniqueWithoutAssetsInput[]
+  updateMany?: Prisma.MessageUpdateManyWithWhereWithoutAssetsInput | Prisma.MessageUpdateManyWithWhereWithoutAssetsInput[]
+  deleteMany?: Prisma.MessageScalarWhereInput | Prisma.MessageScalarWhereInput[]
+}
+
+export type MessageUncheckedUpdateManyWithoutAssetsNestedInput = {
+  create?: Prisma.XOR<Prisma.MessageCreateWithoutAssetsInput, Prisma.MessageUncheckedCreateWithoutAssetsInput> | Prisma.MessageCreateWithoutAssetsInput[] | Prisma.MessageUncheckedCreateWithoutAssetsInput[]
+  connectOrCreate?: Prisma.MessageCreateOrConnectWithoutAssetsInput | Prisma.MessageCreateOrConnectWithoutAssetsInput[]
+  upsert?: Prisma.MessageUpsertWithWhereUniqueWithoutAssetsInput | Prisma.MessageUpsertWithWhereUniqueWithoutAssetsInput[]
+  set?: Prisma.MessageWhereUniqueInput | Prisma.MessageWhereUniqueInput[]
+  disconnect?: Prisma.MessageWhereUniqueInput | Prisma.MessageWhereUniqueInput[]
+  delete?: Prisma.MessageWhereUniqueInput | Prisma.MessageWhereUniqueInput[]
+  connect?: Prisma.MessageWhereUniqueInput | Prisma.MessageWhereUniqueInput[]
+  update?: Prisma.MessageUpdateWithWhereUniqueWithoutAssetsInput | Prisma.MessageUpdateWithWhereUniqueWithoutAssetsInput[]
+  updateMany?: Prisma.MessageUpdateManyWithWhereWithoutAssetsInput | Prisma.MessageUpdateManyWithWhereWithoutAssetsInput[]
+  deleteMany?: Prisma.MessageScalarWhereInput | Prisma.MessageScalarWhereInput[]
 }
 
 export type MessageCreateNestedManyWithoutChatInput = {
@@ -327,30 +360,58 @@ export type MessageUncheckedUpdateManyWithoutChatNestedInput = {
   deleteMany?: Prisma.MessageScalarWhereInput | Prisma.MessageScalarWhereInput[]
 }
 
-export type MessageCreateNestedOneWithoutAssetsInput = {
-  create?: Prisma.XOR<Prisma.MessageCreateWithoutAssetsInput, Prisma.MessageUncheckedCreateWithoutAssetsInput>
-  connectOrCreate?: Prisma.MessageCreateOrConnectWithoutAssetsInput
-  connect?: Prisma.MessageWhereUniqueInput
+export type MessageCreateWithoutAssetsInput = {
+  id?: string
+  content: string
+  chat: Prisma.ChatCreateNestedOneWithoutMessagesInput
 }
 
-export type MessageUpdateOneRequiredWithoutAssetsNestedInput = {
-  create?: Prisma.XOR<Prisma.MessageCreateWithoutAssetsInput, Prisma.MessageUncheckedCreateWithoutAssetsInput>
-  connectOrCreate?: Prisma.MessageCreateOrConnectWithoutAssetsInput
-  upsert?: Prisma.MessageUpsertWithoutAssetsInput
-  connect?: Prisma.MessageWhereUniqueInput
-  update?: Prisma.XOR<Prisma.XOR<Prisma.MessageUpdateToOneWithWhereWithoutAssetsInput, Prisma.MessageUpdateWithoutAssetsInput>, Prisma.MessageUncheckedUpdateWithoutAssetsInput>
+export type MessageUncheckedCreateWithoutAssetsInput = {
+  id?: string
+  content: string
+  chatId: string
+}
+
+export type MessageCreateOrConnectWithoutAssetsInput = {
+  where: Prisma.MessageWhereUniqueInput
+  create: Prisma.XOR<Prisma.MessageCreateWithoutAssetsInput, Prisma.MessageUncheckedCreateWithoutAssetsInput>
+}
+
+export type MessageUpsertWithWhereUniqueWithoutAssetsInput = {
+  where: Prisma.MessageWhereUniqueInput
+  update: Prisma.XOR<Prisma.MessageUpdateWithoutAssetsInput, Prisma.MessageUncheckedUpdateWithoutAssetsInput>
+  create: Prisma.XOR<Prisma.MessageCreateWithoutAssetsInput, Prisma.MessageUncheckedCreateWithoutAssetsInput>
+}
+
+export type MessageUpdateWithWhereUniqueWithoutAssetsInput = {
+  where: Prisma.MessageWhereUniqueInput
+  data: Prisma.XOR<Prisma.MessageUpdateWithoutAssetsInput, Prisma.MessageUncheckedUpdateWithoutAssetsInput>
+}
+
+export type MessageUpdateManyWithWhereWithoutAssetsInput = {
+  where: Prisma.MessageScalarWhereInput
+  data: Prisma.XOR<Prisma.MessageUpdateManyMutationInput, Prisma.MessageUncheckedUpdateManyWithoutAssetsInput>
+}
+
+export type MessageScalarWhereInput = {
+  AND?: Prisma.MessageScalarWhereInput | Prisma.MessageScalarWhereInput[]
+  OR?: Prisma.MessageScalarWhereInput[]
+  NOT?: Prisma.MessageScalarWhereInput | Prisma.MessageScalarWhereInput[]
+  id?: Prisma.StringFilter<"Message"> | string
+  content?: Prisma.StringFilter<"Message"> | string
+  chatId?: Prisma.StringFilter<"Message"> | string
 }
 
 export type MessageCreateWithoutChatInput = {
   id?: string
   content: string
-  assets?: Prisma.MessageAssetCreateNestedManyWithoutMessageInput
+  assets?: Prisma.AssetCreateNestedManyWithoutMessagesInput
 }
 
 export type MessageUncheckedCreateWithoutChatInput = {
   id?: string
   content: string
-  assets?: Prisma.MessageAssetUncheckedCreateNestedManyWithoutMessageInput
+  assets?: Prisma.AssetUncheckedCreateNestedManyWithoutMessagesInput
 }
 
 export type MessageCreateOrConnectWithoutChatInput = {
@@ -379,43 +440,6 @@ export type MessageUpdateManyWithWhereWithoutChatInput = {
   data: Prisma.XOR<Prisma.MessageUpdateManyMutationInput, Prisma.MessageUncheckedUpdateManyWithoutChatInput>
 }
 
-export type MessageScalarWhereInput = {
-  AND?: Prisma.MessageScalarWhereInput | Prisma.MessageScalarWhereInput[]
-  OR?: Prisma.MessageScalarWhereInput[]
-  NOT?: Prisma.MessageScalarWhereInput | Prisma.MessageScalarWhereInput[]
-  id?: Prisma.StringFilter<"Message"> | string
-  content?: Prisma.StringFilter<"Message"> | string
-  chatId?: Prisma.StringFilter<"Message"> | string
-}
-
-export type MessageCreateWithoutAssetsInput = {
-  id?: string
-  content: string
-  chat: Prisma.ChatCreateNestedOneWithoutMessagesInput
-}
-
-export type MessageUncheckedCreateWithoutAssetsInput = {
-  id?: string
-  content: string
-  chatId: string
-}
-
-export type MessageCreateOrConnectWithoutAssetsInput = {
-  where: Prisma.MessageWhereUniqueInput
-  create: Prisma.XOR<Prisma.MessageCreateWithoutAssetsInput, Prisma.MessageUncheckedCreateWithoutAssetsInput>
-}
-
-export type MessageUpsertWithoutAssetsInput = {
-  update: Prisma.XOR<Prisma.MessageUpdateWithoutAssetsInput, Prisma.MessageUncheckedUpdateWithoutAssetsInput>
-  create: Prisma.XOR<Prisma.MessageCreateWithoutAssetsInput, Prisma.MessageUncheckedCreateWithoutAssetsInput>
-  where?: Prisma.MessageWhereInput
-}
-
-export type MessageUpdateToOneWithWhereWithoutAssetsInput = {
-  where?: Prisma.MessageWhereInput
-  data: Prisma.XOR<Prisma.MessageUpdateWithoutAssetsInput, Prisma.MessageUncheckedUpdateWithoutAssetsInput>
-}
-
 export type MessageUpdateWithoutAssetsInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   content?: Prisma.StringFieldUpdateOperationsInput | string
@@ -423,6 +447,12 @@ export type MessageUpdateWithoutAssetsInput = {
 }
 
 export type MessageUncheckedUpdateWithoutAssetsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  content?: Prisma.StringFieldUpdateOperationsInput | string
+  chatId?: Prisma.StringFieldUpdateOperationsInput | string
+}
+
+export type MessageUncheckedUpdateManyWithoutAssetsInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   content?: Prisma.StringFieldUpdateOperationsInput | string
   chatId?: Prisma.StringFieldUpdateOperationsInput | string
@@ -436,13 +466,13 @@ export type MessageCreateManyChatInput = {
 export type MessageUpdateWithoutChatInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   content?: Prisma.StringFieldUpdateOperationsInput | string
-  assets?: Prisma.MessageAssetUpdateManyWithoutMessageNestedInput
+  assets?: Prisma.AssetUpdateManyWithoutMessagesNestedInput
 }
 
 export type MessageUncheckedUpdateWithoutChatInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   content?: Prisma.StringFieldUpdateOperationsInput | string
-  assets?: Prisma.MessageAssetUncheckedUpdateManyWithoutMessageNestedInput
+  assets?: Prisma.AssetUncheckedUpdateManyWithoutMessagesNestedInput
 }
 
 export type MessageUncheckedUpdateManyWithoutChatInput = {
@@ -477,7 +507,7 @@ export type MessageCountOutputTypeDefaultArgs<ExtArgs extends runtime.Types.Exte
  * MessageCountOutputType without action
  */
 export type MessageCountOutputTypeCountAssetsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
-  where?: Prisma.MessageAssetWhereInput
+  where?: Prisma.AssetWhereInput
 }
 
 
@@ -527,7 +557,7 @@ export type $MessagePayload<ExtArgs extends runtime.Types.Extensions.InternalArg
   name: "Message"
   objects: {
     chat: Prisma.$ChatPayload<ExtArgs>
-    assets: Prisma.$MessageAssetPayload<ExtArgs>[]
+    assets: Prisma.$AssetPayload<ExtArgs>[]
   }
   scalars: runtime.Types.Extensions.GetPayloadResult<{
     id: string
@@ -928,7 +958,7 @@ readonly fields: MessageFieldRefs;
 export interface Prisma__MessageClient<T, Null = never, ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
   readonly [Symbol.toStringTag]: "PrismaPromise"
   chat<T extends Prisma.ChatDefaultArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.ChatDefaultArgs<ExtArgs>>): Prisma.Prisma__ChatClient<runtime.Types.Result.GetResult<Prisma.$ChatPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
-  assets<T extends Prisma.Message$assetsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Message$assetsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$MessageAssetPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  assets<T extends Prisma.Message$assetsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Message$assetsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$AssetPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   /**
    * Attaches callbacks for the resolution and/or rejection of the Promise.
    * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -1361,23 +1391,23 @@ export type MessageDeleteManyArgs<ExtArgs extends runtime.Types.Extensions.Inter
  */
 export type Message$assetsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   /**
-   * Select specific fields to fetch from the MessageAsset
+   * Select specific fields to fetch from the Asset
    */
-  select?: Prisma.MessageAssetSelect<ExtArgs> | null
+  select?: Prisma.AssetSelect<ExtArgs> | null
   /**
-   * Omit specific fields from the MessageAsset
+   * Omit specific fields from the Asset
    */
-  omit?: Prisma.MessageAssetOmit<ExtArgs> | null
+  omit?: Prisma.AssetOmit<ExtArgs> | null
   /**
    * Choose, which related nodes to fetch as well
    */
-  include?: Prisma.MessageAssetInclude<ExtArgs> | null
-  where?: Prisma.MessageAssetWhereInput
-  orderBy?: Prisma.MessageAssetOrderByWithRelationInput | Prisma.MessageAssetOrderByWithRelationInput[]
-  cursor?: Prisma.MessageAssetWhereUniqueInput
+  include?: Prisma.AssetInclude<ExtArgs> | null
+  where?: Prisma.AssetWhereInput
+  orderBy?: Prisma.AssetOrderByWithRelationInput | Prisma.AssetOrderByWithRelationInput[]
+  cursor?: Prisma.AssetWhereUniqueInput
   take?: number
   skip?: number
-  distinct?: Prisma.MessageAssetScalarFieldEnum | Prisma.MessageAssetScalarFieldEnum[]
+  distinct?: Prisma.AssetScalarFieldEnum | Prisma.AssetScalarFieldEnum[]
 }
 
 /**
