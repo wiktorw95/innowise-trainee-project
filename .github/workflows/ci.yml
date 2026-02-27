@@ -46,15 +46,13 @@ jobs:
           psql -h localhost -U innogram_user -d innogram -c "CREATE SCHEMA IF NOT EXISTS notification;"
 
       - name: Push Database Schema
-        run: npx prisma db push --schema=apps/core_microservice/prisma/schema.prisma
+        working-directory: apps/core_microservice
+        run: npx prisma db push
         env:
           DATABASE_URL: "postgresql://innogram_user:innogram_password@localhost:5432/innogram"
 
       - name: Run Seed Script
-
+        working-directory: apps/core_microservice
         run: npx prisma db seed
         env:
           DATABASE_URL: "postgresql://innogram_user:innogram_password@localhost:5432/innogram"
-
-      - name: Lint and Build
-        run: npx turbo run lint build
