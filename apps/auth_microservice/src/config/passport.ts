@@ -10,7 +10,6 @@ passport.use(
     {
       clientID: process.env.GOOGLE_CLIENT_ID || 'mock_id',
       clientSecret: process.env.GOOGLE_CLIENT_SECRET || 'mock_secret',
-      // Best practice: Move this to your .env file eventually!
       callbackURL:
         process.env.GOOGLE_CALLBACK_URL ||
         'http://localhost:3002/auth/google/callback',
@@ -22,7 +21,6 @@ passport.use(
       done: VerifyCallback
     ) => {
       try {
-        // Extract the primary email from the Google profile
         const email = profile.emails?.[0]?.value;
 
         if (!email) {

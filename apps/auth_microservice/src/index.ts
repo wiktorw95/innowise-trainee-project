@@ -70,7 +70,6 @@ router.get(
         user = createResponse.data;
       }
 
-      // 4. Generate the JWT tokens using the REAL database UUID
       const tokens = generateTokens(user.id);
 
       await redis.set(
