@@ -19,6 +19,10 @@ jobs:
           POSTGRES_DB: innogram
         ports:
           - 5432:5432
+      redis:
+        image: redis:7-alpine
+        ports:
+          - 6379:6379
 
     steps:
       - uses: actions/checkout@v4
@@ -56,3 +60,11 @@ jobs:
         run: npx prisma db seed
         env:
           DATABASE_URL: "postgresql://innogram_user:innogram_password@localhost:5432/innogram"
+
+      - name: Build all microservices
+        run: npm run build
+        env:
+          JWT_SECRET: "ci_dummy_secret"
+          JWT_REFRESH_SECRET: "ci_dummy_refresh_secret"
+          CORE_API_URL: "http://localhost:3001/api"
+          REDIS_URL: "redis://localhost:6379"

@@ -36,6 +36,7 @@ services:
       - "15672:15672"
     networks:
       - innogram-network
+    command: redis-server --save 60 1 --loglevel warning
 
 volumes:
   postgres_data:

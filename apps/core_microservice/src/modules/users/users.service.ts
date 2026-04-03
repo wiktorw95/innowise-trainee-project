@@ -8,7 +8,7 @@ import {
 import { CreateUserDto } from './dto/create-user.dto.js';
 import { UpdateUserDto } from './dto/update-user.dto.js';
 import { PrismaService } from '../../prisma/prisma.service.js';
-import { Prisma } from '@prisma/client';
+import { Prisma } from '../../../generated/prisma/client.js';
 
 @Injectable()
 export class UsersService {
@@ -89,6 +89,26 @@ export class UsersService {
       throw new InternalServerErrorException(
         'An error occurred while updating the user.',
       );
+    }
+  }
+
+  async findByEmail(email: string) {
+    try {
+      const user = await this.prisma.user.findUnique({
+        where: { email },
+      });
+
+      if (!user) {
+        this.logger.warn(`User with email ${email} not found.`);
+        throw new NotFoundException(`User with email ${email} not found`);
+      }
+
+      return user;
+    } catch (error) {
+      if (error instanceof NotFoundException) throw error;
+
+      this.logger.error(`Error fetching user by email ${email}: ${error}`);
+      throw new InternalServerErrorException('Could not retrieve the user.');
     }
   }
 
