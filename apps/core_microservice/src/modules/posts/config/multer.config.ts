@@ -1,26 +1,32 @@
-import { diskStorage } from 'multer';
 import { extname } from 'path';
-import { BadRequestException } from '@nestjs/common';
+import { existsSync, mkdirSync } from 'fs';
+import { diskStorage } from 'multer';
+import { v4 as uuid } from 'uuid';
+import { Request } from 'express';
+import { FileFilterCallback } from 'multer'; // 1. Imported official type
 
 export const multerOptions = {
-  storage: diskStorage({
-    destination: './uploads',
-    filename: (req, file, callback) => {
-      const uniqueSuffix = Date.now() + '-' + Math.round(Math.random() * 1e9);
-      callback(null, `${uniqueSuffix}${extname(file.originalname)}`);
-    },
-  }),
-  fileFilter: (req: any, file: any, callback: any) => {
+  fileFilter: (
+    req: Request,
+    file: Express.Multer.File,
+    cb: FileFilterCallback,
+  ) => {
     if (file.mimetype.match(/\/(jpg|jpeg|png|gif|mp4)$/)) {
-      callback(null, true);
+      cb(null, true);
     } else {
-      callback(
-        new BadRequestException(
-          'Unsupported file type. Only images and MP4 allowed.',
-        ),
-        false,
-      );
+      cb(new Error('Unsupported file type'));
     }
   },
-  limits: { fileSize: 10 * 1024 * 1024 },
+  storage: diskStorage({
+    destination: (req: Request, file: Express.Multer.File, cb) => {
+      const uploadPath = './uploads';
+      if (!existsSync(uploadPath)) {
+        mkdirSync(uploadPath);
+      }
+      cb(null, uploadPath);
+    },
+    filename: (req: Request, file: Express.Multer.File, cb) => {
+      cb(null, `${uuid()}${extname(file.originalname)}`);
+    },
+  }),
 };

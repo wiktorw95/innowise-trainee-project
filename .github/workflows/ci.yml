@@ -36,6 +36,11 @@ jobs:
       - name: Install dependencies
         run: npm ci --legacy-peer-deps
 
+      - name: Create Uploads Directory
+        run: |
+          mkdir -p apps/core_microservice/uploads
+          touch apps/core_microservice/uploads/.gitkeep
+
       - name: Generate Prisma Client
         run: npx prisma generate --schema=apps/core_microservice/prisma/schema.prisma
         env:
@@ -61,6 +66,15 @@ jobs:
         env:
           DATABASE_URL: "postgresql://innogram_user:innogram_password@localhost:5432/innogram"
 
+      - name: Run Linter
+        run: npm run lint
+
+      - name: Run Type-Check
+        run: npm run type-check
+        env:
+          JWT_SECRET: "ci_dummy_secret"
+          JWT_REFRESH_SECRET: "ci_dummy_refresh_secret"
+
       - name: Build all microservices
         run: npm run build
         env:
@@ -68,3 +82,4 @@ jobs:
           JWT_REFRESH_SECRET: "ci_dummy_refresh_secret"
           CORE_API_URL: "http://localhost:3001/api"
           REDIS_URL: "redis://localhost:6379"
+          DATABASE_URL: "postgresql://innogram_user:innogram_password@localhost:5432/innogram"

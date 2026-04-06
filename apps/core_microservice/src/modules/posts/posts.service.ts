@@ -11,8 +11,11 @@ import { UpdatePostDto } from './dto/update-post.dto.js';
 export class PostsService {
   constructor(private prisma: PrismaService) {}
 
-  async create(userId: string, createPostDto: CreatePostDto, files: Express.Multer.File[]) {
-
+  async create(
+    userId: string,
+    createPostDto: CreatePostDto,
+    files: Express.Multer.File[],
+  ) {
     const profile = await this.prisma.profile.findUnique({
       where: { userId: userId },
     });
@@ -21,10 +24,11 @@ export class PostsService {
       throw new NotFoundException('Profile not found for this user');
     }
 
-    const assetData = files?.map(file => ({
-      url: `/uploads/${file.filename}`,
-      type: file.mimetype,
-    })) || [];
+    const assetData =
+      files?.map((file) => ({
+        url: `/uploads/${file.filename}`,
+        type: file.mimetype,
+      })) || [];
 
     return this.prisma.post.create({
       data: {
@@ -60,7 +64,10 @@ export class PostsService {
       where: { userId: { in: followingIds }, archived: false },
     });
 
-    return { data: posts, meta: { total, page, limit, totalPages: Math.ceil(total / limit) } };
+    return {
+      data: posts,
+      meta: { total, page, limit, totalPages: Math.ceil(total / limit) },
+    };
   }
 
   async search(query: string) {
@@ -70,7 +77,10 @@ export class PostsService {
         archived: false,
       },
       orderBy: { createdAt: 'desc' },
-      include: { assets: true, author: { select: { id: true, username: true } } },
+      include: {
+        assets: true,
+        author: { select: { id: true, username: true } },
+      },
     });
   }
 

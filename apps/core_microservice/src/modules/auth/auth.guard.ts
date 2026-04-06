@@ -5,13 +5,16 @@ import {
   UnauthorizedException,
 } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
+import { Request } from 'express';
 
 @Injectable()
 export class AuthGuard implements CanActivate {
   constructor(private jwtService: JwtService) {}
 
   async canActivate(context: ExecutionContext): Promise<boolean> {
-    const request = context.switchToHttp().getRequest();
+    const request = context
+      .switchToHttp()
+      .getRequest<Request & { user?: any }>();
     const authHeader = request.headers.authorization;
 
     if (!authHeader || !authHeader.startsWith('Bearer ')) {
@@ -24,16 +27,19 @@ export class AuthGuard implements CanActivate {
     try {
       const secret = process.env.JWT_SECRET || 'super-secret-key';
 
+      // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
       const payload = await this.jwtService.verifyAsync(token, {
         secret: secret,
       });
       console.log('Guard Success! Decoded Payload:', payload);
 
+      // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
       request.user = payload;
 
       return true;
-    } catch (error: any) {
-      console.log('Guard Failed: JWT Verification Error -', error.message);
+    } catch (error: unknown) {
+      const message = error instanceof Error ? error.message : 'Unknown error';
+      console.log('Guard Failed: JWT Verification Error -', message);
       throw new UnauthorizedException('Invalid token');
     }
   }
