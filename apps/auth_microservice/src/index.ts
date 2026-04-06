@@ -32,7 +32,7 @@ router.post('/refresh', refresh);
 router.post(
   '/logout',
   authenticate as RequestHandler,
-  logout as RequestHandler,
+  logout as RequestHandler
 );
 
 router.post('/validate', authenticate as RequestHandler, (req, res) => {
@@ -41,7 +41,7 @@ router.post('/validate', authenticate as RequestHandler, (req, res) => {
 
 router.get(
   '/google',
-  passport.authenticate('google', { scope: ['profile', 'email'] }),
+  passport.authenticate('google', { scope: ['profile', 'email'] })
 );
 router.get(
   '/google/callback',
@@ -56,6 +56,7 @@ router.get(
           `${CORE_API_URL}/users/email/${googleUser.email}`
         );
         user = coreResponse.data;
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
       } catch (err: any) {
         if (err.response?.status !== 404) throw err;
       }

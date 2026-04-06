@@ -21,7 +21,7 @@ export const authenticate = (
   try {
     req.user = verifyAccessToken(token);
     next();
-  } catch (error) {
+  } catch {
     res.status(401).json({ error: 'Expired token provided' });
   }
 };

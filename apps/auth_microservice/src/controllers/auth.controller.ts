@@ -27,6 +27,7 @@ export const register = async (req: Request, res: Response): Promise<void> => {
       message: 'User created successfully.',
       userId: newUser.id,
     });
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
   } catch (error: any) {
     if (error.response?.status === 409) {
       res.status(409).json({ error: 'Email already in use' });
@@ -61,6 +62,7 @@ export const login = async (req: Request, res: Response): Promise<void> => {
     );
 
     res.json({ accessToken, refreshToken });
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
   } catch (error: any) {
     if (error.response?.status === 404) {
       res.status(401).json({ error: 'Invalid Credentials' });
@@ -89,7 +91,7 @@ export const refresh = async (req: Request, res: Response): Promise<void> => {
       7 * 24 * 60 * 60
     );
     res.json(tokens);
-  } catch (error) {
+  } catch {
     res.status(500).json({ error: 'Refresh token failed.' });
   }
 };
@@ -104,7 +106,7 @@ export const logout = async (
       await redis.del(`refresh_token:${userId}`);
     }
     res.json({ message: 'Logged out successfully' });
-  } catch (error) {
+  } catch {
     res.status(500).json({ error: 'Logout failed' });
   }
 };
