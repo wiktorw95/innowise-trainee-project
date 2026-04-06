@@ -9,6 +9,7 @@ dist/
 build/
 .next/
 out/
+apps/core_microservice/uploads
 
 # Environment variables
 .env
