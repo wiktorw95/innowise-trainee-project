@@ -2,6 +2,7 @@ import express, { RequestHandler } from 'express';
 import cors from 'cors';
 import helmet from 'helmet';
 import dotenv from 'dotenv';
+dotenv.config();
 import passport from 'passport';
 import {
   register,
@@ -14,8 +15,6 @@ import { generateTokens } from './utils/jwt';
 import { redis } from './config/redis';
 import './config/passport';
 import axios from 'axios';
-
-dotenv.config();
 
 const app = express();
 const CORE_API_URL = process.env.CORE_API_URL || 'http://localhost:3001/api';

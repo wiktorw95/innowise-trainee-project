@@ -32,7 +32,6 @@ export class UsersService {
         }
       }
 
-      // Catch-all for unexpected database failures
       this.logger.error(`Failed to create user: ${error}`);
       throw new InternalServerErrorException('An unexpected error occurred.');
     }
