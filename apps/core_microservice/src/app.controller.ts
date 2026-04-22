@@ -5,13 +5,8 @@ import { AppService } from './app.service.js';
 export class AppController {
   constructor(private readonly appService: AppService) {}
 
-  @Get('debug-db')
-  async debugDb() {
-    const dbData = await this.appService.getDbStatus();
-
-    return {
-      status: 'ok',
-      ...dbData,
-    };
+  @Get()
+  getHello(): string {
+    return this.appService.getHello();
   }
 }

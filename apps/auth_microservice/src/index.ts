@@ -1,97 +1,49 @@
-import express, { RequestHandler } from 'express';
+import 'dotenv/config';
+import express from 'express';
 import cors from 'cors';
 import helmet from 'helmet';
-import dotenv from 'dotenv';
-dotenv.config();
-import passport from 'passport';
-import {
-  register,
-  login,
-  refresh,
-  logout,
-} from './controllers/auth.controller';
-import { authenticate } from './middleware/auth.middleware';
-import { generateTokens } from './utils/jwt';
-import { redis } from './config/redis';
-import './config/passport';
-import axios from 'axios';
 
-const app = express();
-const CORE_API_URL = process.env.CORE_API_URL || 'http://localhost:3001/api';
+import { AuthRoutes } from './routes/auth.routes.js';
+import { AuthService } from './service/auth.service.js';
+import { RedisRepository } from './repository/redis.repository.js';
+import { PrismaService } from '@innogram/shared';
+import { expressLogger } from './service/logger.common.js';
 
-app.use(cors());
-app.use(helmet());
-app.use(express.json());
-app.use(passport.initialize());
+const bootstrap = async () => {
+  const app = express();
 
-const router = express.Router();
+  const prisma = new PrismaService();
+  const redis = new RedisRepository();
 
-router.post('/register', register);
-router.post('/login', login);
-router.post('/refresh', refresh);
-router.post(
-  '/logout',
-  authenticate as RequestHandler,
-  logout as RequestHandler
-);
+  const authService = new AuthService(redis, prisma);
+  const authController = new AuthRoutes(authService);
 
-router.post('/validate', authenticate as RequestHandler, (req, res) => {
-  res.json({ valid: true, user: req.user });
-});
+  app.use(helmet());
+  app.use(cors());
+  app.use(express.json());
+  app.use(expressLogger);
 
-router.get(
-  '/google',
-  passport.authenticate('google', { scope: ['profile', 'email'] })
-);
-router.get(
-  '/google/callback',
-  passport.authenticate('google', { session: false }),
-  async (req, res) => {
-    const googleUser = req.user as { googleId: string; email: string };
+  app.use('/internal/auth', authController.router);
 
-    try {
-      let user = null;
-      try {
-        const coreResponse = await axios.get(
-          `${CORE_API_URL}/users/email/${googleUser.email}`
-        );
-        user = coreResponse.data;
-        // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      } catch (err: any) {
-        if (err.response?.status !== 404) throw err;
-      }
+  app.get('/health', (_, res) =>
+    res.status(200).json({ status: 'ok', service: 'auth' })
+  );
 
-      if (!user) {
-        const createResponse = await axios.post(`${CORE_API_URL}/users`, {
-          email: googleUser.email,
-          password: 'OAUTH_PROVIDER',
-          profile: { create: { username: googleUser.email.split('@')[0] } },
-        });
-        user = createResponse.data;
-      }
+  app.use((err: any, req: any, res: any) => {
+    const status = err.status || 500;
+    res.status(status).json({
+      success: false,
+      message: err.message || 'Internal Server Error',
+    });
+  });
 
-      const tokens = generateTokens(user.id);
+  const PORT = process.env.PORT || 3002;
+  app.listen(PORT, () => {
+    console.log(`🚀 Auth Microservice running on port ${PORT}`);
+  });
+};
 
-      await redis.set(
-        `refresh_token:${user.id}`,
-        tokens.refreshToken,
-        'EX',
-        7 * 24 * 60 * 60
-      );
-
-      res.redirect(
-        `http://localhost:3000/auth-success?token=${tokens.accessToken}`
-      );
-    } catch (error) {
-      console.error('OAuth Callback Error:', error);
-      res.redirect('http://localhost:3000/login?error=oauth_failed');
-    }
-  }
-);
-
-app.use('/auth', router);
-
-const PORT = process.env.PORT || 3002;
-app.listen(PORT, () => {
-  console.log(`Auth Microservice Listening on PORT: ${PORT}`);
+bootstrap().catch((err) => {
+  console.error('Fatal Error during bootstrap:', err);
+  process.exit(1);
 });

@@ -2,13 +2,51 @@ name: Innogram CI
 
 on:
   push:
-    branches: ["main", "dev", "feature/**"]
+    branches: [ "main", "dev", "feature/**" ]
   pull_request:
-    branches: ["main", "dev"]
+    branches: [ "main", "dev", "feature/**" ]
+  workflow_dispatch:
 
 jobs:
-  build-and-test:
+  quality-gate:
     runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v4
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: 'npm'
+
+      - name: Install Dependencies
+        run: npm ci
+
+      - name: Generate Prisma Client
+        working-directory: packages/shared
+        run: npx prisma generate
+
+      - name: Lint and Type-check
+        run: npx turbo run lint type-check
+
+  build-and-test:
+    needs: quality-gate
+    runs-on: ubuntu-latest
+
+    env:
+      DATABASE_URL: "postgresql://innogram_user:innogram_password@localhost:5432/innogram"
+      REDIS_URL: "redis://localhost:6379"
+      REDIS_HOST: "localhost"
+      REDIS_PORT: 6379
+
+      GOOGLE_CLIENT_SECRET: ${{ secrets.GOOGLE_CLIENT_SECRET }}
+      GOOGLE_CLIENT_ID: ${{ secrets.GOOGLE_CLIENT_ID }}
+      JWT_SECRET: ${{ secrets.JWT_SECRET }}
+      JWT_REFRESH_SECRET: ${{ secrets.JWT_REFRESH_SECRET }}
+
+      NODE_ENV: test
+      CLIENT_URL: "http://localhost:3001"
 
     services:
       postgres:
@@ -17,69 +55,40 @@ jobs:
           POSTGRES_USER: innogram_user
           POSTGRES_PASSWORD: innogram_password
           POSTGRES_DB: innogram
-        ports:
-          - 5432:5432
+        ports: [ 5432:5432 ]
+        options: >-
+          --health-cmd pg_isready
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
       redis:
-        image: redis:7-alpine
-        ports:
-          - 6379:6379
+        image: redis:7
+        ports: [ 6379:6379 ]
 
     steps:
-      - uses: actions/checkout@v4
+      - name: Checkout Code
+        uses: actions/checkout@v4
 
-      - name: Setup Node.js
+      - name: Set up Node.js
         uses: actions/setup-node@v4
         with:
-          node-version: '22'
+          node-version: 22
           cache: 'npm'
 
-      - name: Install dependencies
-        run: npm ci --legacy-peer-deps
+      - name: Install Dependencies
+        run: npm ci
 
-      - name: Create Uploads Directory
+      - name: Create .env for testing
         run: |
-          mkdir -p apps/core_microservice/uploads
-          touch apps/core_microservice/uploads/.gitkeep
+          echo "DATABASE_URL=${{ env.DATABASE_URL }}" >> .env
+          echo "GOOGLE_CLIENT_SECRET=${{ secrets.GOOGLE_CLIENT_SECRET }}" >> .env
+          echo "JWT_SECRET=${{ secrets.JWT_SECRET }}" >> .env
 
-      - name: Generate Prisma Client
-        run: npx prisma generate --schema=apps/core_microservice/prisma/schema.prisma
-        env:
-          DATABASE_URL: "postgresql://innogram_user:innogram_password@localhost:5432/innogram"
-
-      - name: Setup Database Schemas
-        env:
-          PGPASSWORD: innogram_password
+      - name: Sync Database Schema
+        working-directory: packages/shared
         run: |
-          psql -h localhost -U innogram_user -d innogram -c "CREATE SCHEMA IF NOT EXISTS auth;"
-          psql -h localhost -U innogram_user -d innogram -c "CREATE SCHEMA IF NOT EXISTS main;"
-          psql -h localhost -U innogram_user -d innogram -c "CREATE SCHEMA IF NOT EXISTS notification;"
+          npx prisma generate
+          npx prisma db push --accept-data-loss
 
-      - name: Push Database Schema
-        working-directory: apps/core_microservice
-        run: npx prisma db push
-        env:
-          DATABASE_URL: "postgresql://innogram_user:innogram_password@localhost:5432/innogram"
-
-      - name: Run Seed Script
-        working-directory: apps/core_microservice
-        run: npx prisma db seed
-        env:
-          DATABASE_URL: "postgresql://innogram_user:innogram_password@localhost:5432/innogram"
-
-      - name: Run Linter
-        run: npm run lint
-
-      - name: Run Type-Check
-        run: npm run type-check
-        env:
-          JWT_SECRET: "ci_dummy_secret"
-          JWT_REFRESH_SECRET: "ci_dummy_refresh_secret"
-
-      - name: Build all microservices
-        run: npm run build
-        env:
-          JWT_SECRET: "ci_dummy_secret"
-          JWT_REFRESH_SECRET: "ci_dummy_refresh_secret"
-          CORE_API_URL: "http://localhost:3001/api"
-          REDIS_URL: "redis://localhost:6379"
-          DATABASE_URL: "postgresql://innogram_user:innogram_password@localhost:5432/innogram"
+      - name: Turbo Build
+        run: npx turbo run build

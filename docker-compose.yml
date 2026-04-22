@@ -36,7 +36,40 @@ services:
       - "15672:15672"
     networks:
       - innogram-network
-    command: redis-server --save 60 1 --loglevel warning
+  core-service:
+    container_name: innogram-core
+    build:
+      context: .
+      dockerfile: apps/core_microservice/Dockerfile
+    ports:
+      - "3001:3001"
+    environment:
+      - DATABASE_URL=postgresql://innogram_user:innogram_password@postgres:5432/innogram
+      - REDIS_HOST=redis
+      - RABBITMQ_URL=amqp://innogram:innogram_password@rabbitmq:5672
+    depends_on:
+      - postgres
+      - redis
+      - rabbitmq
+    networks:
+      - innogram-network
+
+  auth-service:
+    container_name: innogram-auth
+    build:
+      context: .
+      dockerfile: apps/auth_microservice/Dockerfile
+    ports:
+      - "3002:3002"
+    environment:
+      - DATABASE_URL=postgresql://innogram_user:innogram_password@postgres:5432/innogram
+      - REDIS_HOST=redis
+      - JWT_SECRET=your-super-secret-jwt-key-here
+    depends_on:
+      - postgres
+      - redis
+    networks:
+      - innogram-network
 
 volumes:
   postgres_data:

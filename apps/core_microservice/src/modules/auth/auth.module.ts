@@ -1,16 +1,15 @@
-import { Global, Module } from '@nestjs/common';
-import { JwtModule } from '@nestjs/jwt';
+import { Module } from '@nestjs/common';
+import { HttpModule } from '@nestjs/axios';
+import { AuthController } from './auth.controller.js';
+import { AuthService } from './auth.service.js';
+import { AccessGuard } from './access.guard.js';
+import { SharedPrismaModule } from '@innogram/shared';
+import { ConfigModule } from '@nestjs/config';
 
-@Global()
 @Module({
-  imports: [
-    JwtModule.registerAsync({
-      useFactory: () => ({
-        secret: process.env.JWT_SECRET || 'super-secret-key',
-        signOptions: { expiresIn: '15m' },
-      }),
-    }),
-  ],
-  exports: [JwtModule],
+  imports: [HttpModule, ConfigModule, SharedPrismaModule],
+  controllers: [AuthController],
+  providers: [AuthService, AccessGuard],
+  exports: [AuthService, AccessGuard],
 })
 export class AuthModule {}
