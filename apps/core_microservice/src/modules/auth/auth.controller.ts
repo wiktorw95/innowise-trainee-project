@@ -24,7 +24,6 @@ export class AuthController {
     tokens: { accessToken: string; refreshToken: string },
     source: string,
   ) {
-    // 1. Condensed but clear logging
     console.log(
       `\n✅ [${source}] Access: ${tokens.accessToken.slice(0, 20)}...`,
     );
@@ -39,7 +38,6 @@ export class AuthController {
       sameSite: isProd ? 'strict' : 'lax',
     };
 
-    // 2. Setting cookies in one go
     res.cookie('access_token', tokens.accessToken, {
       ...cookieBase,
       maxAge: 15 * 60 * 1000,

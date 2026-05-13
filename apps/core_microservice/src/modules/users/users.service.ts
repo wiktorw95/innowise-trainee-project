@@ -4,6 +4,7 @@ import {
   Logger,
   NotFoundException,
   InternalServerErrorException,
+  BadRequestException,
 } from '@nestjs/common';
 import { CreateUserDto } from './dto/create-user.dto.js';
 import { UpdateUserDto } from './dto/update-user.dto.js';
@@ -21,6 +22,16 @@ export class UsersService {
       const hashedPassword = await bcrypt.hash(tempPassword, 10);
 
       const creator = adminId || undefined;
+
+      let parsedDate = new Date('2000-01-01');
+      if (dto.birthday) {
+        parsedDate = new Date(dto.birthday);
+        if (isNaN(parsedDate.getTime())) {
+          throw new BadRequestException(
+            'Invalid birthday date format provided.',
+          );
+        }
+      }
 
       const newUser = await this.prisma.user.create({
         data: {
@@ -43,9 +54,7 @@ export class UsersService {
             create: {
               username: dto.username,
               displayName: dto.displayName || dto.username,
-              birthday: dto.birthday
-                ? new Date(dto.birthday)
-                : new Date('2000-01-01'),
+              birthday: parsedDate,
               created_by: creator,
             },
           },
@@ -69,6 +78,9 @@ export class UsersService {
           throw new ConflictException(
             `A record with this ${target} already exists.`,
           );
+        }
+        if (error instanceof BadRequestException) {
+          throw error;
         }
       }
       this.logger.error('Failed to provision user', error);

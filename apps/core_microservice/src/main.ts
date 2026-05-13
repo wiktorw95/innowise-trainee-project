@@ -3,7 +3,6 @@ import { AppModule } from './app.module.js';
 import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
 import { ValidationPipe } from '@nestjs/common';
 import helmet from 'helmet';
-import { NestLoggingInterceptor } from './modules/common/logger.common.js';
 import cookieParser from 'cookie-parser';
 
 async function bootstrap() {
@@ -32,7 +31,6 @@ async function bootstrap() {
     credentials: true,
   });
 
-  app.useGlobalInterceptors(new NestLoggingInterceptor());
   app.useGlobalPipes(
     new ValidationPipe({
       transform: true,

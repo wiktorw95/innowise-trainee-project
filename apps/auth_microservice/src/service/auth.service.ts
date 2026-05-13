@@ -5,6 +5,16 @@ import { RedisRepository } from '../repository/redis.repository.js';
 import { PrismaService } from '@innogram/shared';
 import { ILoginPayload, ISignUpPayload } from '@innogram/types';
 
+export class HttpError extends Error {
+  constructor(
+    public status: number,
+    message: string
+  ) {
+    super(message);
+    this.name = 'HttpError';
+  }
+}
+
 const JWT_SECRET = process.env.JWT_SECRET;
 const JWT_REFRESH_SECRET = process.env.JWT_REFRESH_SECRET;
 
@@ -51,7 +61,7 @@ export class AuthService {
   ) {
     const user = await this.prisma.account.findUnique({ where: { email } });
     if (!user || !(await bcrypt.compare(password, user.password_hash)))
-      throw new Error('Invalid credentials');
+      throw new HttpError(401, 'Invalid credentials');
     return this.issueTokens(user.userId, ipAddress, userAgent);
   }
 
@@ -119,7 +129,7 @@ export class AuthService {
     const redirectUri = providedRedirectUri || GOOGLE_CALLBACK_URL;
 
     if (!clientId || !clientSecret || !redirectUri)
-      throw new Error('Missing OAuth env variables');
+      throw new HttpError(500, 'Missing OAuth env variables');
 
     const tokenRes = await fetch('https://oauth2.googleapis.com/token', {
       method: 'POST',
@@ -134,7 +144,10 @@ export class AuthService {
     });
 
     if (!tokenRes.ok)
-      throw new Error(`Google Token Exchange Failed: ${await tokenRes.text()}`);
+      throw new HttpError(
+        401,
+        `Google Token Exchange Failed: ${await tokenRes.text()}`
+      );
 
     const profileRes = await fetch(
       'https://www.googleapis.com/oauth2/v2/userinfo',
@@ -199,12 +212,18 @@ export class AuthService {
   ) {
     const { email, password, username, displayName, birthday, profileImage } =
       dto;
+
+    const parsedBirthday = new Date(birthday);
+    if (isNaN(parsedBirthday.getTime())) {
+      throw new HttpError(400, 'Invalid birthday date format');
+    }
+
     const [existingAccount, existingProfile] = await Promise.all([
       this.prisma.account.findUnique({ where: { email } }),
       this.prisma.profile.findUnique({ where: { username } }),
     ]);
     if (existingAccount || existingProfile) {
-      throw new Error('Email or Username already taken');
+      throw new HttpError(409, 'Email or Username already taken');
     }
 
     const newUserId = uuidv4();
@@ -227,7 +246,7 @@ export class AuthService {
           create: {
             username,
             displayName,
-            birthday: new Date(birthday),
+            birthday: parsedBirthday,
             avatarUrl: profileImage || null,
             created_by: newUserId,
           },

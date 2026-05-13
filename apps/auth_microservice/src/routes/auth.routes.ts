@@ -1,4 +1,4 @@
-import { Router, Request, Response } from 'express';
+import { Router, Request, Response, NextFunction } from 'express';
 import { AuthService } from '../service/auth.service.js';
 
 export class AuthRoutes {
@@ -27,7 +27,7 @@ export class AuthRoutes {
     return { ipAddress, userAgent };
   }
 
-  private login = async (req: Request, res: Response) => {
+  private login = async (req: Request, res: Response, next: NextFunction) => {
     try {
       const { ipAddress, userAgent } = this.getClientInfo(req);
       res
@@ -39,28 +39,44 @@ export class AuthRoutes {
             userAgent
           )
         );
-    } catch (error: any) {
-      res.status(401).json({ error: error.message });
+    } catch (error) {
+      next(error);
     }
   };
 
-  private validate = async (req: Request, res: Response) => {
-    const user = await this.authService.validateToken(req.body.access_token);
-    res.status(200).json({ valid: true, user });
+  private validate = async (
+    req: Request,
+    res: Response,
+    next: NextFunction
+  ) => {
+    try {
+      const user = await this.authService.validateToken(req.body.access_token);
+      res.status(200).json({ valid: true, user });
+    } catch (error) {
+      next(error);
+    }
   };
 
-  private validateRefresh = async (req: Request, res: Response) => {
+  private validateRefresh = async (
+    req: Request,
+    res: Response,
+    next: NextFunction
+  ) => {
     try {
       const valid = await this.authService.validateRefreshToken(
         req.body.refresh_token
       );
       res.status(200).json(valid);
-    } catch (error: any) {
-      res.status(401).json({ valid: false, error: error.message });
+    } catch (error) {
+      next(error);
     }
   };
 
-  private refreshTokens = async (req: Request, res: Response) => {
+  private refreshTokens = async (
+    req: Request,
+    res: Response,
+    next: NextFunction
+  ) => {
     try {
       const { refresh_token_id, access_token } = req.body;
       const { ipAddress, userAgent } = this.getClientInfo(req);
@@ -78,32 +94,42 @@ export class AuthRoutes {
             userAgent
           )
         );
-    } catch (error: any) {
-      res
-        .status(401)
-        .json({ message: 'Token refresh failed', error: error.message });
+    } catch (error) {
+      next(error);
     }
   };
 
-  private handleLogout = async (req: Request, res: Response) => {
+  private handleLogout = async (
+    req: Request,
+    res: Response,
+    next: NextFunction
+  ) => {
     try {
       const { refresh_token, access_token } = req.body;
       await this.authService.logout(refresh_token, access_token);
       res.status(200).json({ message: 'Logged out successfully' });
-    } catch (error: any) {
-      res.status(400).json({ error: error.message });
+    } catch (error) {
+      next(error);
     }
   };
 
-  private initiateOAuthFlow = async (_req: Request, res: Response) => {
+  private initiateOAuthFlow = async (
+    _req: Request,
+    res: Response,
+    next: NextFunction
+  ) => {
     try {
       res.status(200).json({ url: await this.authService.initiateOAuthFlow() });
-    } catch (error: any) {
-      res.status(500).json({ error: 'Failed to initiate OAuth' });
+    } catch (error) {
+      next(error);
     }
   };
 
-  private exchangeCodeForTokens = async (req: Request, res: Response) => {
+  private exchangeCodeForTokens = async (
+    req: Request,
+    res: Response,
+    next: NextFunction
+  ) => {
     try {
       const { code, redirect_uri } = req.body;
       const { ipAddress, userAgent } = this.getClientInfo(req);
@@ -118,14 +144,16 @@ export class AuthRoutes {
             userAgent
           )
         );
-    } catch (error: any) {
-      res
-        .status(401)
-        .json({ error: 'OAuth exchange failed', details: error.message });
+    } catch (error) {
+      next(error);
     }
   };
 
-  private register = async (req: Request, res: Response) => {
+  private register = async (
+    req: Request,
+    res: Response,
+    next: NextFunction
+  ) => {
     try {
       const { ipAddress, userAgent } = this.getClientInfo(req);
       res
@@ -133,8 +161,8 @@ export class AuthRoutes {
         .json(
           await this.authService.registerUser(req.body, ipAddress, userAgent)
         );
-    } catch (error: any) {
-      res.status(400).json({ error: error.message });
+    } catch (error) {
+      next(error);
     }
   };
 }
