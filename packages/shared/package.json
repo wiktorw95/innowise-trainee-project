@@ -1,11 +1,22 @@
 {
   "name": "@innogram/shared",
   "version": "1.0.0",
-  "private": true,
-  "main": "src/index.ts",
+  "type": "module",
+  "main": "./dist/src/index.js",
+  "types": "./dist/src/index.d.ts",
   "scripts": {
-    "type-check": "tsc --noEmit",
-    "lint": "eslint . --max-warnings 0",
-    "build": "echo 'Building shared...'"
+    "build": "tsc",
+    "dev": "tsc --watch"
+  },
+  "exports": {
+    ".": {
+      "types": "./dist/src/index.d.ts",
+      "import": "./dist/src/index.js",
+      "require": "./dist/src/index.js"
+    }
+  },
+  "dependencies": {
+    "@nestjs/common": "^11.0.1",
+    "@nestjs/config": "^4.0.4"
   }
 }

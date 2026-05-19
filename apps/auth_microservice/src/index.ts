@@ -1,97 +1,70 @@
-import express, { RequestHandler } from 'express';
+import 'dotenv/config';
+import express from 'express';
 import cors from 'cors';
 import helmet from 'helmet';
-import dotenv from 'dotenv';
-import passport from 'passport';
-import {
-  register,
-  login,
-  refresh,
-  logout,
-} from './controllers/auth.controller';
-import { authenticate } from './middleware/auth.middleware';
-import { generateTokens } from './utils/jwt';
-import { redis } from './config/redis';
-import './config/passport';
-import axios from 'axios';
+import { Request, Response, NextFunction } from 'express';
 
-dotenv.config();
+import { AuthRoutes } from './routes/auth.routes.js';
+import { AuthService } from './service/auth.service.js';
+import { RedisRepository } from './repository/redis.repository.js';
+import { PrismaService } from '@innogram/shared';
+import rateLimit from 'express-rate-limit';
 
-const app = express();
-const CORE_API_URL = process.env.CORE_API_URL || 'http://localhost:3001/api';
+const bootstrap = async () => {
+  const app = express();
 
-app.use(cors());
-app.use(helmet());
-app.use(express.json());
-app.use(passport.initialize());
+  const prisma = new PrismaService();
+  const redis = new RedisRepository();
 
-const router = express.Router();
+  const authService = new AuthService(redis, prisma);
+  const authController = new AuthRoutes(authService);
 
-router.post('/register', register);
-router.post('/login', login);
-router.post('/refresh', refresh);
-router.post(
-  '/logout',
-  authenticate as RequestHandler,
-  logout as RequestHandler,
-);
+  app.use(helmet());
+  app.use(
+    cors({
+      origin: process.env.FRONTEND_URL || 'http://localhost:5173',
+      credentials: true,
+    })
+  );
+  app.use(express.json());
 
-router.post('/validate', authenticate as RequestHandler, (req, res) => {
-  res.json({ valid: true, user: req.user });
-});
+  const loginLimiter = rateLimit({
+    windowMs: 15 * 60 * 1000,
+    max: 5,
+    message: {
+      success: false,
+      message: 'Too many login attempts, please try again after 15 minutes',
+    },
+  });
+  app.use('/internal/auth/login', loginLimiter);
 
-router.get(
-  '/google',
-  passport.authenticate('google', { scope: ['profile', 'email'] }),
-);
-router.get(
-  '/google/callback',
-  passport.authenticate('google', { session: false }),
-  async (req, res) => {
-    const googleUser = req.user as { googleId: string; email: string };
+  app.use('/internal/auth', authController.router);
 
-    try {
-      let user = null;
-      try {
-        const coreResponse = await axios.get(
-          `${CORE_API_URL}/users/email/${googleUser.email}`
-        );
-        user = coreResponse.data;
-      } catch (err: any) {
-        if (err.response?.status !== 404) throw err;
-      }
+  app.get('/health', (_, res) =>
+    res.status(200).json({ status: 'ok', service: 'auth' })
+  );
 
-      if (!user) {
-        const createResponse = await axios.post(`${CORE_API_URL}/users`, {
-          email: googleUser.email,
-          password: 'OAUTH_PROVIDER',
-          profile: { create: { username: googleUser.email.split('@')[0] } },
-        });
-        user = createResponse.data;
-      }
+  app.use(
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    (err: any, req: Request, res: Response, _next: NextFunction): void => {
+      const status = err.status || err.statusCode || 500;
+      console.error(`[Error] ${req.method} ${req.path} -`, err.message);
 
-      const tokens = generateTokens(user.id);
-
-      await redis.set(
-        `refresh_token:${user.id}`,
-        tokens.refreshToken,
-        'EX',
-        7 * 24 * 60 * 60
-      );
-
-      res.redirect(
-        `http://localhost:3000/auth-success?token=${tokens.accessToken}`
-      );
-    } catch (error) {
-      console.error('OAuth Callback Error:', error);
-      res.redirect('http://localhost:3000/login?error=oauth_failed');
+      res.status(status).json({
+        success: false,
+        error: err.name || 'Error',
+        message: err.message || 'Internal Server Error',
+      });
     }
-  }
-);
+  );
 
-app.use('/auth', router);
+  const PORT = process.env.PORT || 3002;
+  app.listen(PORT, () => {
+    console.log(`🚀 Auth Microservice running on port ${PORT}`);
+  });
+};
 
-const PORT = process.env.PORT || 3002;
-app.listen(PORT, () => {
-  console.log(`Auth Microservice Listening on PORT: ${PORT}`);
+bootstrap().catch((err) => {
+  console.error('Fatal Error during bootstrap:', err);
+  process.exit(1);
 });

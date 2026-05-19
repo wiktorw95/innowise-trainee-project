@@ -1,20 +1,27 @@
 {
-  "name": "@innogram/client_app",
-  "version": "1.0.0",
+  "name": "@innogram/client",
+  "version": "0.1.0",
   "private": true,
   "scripts": {
-    "dev": "echo 'Starting client_app...'",
-    "build": "echo 'Building client_app...'",
-    "test": "echo 'Testing client_app...'",
-    "lint": "eslint . --max-warnings 0",
+    "dev": "next dev",
+    "build": "next build",
+    "start": "next start",
+    "lint": "eslint",
     "type-check": "tsc --noEmit"
   },
   "dependencies": {
-    "react": "^19.2.4",
-    "react-dom": "^19.2.4"
+    "next": "^16.2.3",
+    "react": "19.2.4",
+    "react-dom": "19.2.4"
   },
   "devDependencies": {
-    "@types/react": "^19.2.14",
-    "@types/react-dom": "^19.2.3"
+    "@tailwindcss/postcss": "^4",
+    "@types/node": "^20",
+    "@types/react": "^19",
+    "@types/react-dom": "^19",
+    "eslint": "^8.57.0",
+    "eslint-config-next": "16.2.2",
+    "tailwindcss": "^4",
+    "typescript": "^5"
   }
 }

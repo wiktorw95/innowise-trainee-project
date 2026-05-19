@@ -1,5 +1,13 @@
-export const formatDate = (date: Date): string => {
-  return new Intl.DateTimeFormat('en-US').format(date);
-};
+import { Global, Module } from '@nestjs/common';
+import PrismaService from './prisma/prisma.service.js';
 
-export const APP_NAME = 'Innogram';
+@Global()
+@Module({
+  providers: [PrismaService],
+  exports: [PrismaService],
+})
+export class SharedPrismaModule {}
+
+export * from './prisma/prisma.service.js';
+export { default as PrismaService } from "./prisma/prisma.service.js";
+export * from '../generated/prisma/client.js';

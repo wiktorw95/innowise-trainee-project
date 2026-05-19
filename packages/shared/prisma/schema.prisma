@@ -1,0 +1,401 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Get a free hosted Postgres database in seconds: `npx create-db`
+
+generator client {
+  provider = "prisma-client"
+  output   = "../generated/prisma"
+}
+
+datasource db {
+  provider = "postgresql"
+  schemas  = ["auth", "main", "notification"]
+}
+
+model User {
+  id         String   @id @default(uuid())
+  role       String   @default("User") @db.VarChar(20)
+  disabled   Boolean  @default(false)
+  created_at DateTime @default(now())
+  created_by String?  @db.VarChar(36)
+  updated_at DateTime @updatedAt
+  updated_by String?  @db.VarChar(36)
+
+  profile  Profile?
+  accounts Account[]
+
+  createdPosts         Post[]         @relation("PostCreator")
+  updatedPosts         Post[]         @relation("PostUpdater")
+  createdProfiles      Profile[]      @relation("ProfileCreator")
+  updatedProfiles      Profile[]      @relation("ProfileUpdater")
+  createdNotifications Notification[] @relation("NotificationCreator")
+  updatedNotifications Notification[] @relation("NotificationUpdater")
+  createdAccount       Account[]      @relation("AccountCreator")
+  updatedAccount       Account[]      @relation("AccountUpdater")
+  createdComment       Comment[]      @relation("CommentCreator")
+  updatedComment       Comment[]      @relation("CommentUpdater")
+  createdAsset         Asset[]        @relation("AssetCreator")
+  updatedAsset         Asset[]        @relation("AssetUpdater")
+  createdChat          Chat[]         @relation("ChatCreator")
+  updatedChat          Chat[]         @relation("ChatUpdater")
+  createdMessage       Message[]      @relation("MessageCreator")
+  updatedMessage       Message[]      @relation("MessageUpdater")
+
+  createdPostsAssets           Posts_Assets[]          @relation("Posts_AssetsCreator")
+  updatedPostsAssets           Posts_Assets[]          @relation("Posts_AssetsUpdater")
+  createdProfilesFollows       Profiles_Follows[]      @relation("Profile_FollowCreator")
+  updatedProfilesFollows       Profiles_Follows[]      @relation("Profile_FollowUpdater")
+  createdChatParticipants      Chat_Participants[]     @relation("Chat_ParticipantsCreator")
+  updatedChatParticipants      Chat_Participants[]     @relation("Chat_ParticipantsUpdater")
+  createdMessagesAssets        Messages_Assets[]       @relation("Message_AssetsCreator")
+  updatedMessagesAssets        Messages_Assets[]       @relation("Message_AssetsUpdater")
+  createdPostsLikes            Posts_Likes[]           @relation("Posts_LikesCreator")
+  updatedPostsLikes            Posts_Likes[]           @relation("Posts_LikesUpdater")
+  createdCommentsLikes         Comments_Likes[]        @relation("Comments_LikesCreator")
+  updatedCommentsLikes         Comments_Likes[]        @relation("Comments_LikesUpdater")
+  createdProfilesToProfiles    Profiles_to_Profiles[]  @relation("Profiles_to_ProfilesCreator")
+  updatedProfilesToProfiles    Profiles_to_Profiles[]  @relation("Profiles_to_ProfilesUpdater")
+  createdProfileConfigurations Profile_Configuration[] @relation("Profile_ConfigCreator")
+  updatedProfileConfigurations Profile_Configuration[] @relation("Profile_ConfigUpdater")
+
+  @@schema("auth")
+}
+
+model Account {
+  id            String   @id @default(uuid())
+  userId        String
+  email         String   @unique @db.VarChar(255)
+  password_hash String   @db.VarChar(255)
+  provider      String   @default("local") @db.VarChar(20)
+  provider_id   String
+  last_login_at DateTime
+  created_at    DateTime @default(now())
+  created_by    String?  @db.VarChar(36)
+  updated_at    DateTime @updatedAt
+  updated_by    String?  @db.VarChar(36)
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  creator User? @relation("AccountCreator", fields: [created_by], references: [id])
+  updater User? @relation("AccountUpdater", fields: [updated_by], references: [id])
+
+  @@schema("auth")
+}
+
+model Profile {
+  id          String   @id @default(uuid())
+  userId      String   @unique
+  username    String   @unique @db.VarChar(50)
+  displayName String   @db.VarChar(100)
+  birthday    DateTime @db.Date
+  bio         String?  @db.Text
+  avatarUrl   String?  @db.VarChar(500)
+  isPublic    Boolean  @default(true)
+  created_at  DateTime @default(now())
+  created_by  String?  @db.VarChar(36)
+  updated_at  DateTime @updatedAt
+  updated_by  String?  @db.VarChar(36)
+  deleted     Boolean  @default(false)
+
+  user    User? @relation(fields: [userId], references: [id], onDelete: Cascade)
+  creator User? @relation("ProfileCreator", fields: [created_by], references: [id])
+  updater User? @relation("ProfileUpdater", fields: [updated_by], references: [id])
+
+  posts   Post[]
+  comment Comment[]
+  message Message[]
+
+  chatParticipants   Chat_Participants[]
+  postsLikes         Posts_Likes[]
+  commentsLikes      Comments_Likes[]
+  profilesToProfiles Profiles_to_Profiles[]
+
+  profileFollower Profiles_Follows[] @relation("Follower")
+  profileFollowed Profiles_Follows[] @relation("Followed")
+
+  @@schema("main")
+}
+
+model Post {
+  id         String   @id @default(uuid())
+  profileId  String   @db.VarChar(36)
+  content    String   @db.Text
+  isArchived Boolean  @default(false)
+  created_at DateTime @default(now())
+  created_by String   @db.VarChar(36)
+  updated_at DateTime @updatedAt
+  updated_by String?  @db.VarChar(36)
+
+  comment Comment[]
+
+  postsAssets Posts_Assets[]
+  postsLikes  Posts_Likes[]
+
+  profile Profile @relation(fields: [profileId], references: [id])
+  creator User    @relation("PostCreator", fields: [created_by], references: [id])
+  updater User?   @relation("PostUpdater", fields: [updated_by], references: [id])
+
+  @@schema("main")
+}
+
+model Comment {
+  id                String   @id @default(uuid())
+  post_id           String
+  profile_id        String
+  parent_comment_id String?
+  content           String   @db.Text
+  created_at        DateTime @default(now())
+  created_by        String   @db.VarChar(36)
+  updated_at        DateTime @updatedAt
+  updated_by        String?  @db.VarChar(36)
+
+  post    Post    @relation(fields: [post_id], references: [id])
+  profile Profile @relation(fields: [profile_id], references: [id])
+
+  parent_comment Comment?  @relation("CommentReplies", fields: [parent_comment_id], references: [id])
+  replies        Comment[] @relation("CommentReplies")
+
+  commentsLikes Comments_Likes[]
+
+  creator User  @relation("CommentCreator", fields: [created_by], references: [id])
+  updater User? @relation("CommentUpdater", fields: [updated_by], references: [id])
+
+  @@schema("main")
+}
+
+model Asset {
+  id          String   @id @default(uuid())
+  file_name   String   @db.VarChar(255)
+  file_path   String
+  file_type   String   @db.VarChar(100)
+  file_size   Int
+  order_index Int      @default(0)
+  created_at  DateTime @default(now())
+  created_by  String   @db.VarChar(36)
+  updated_at  DateTime @updatedAt
+  updated_by  String?  @db.VarChar(36)
+
+  postsAssets    Posts_Assets[]
+  messagesAssets Messages_Assets[]
+
+  creator User  @relation("AssetCreator", fields: [created_by], references: [id])
+  updater User? @relation("AssetUpdater", fields: [updated_by], references: [id])
+
+  @@schema("main")
+}
+
+model Chat {
+  id          String   @id @default(uuid())
+  name        String   @db.VarChar(100)
+  description String   @db.Text
+  type        String   @default("private") @db.VarChar(20)
+  created_at  DateTime @default(now())
+  created_by  String   @db.VarChar(36)
+  updated_at  DateTime @updatedAt
+  updated_by  String?  @db.VarChar(36)
+
+  message Message[]
+
+  chatParticipants Chat_Participants[]
+
+  creator User  @relation("ChatCreator", fields: [created_by], references: [id])
+  updater User? @relation("ChatUpdater", fields: [updated_by], references: [id])
+
+  @@schema("main")
+}
+
+model Message {
+  id                  String   @id @default(uuid())
+  chat_id             String
+  profile_id          String
+  content             String   @db.Text
+  reply_to_message_id String?
+  is_edited           Boolean  @default(false)
+  created_at          DateTime @default(now())
+  created_by          String   @db.VarChar(36)
+  updated_at          DateTime @updatedAt
+  updated_by          String?  @db.VarChar(36)
+  deleted             Boolean  @default(false)
+
+  chats          Chat     @relation(fields: [chat_id], references: [id], onDelete: Cascade)
+  profiles       Profile  @relation(fields: [profile_id], references: [id], onDelete: Cascade)
+  parentMessages Message? @relation("MessageReplies", fields: [reply_to_message_id], references: [id], onDelete: Cascade)
+
+  reply_messages Message[] @relation("MessageReplies")
+
+  messagesAssets Messages_Assets[]
+
+  creator User  @relation("MessageCreator", fields: [created_by], references: [id])
+  updater User? @relation("MessageUpdater", fields: [updated_by], references: [id])
+
+  @@schema("main")
+}
+
+model Profile_Configuration {
+  id                       String   @id @default(uuid())
+  config_key               String   @db.VarChar(100)
+  is_admin_accessible_only Boolean  @default(false)
+  created_at               DateTime @default(now())
+  created_by               String   @db.VarChar(36)
+  updated_at               DateTime @updatedAt
+  updated_by               String?  @db.VarChar(36)
+
+  profilesToProfiles Profiles_to_Profiles[]
+
+  creator User  @relation("Profile_ConfigCreator", fields: [created_by], references: [id])
+  updater User? @relation("Profile_ConfigUpdater", fields: [updated_by], references: [id])
+
+  @@schema("main")
+}
+
+model Notification {
+  id         String    @id @default(uuid())
+  type       String    @db.VarChar(20)
+  title      String    @db.VarChar(255)
+  message    String    @db.Text
+  data       Json?     @db.JsonB
+  isRead     Boolean   @default(false)
+  readAt     DateTime?
+  created_at DateTime  @default(now())
+  created_by String    @db.VarChar(36)
+  updated_at DateTime  @updatedAt
+  updated_by String?   @db.VarChar(36)
+
+  creator User  @relation("NotificationCreator", fields: [created_by], references: [id])
+  updater User? @relation("NotificationUpdater", fields: [updated_by], references: [id])
+
+  @@schema("notification")
+}
+
+model Posts_Assets {
+  post_id     String
+  asset_id    String
+  order_index Int      @default(0)
+  created_at  DateTime @default(now())
+  created_by  String   @db.VarChar(36)
+  updated_at  DateTime @updatedAt
+  updated_by  String?  @db.VarChar(36)
+
+  assets Asset @relation(fields: [asset_id], references: [id], onDelete: Cascade)
+  posts  Post  @relation(fields: [post_id], references: [id], onDelete: Cascade)
+
+  creator User  @relation("Posts_AssetsCreator", fields: [created_by], references: [id])
+  updater User? @relation("Posts_AssetsUpdater", fields: [updated_by], references: [id])
+
+  @@id([post_id, asset_id])
+  @@schema("main")
+}
+
+model Profiles_Follows {
+  follower_profile_id String
+  followed_profile_id String
+  accepted            Boolean?
+  created_at          DateTime @default(now())
+  created_by          String   @db.VarChar(36)
+  updated_at          DateTime @updatedAt
+  updated_by          String?  @db.VarChar(36)
+
+  follower Profile @relation("Follower", fields: [follower_profile_id], references: [id], onDelete: Cascade)
+  followed Profile @relation("Followed", fields: [followed_profile_id], references: [id], onDelete: Cascade)
+
+  creator User  @relation("Profile_FollowCreator", fields: [created_by], references: [id])
+  updater User? @relation("Profile_FollowUpdater", fields: [updated_by], references: [id])
+
+  @@id([follower_profile_id, followed_profile_id])
+  @@schema("main")
+}
+
+model Chat_Participants {
+  profile_id String
+  chat_id    String
+  role       String    @default("member") @db.VarChar(20)
+  joined_at  DateTime  @default(now())
+  left_at    DateTime?
+  created_at DateTime  @default(now())
+  created_by String    @db.VarChar(36)
+  updated_at DateTime  @updatedAt
+  updated_by String?   @db.VarChar(36)
+
+  profile Profile @relation(fields: [profile_id], references: [id], onDelete: Cascade)
+  chat    Chat    @relation(fields: [chat_id], references: [id], onDelete: Cascade)
+
+  creator User  @relation("Chat_ParticipantsCreator", fields: [created_by], references: [id])
+  updater User? @relation("Chat_ParticipantsUpdater", fields: [updated_by], references: [id])
+
+  @@id([profile_id, chat_id])
+  @@schema("main")
+}
+
+model Messages_Assets {
+  message_id  String
+  asset_id    String
+  order_index Int      @default(0)
+  created_at  DateTime @default(now())
+  created_by  String   @db.VarChar(36)
+  updated_at  DateTime @updatedAt
+  updated_by  String?  @db.VarChar(36)
+
+  assets   Asset   @relation(fields: [asset_id], references: [id], onDelete: Cascade)
+  messages Message @relation(fields: [message_id], references: [id], onDelete: Cascade)
+
+  creator User  @relation("Message_AssetsCreator", fields: [created_by], references: [id])
+  updater User? @relation("Message_AssetsUpdater", fields: [updated_by], references: [id])
+
+  @@id([message_id, asset_id])
+  @@schema("main")
+}
+
+model Posts_Likes {
+  post_id    String
+  profile_id String
+  created_at DateTime @default(now())
+  created_by String   @db.VarChar(36)
+  updated_at DateTime @updatedAt
+  updated_by String?  @db.VarChar(36)
+
+  posts    Post    @relation(fields: [post_id], references: [id], onDelete: Cascade)
+  profiles Profile @relation(fields: [profile_id], references: [id], onDelete: Cascade)
+
+  creator User  @relation("Posts_LikesCreator", fields: [created_by], references: [id])
+  updater User? @relation("Posts_LikesUpdater", fields: [updated_by], references: [id])
+
+  @@id([post_id, profile_id])
+  @@schema("main")
+}
+
+model Comments_Likes {
+  comment_id String
+  profile_id String
+  created_at DateTime @default(now())
+  created_by String   @db.VarChar(36)
+  updated_at DateTime @updatedAt
+  updated_by String?  @db.VarChar(36)
+
+  comments Comment @relation(fields: [comment_id], references: [id], onDelete: Cascade)
+  profiles Profile @relation(fields: [profile_id], references: [id], onDelete: Cascade)
+
+  creator User  @relation("Comments_LikesCreator", fields: [created_by], references: [id])
+  updater User? @relation("Comments_LikesUpdater", fields: [updated_by], references: [id])
+
+  @@id([comment_id, profile_id])
+  @@schema("main")
+}
+
+model Profiles_to_Profiles {
+  profile_id               String
+  profile_configuration_id String
+  created_at               DateTime @default(now())
+  created_by               String   @db.VarChar(36)
+  updated_at               DateTime @updatedAt
+  updated_by               String?  @db.VarChar(36)
+
+  profiles       Profile               @relation(fields: [profile_id], references: [id], onDelete: Cascade)
+  profile_config Profile_Configuration @relation(fields: [profile_configuration_id], references: [id], onDelete: Cascade)
+
+  creator User  @relation("Profiles_to_ProfilesCreator", fields: [created_by], references: [id])
+  updater User? @relation("Profiles_to_ProfilesUpdater", fields: [updated_by], references: [id])
+
+  @@id([profile_id, profile_configuration_id])
+  @@schema("main")
+}
