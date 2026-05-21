@@ -6,8 +6,10 @@ import { SignUpDto } from './dto/SignUp.dto.js';
 import { AxiosError } from 'axios';
 
 export interface ValidatedUser {
-  id: string;
-  email: string;
+  sub: string;
+  jti?: string;
+  exp?: number;
+  iat?: number;
 }
 export interface ValidateTokenResponse {
   user: ValidatedUser;
