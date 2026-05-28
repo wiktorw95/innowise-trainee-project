@@ -9,5 +9,5 @@ import PrismaService from './prisma/prisma.service.js';
 export class SharedPrismaModule {}
 
 export * from './prisma/prisma.service.js';
-export { default as PrismaService } from "./prisma/prisma.service.js";
+export { default as PrismaService } from './prisma/prisma.service.js';
 export * from '../generated/prisma/client.js';

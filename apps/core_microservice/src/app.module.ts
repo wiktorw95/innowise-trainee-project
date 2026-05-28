@@ -9,6 +9,8 @@ import { NotificationsModule } from './modules/notifications/notifications.modul
 import { UsersModule } from './modules/users/users.module.js';
 import { ConfigModule } from '@nestjs/config';
 import { SharedPrismaModule } from '@innogram/shared';
+import { APP_GUARD } from '@nestjs/core';
+import { AccessGuard } from './modules/auth/access.guard.js';
 
 @Module({
   imports: [
@@ -25,6 +27,12 @@ import { SharedPrismaModule } from '@innogram/shared';
     NotificationsModule,
   ],
   controllers: [AppController],
-  providers: [AppService],
+  providers: [
+    AppService,
+    {
+      provide: APP_GUARD,
+      useClass: AccessGuard,
+    },
+  ],
 })
 export class AppModule {}
