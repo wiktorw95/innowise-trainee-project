@@ -13,6 +13,7 @@ import { AuthService } from './auth.service.js';
 import { LoginDto } from './dto/Login.dto.js';
 import { SignUpDto } from './dto/SignUp.dto.js';
 import { ApiExcludeEndpoint, ApiOperation, ApiTags } from '@nestjs/swagger';
+import { Public } from './decorators/public.decorator.js';
 
 @ApiTags('Auth')
 @Controller('auth')
@@ -50,6 +51,7 @@ export class AuthController {
     return { success: true, message: 'Auth successful' };
   }
 
+  @Public()
   @Post('login')
   async login(
     @Body() dto: LoginDto,
@@ -62,6 +64,7 @@ export class AuthController {
     );
   }
 
+  @Public()
   @Post('signup')
   async signUp(
     @Body() dto: SignUpDto,
@@ -74,6 +77,7 @@ export class AuthController {
     );
   }
 
+  @Public()
   @Post('refresh')
   async refresh(
     @Req() req: Request,
@@ -89,12 +93,14 @@ export class AuthController {
     );
   }
 
+  @Public()
   @Get('login/google')
   async handleOAuthLogin(@Res() res: Response) {
     const { url } = await this.authService.handleOAuthInit();
     return res.json({ message: 'Open URL to login', url });
   }
 
+  @Public()
   @Get('google/callback')
   @ApiExcludeEndpoint()
   async handleOAuthCallback(
@@ -111,6 +117,7 @@ export class AuthController {
     );
   }
 
+  @Public()
   @Post('logout')
   async logout(@Req() req: Request, @Res({ passthrough: true }) res: Response) {
     const rt = req.cookies?.['refresh_token'] as string | undefined;
@@ -121,6 +128,7 @@ export class AuthController {
     return { success: true };
   }
 
+  @Public()
   @Get('status')
   @ApiOperation({ summary: 'Check current auth health' })
   check(
