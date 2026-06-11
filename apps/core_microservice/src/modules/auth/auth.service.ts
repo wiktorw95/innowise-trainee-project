@@ -36,8 +36,8 @@ export interface TokenCheckResult {
 @Injectable()
 export class AuthService {
   private readonly url = process.env.AUTH_SERVICE_URL
-    ? `${process.env.AUTH_SERVICE_URL}/internal/auth`
-    : 'http://localhost:3002/internal/auth';
+    ? `${process.env.AUTH_SERVICE_URL.replace(/\/+$/, '')}/auth`
+    : 'http://localhost:3002/auth';
 
   constructor(private readonly http: HttpService) {}
 

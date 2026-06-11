@@ -3,6 +3,7 @@
   "version": "1.0.0",
   "description": "Innogram - Social Media Application",
   "private": true,
+  "packageManager": "npm@11.10.0",
   "workspaces": [
     "apps/*",
     "packages/*"

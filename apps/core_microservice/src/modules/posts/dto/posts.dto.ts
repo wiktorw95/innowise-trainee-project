@@ -30,18 +30,18 @@ export class UpdatePostDto {
 
 export class FeedQueryDto {
   @ApiPropertyOptional({ default: 1 })
-  @Transform(({ value }) => parseInt(value, 10))
+  @Transform(({ value }) => (value === undefined ? 1 : parseInt(value, 10)))
   @IsInt()
   @Min(1)
   @IsOptional()
-  page?: number = 1;
+  page: number = 1;
 
   @ApiPropertyOptional({ default: 10 })
-  @Transform(({ value }) => parseInt(value, 10))
+  @Transform(({ value }) => (value === undefined ? 10 : parseInt(value, 10)))
   @IsInt()
   @Min(1)
   @IsOptional()
-  limit?: number = 10;
+  limit: number = 10;
 
   @ApiPropertyOptional({ description: 'Search term' })
   @IsString()

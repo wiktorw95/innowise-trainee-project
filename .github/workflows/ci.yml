@@ -8,6 +8,7 @@ on:
   workflow_dispatch:
 
 env:
+  # Backend Envs
   DATABASE_URL: "postgresql://innogram_user:innogram_password@localhost:5432/innogram"
   REDIS_HOST: "localhost"
   REDIS_PORT: 6379
@@ -15,8 +16,11 @@ env:
   JWT_REFRESH_SECRET: "ci-dummy-refresh-secret-key-1234567890"
   GOOGLE_CLIENT_ID: "ci-dummy-google-client-id"
   GOOGLE_CLIENT_SECRET: "ci-dummy-google-client-secret"
-  FRONTEND_URL: "http://localhost:5173"
   NODE_ENV: "test"
+
+  # Frontend Envs
+  NEXT_PUBLIC_API_URL: "http://localhost:3000"
+  CLIENT_URL: "http://localhost:3001"
 
 jobs:
   quality-gate:
@@ -34,6 +38,14 @@ jobs:
 
       - name: Install Dependencies
         run: npm ci
+
+      - name: Cache Turborepo
+        uses: actions/cache@v4
+        with:
+          path: .turbo
+          key: ${{ runner.os }}-turbo-${{ github.sha }}
+          restore-keys: |
+            ${{ runner.os }}-turbo-
 
       - name: Generate Prisma Client
         working-directory: packages/shared
@@ -77,15 +89,13 @@ jobs:
       - name: Install Dependencies
         run: npm ci
 
-      - name: Create .env for testing
-        run: |
-          echo "DATABASE_URL=${DATABASE_URL}" >> .env
-          echo "REDIS_HOST=${REDIS_HOST}" >> .env
-          echo "REDIS_PORT=${REDIS_PORT}" >> .env
-          echo "JWT_SECRET=${JWT_SECRET}" >> .env
-          echo "JWT_REFRESH_SECRET=${JWT_REFRESH_SECRET}" >> .env
-          echo "GOOGLE_CLIENT_ID=${GOOGLE_CLIENT_ID}" >> .env
-          echo "GOOGLE_CLIENT_SECRET=${GOOGLE_CLIENT_SECRET}" >> .env
+      - name: Cache Turborepo
+        uses: actions/cache@v4
+        with:
+          path: .turbo
+          key: ${{ runner.os }}-turbo-${{ github.sha }}
+          restore-keys: |
+            ${{ runner.os }}-turbo-
 
       - name: Sync Database Schema
         working-directory: packages/shared

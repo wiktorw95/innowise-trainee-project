@@ -36,9 +36,9 @@ const bootstrap = async () => {
       message: 'Too many login attempts, please try again after 15 minutes',
     },
   });
-  app.use('/internal/auth/login', loginLimiter);
+  app.use('/auth/login', loginLimiter);
 
-  app.use('/internal/auth', authController.router);
+  app.use('/auth', authController.router);
 
   app.get('/health', (_, res) =>
     res.status(200).json({ status: 'ok', service: 'auth' })

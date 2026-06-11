@@ -11,6 +11,7 @@ import { Server, Socket } from 'socket.io';
 import { ChatsService } from './chats.service.js';
 import { AuthService } from '../auth/auth.service.js';
 import { SendMessageDto, UpdateMessageDto } from './dto/chats.dto.js';
+import { AppLogger } from '@innogram/shared';
 
 export interface AuthenticatedSocket extends Socket {
   data: {
@@ -20,7 +21,7 @@ export interface AuthenticatedSocket extends Socket {
 
 @WebSocketGateway({
   cors: {
-    origin: process.env.FRONTEND_URL || 'http://localhost:5173',
+    origin: process.env.FRONTEND_URL || 'http://localhost:3001',
     credentials: true,
   },
 })
@@ -33,6 +34,7 @@ export class ChatsGateway implements OnGatewayConnection, OnGatewayDisconnect {
   ) {}
 
   async handleConnection(client: AuthenticatedSocket) {
+    const ctx = 'WebSockets:Connection';
     try {
       const token =
         client.handshake.headers.cookie
@@ -40,7 +42,7 @@ export class ChatsGateway implements OnGatewayConnection, OnGatewayDisconnect {
           ?.split(';')?.[0] ||
         client.handshake.headers.authorization?.split(' ')?.[1];
 
-      if (!token) throw new Error('Unauthorized');
+      if (!token) throw new Error('Unauthorized: No access token provided');
 
       const payload = await this.authService.validateToken(token);
       client.data.userId = payload.user.sub;
@@ -52,15 +54,22 @@ export class ChatsGateway implements OnGatewayConnection, OnGatewayDisconnect {
         await client.join(chat.id);
       }
 
-      console.log(`🟢 Socket connected: ${client.data.userId}`);
+      AppLogger.success(
+        `🟢 Socket connected and authenticated for user: ${client.data.userId}`,
+        ctx,
+      );
     } catch (error) {
-      console.log(`🔴 Socket rejected: ${error}`);
+      const errMsg = error instanceof Error ? error.message : 'Unknown error';
+      AppLogger.warn(`🔴 Socket connection rejected: ${errMsg}`, ctx);
       client.disconnect();
     }
   }
 
   handleDisconnect(client: AuthenticatedSocket) {
-    console.log(`🔴 Socket disconnected: ${client.data.userId}`);
+    AppLogger.info(
+      `🔴 Socket disconnected for user: ${client.data.userId || 'Unknown'}`,
+      'WebSockets:Disconnect',
+    );
   }
 
   @SubscribeMessage('sendMessage')
@@ -68,6 +77,12 @@ export class ChatsGateway implements OnGatewayConnection, OnGatewayDisconnect {
     @ConnectedSocket() client: AuthenticatedSocket,
     @MessageBody() payload: { chatId: string; dto: SendMessageDto },
   ) {
+    const ctx = 'WebSockets:SendMessage';
+    AppLogger.debug(
+      `User ${client.data.userId} sending message to chat ${payload.chatId}`,
+      null,
+      ctx,
+    );
     try {
       const message = await this.chatsService.saveMessage(
         client.data.userId,
@@ -81,23 +96,38 @@ export class ChatsGateway implements OnGatewayConnection, OnGatewayDisconnect {
       });
 
       this.server.to(payload.chatId).emit('newMessage', message);
+      AppLogger.success(
+        `Message distributed to chat room ${payload.chatId}`,
+        ctx,
+      );
       return { success: true };
-    } catch {
+    } catch (error) {
+      AppLogger.error(`Failed to dispatch message via WebSocket`, error, ctx);
       return { success: false, error: 'Failed to send message' };
     }
   }
+
   @SubscribeMessage('editMessage')
   async handleEditMessage(
     @ConnectedSocket() client: AuthenticatedSocket,
     @MessageBody()
     payload: { chatId: string; messageId: string; dto: UpdateMessageDto },
   ) {
-    const updated = await this.chatsService.editMessage(
-      client.data.userId,
-      payload.messageId,
-      payload.dto.content,
+    const ctx = 'WebSockets:EditMessage';
+    AppLogger.info(
+      `User ${client.data.userId} editing message ${payload.messageId} in room ${payload.chatId}`,
+      ctx,
     );
-    this.server.to(payload.chatId).emit('messageEdited', updated);
+    try {
+      const updated = await this.chatsService.editMessage(
+        client.data.userId,
+        payload.messageId,
+        payload.dto.content,
+      );
+      this.server.to(payload.chatId).emit('messageEdited', updated);
+    } catch (error) {
+      AppLogger.error(`Failed to process message edit event`, error, ctx);
+    }
   }
 
   @SubscribeMessage('deleteMessage')
@@ -105,11 +135,20 @@ export class ChatsGateway implements OnGatewayConnection, OnGatewayDisconnect {
     @ConnectedSocket() client: AuthenticatedSocket,
     @MessageBody() payload: { chatId: string; messageId: string },
   ) {
-    const deleted = await this.chatsService.deleteMessage(
-      client.data.userId,
-      payload.messageId,
+    const ctx = 'WebSockets:DeleteMessage';
+    AppLogger.info(
+      `User ${client.data.userId} deleting message ${payload.messageId} in room ${payload.chatId}`,
+      ctx,
     );
-    this.server.to(payload.chatId).emit('messageDeleted', deleted);
+    try {
+      const deleted = await this.chatsService.deleteMessage(
+        client.data.userId,
+        payload.messageId,
+      );
+      this.server.to(payload.chatId).emit('messageDeleted', deleted);
+    } catch (error) {
+      AppLogger.error(`Failed to process message deletion event`, error, ctx);
+    }
   }
 
   @SubscribeMessage('typing')
@@ -123,6 +162,11 @@ export class ChatsGateway implements OnGatewayConnection, OnGatewayDisconnect {
   }
 
   broadcastMessageUpdate(chatId: string, message: any) {
+    AppLogger.debug(
+      `Broadcasting fallback message asset update to room: ${chatId}`,
+      null,
+      'WebSockets:Broadcast',
+    );
     this.server.to(chatId).emit('messageUpdated', message);
   }
 }

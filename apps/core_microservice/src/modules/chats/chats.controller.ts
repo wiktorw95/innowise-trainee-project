@@ -32,7 +32,7 @@ const uploadInterceptor = FilesInterceptor('files', 10, {
 @ApiTags('Chats')
 @ApiBearerAuth()
 @UseGuards(AccessGuard)
-@Controller('Chats')
+@Controller('chats')
 export class ChatsController {
   constructor(
     private readonly chatsService: ChatsService,

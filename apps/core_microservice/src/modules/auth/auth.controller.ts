@@ -14,6 +14,7 @@ import { LoginDto } from './dto/Login.dto.js';
 import { SignUpDto } from './dto/SignUp.dto.js';
 import { ApiExcludeEndpoint, ApiOperation, ApiTags } from '@nestjs/swagger';
 import { Public } from './decorators/public.decorator.js';
+import { AppLogger } from '@innogram/shared';
 
 @ApiTags('Auth')
 @Controller('auth')
@@ -25,11 +26,15 @@ export class AuthController {
     tokens: { accessToken: string; refreshToken: string },
     source: string,
   ) {
-    console.log(
-      `\n✅ [${source}] Access: ${tokens.accessToken.slice(0, 20)}...`,
+    const ctx = 'CoreGateway:Auth';
+    AppLogger.success(
+      `[${source}] Setting secure cookies and redirecting to feed`,
+      ctx,
     );
-    console.log(
-      `🔄 [${source}] Refresh: ${tokens.refreshToken.slice(0, 20)}...\n`,
+    AppLogger.debug(
+      `[${source}] Access Token: ${tokens.accessToken.slice(0, 20)}...`,
+      null,
+      ctx,
     );
 
     const isProd = process.env.NODE_ENV === 'production';
@@ -48,7 +53,13 @@ export class AuthController {
       maxAge: 7 * 24 * 60 * 60 * 1000,
     });
 
-    return { success: true, message: 'Auth successful' };
+    const clientUrl = process.env.CLIENT_URL || 'http://localhost:3000';
+
+    if (source === 'GOOGLE') {
+      return res.redirect(`${clientUrl}/app/feed`);
+    } else {
+      return { success: true, message: 'Auth successful' };
+    }
   }
 
   @Public()
@@ -97,7 +108,7 @@ export class AuthController {
   @Get('login/google')
   async handleOAuthLogin(@Res() res: Response) {
     const { url } = await this.authService.handleOAuthInit();
-    return res.json({ message: 'Open URL to login', url });
+    return res.redirect(url);
   }
 
   @Public()
