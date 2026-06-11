@@ -13,6 +13,8 @@ import { AuthService } from './auth.service.js';
 import { LoginDto } from './dto/Login.dto.js';
 import { SignUpDto } from './dto/SignUp.dto.js';
 import { ApiExcludeEndpoint, ApiOperation, ApiTags } from '@nestjs/swagger';
+import { Public } from './decorators/public.decorator.js';
+import { AppLogger } from '@innogram/shared';
 
 @ApiTags('Auth')
 @Controller('auth')
@@ -24,11 +26,15 @@ export class AuthController {
     tokens: { accessToken: string; refreshToken: string },
     source: string,
   ) {
-    console.log(
-      `\n✅ [${source}] Access: ${tokens.accessToken.slice(0, 20)}...`,
+    const ctx = 'CoreGateway:Auth';
+    AppLogger.success(
+      `[${source}] Setting secure cookies and redirecting to feed`,
+      ctx,
     );
-    console.log(
-      `🔄 [${source}] Refresh: ${tokens.refreshToken.slice(0, 20)}...\n`,
+    AppLogger.debug(
+      `[${source}] Access Token: ${tokens.accessToken.slice(0, 20)}...`,
+      null,
+      ctx,
     );
 
     const isProd = process.env.NODE_ENV === 'production';
@@ -47,9 +53,16 @@ export class AuthController {
       maxAge: 7 * 24 * 60 * 60 * 1000,
     });
 
-    return { success: true, message: 'Auth successful' };
+    const clientUrl = process.env.CLIENT_URL || 'http://localhost:3001';
+
+    if (source === 'GOOGLE') {
+      return res.redirect(`${clientUrl}/app/feed`);
+    } else {
+      return { success: true, message: 'Auth successful' };
+    }
   }
 
+  @Public()
   @Post('login')
   async login(
     @Body() dto: LoginDto,
@@ -62,6 +75,7 @@ export class AuthController {
     );
   }
 
+  @Public()
   @Post('signup')
   async signUp(
     @Body() dto: SignUpDto,
@@ -74,6 +88,7 @@ export class AuthController {
     );
   }
 
+  @Public()
   @Post('refresh')
   async refresh(
     @Req() req: Request,
@@ -89,12 +104,14 @@ export class AuthController {
     );
   }
 
+  @Public()
   @Get('login/google')
   async handleOAuthLogin(@Res() res: Response) {
     const { url } = await this.authService.handleOAuthInit();
-    return res.json({ message: 'Open URL to login', url });
+    return res.redirect(url);
   }
 
+  @Public()
   @Get('google/callback')
   @ApiExcludeEndpoint()
   async handleOAuthCallback(
@@ -111,6 +128,7 @@ export class AuthController {
     );
   }
 
+  @Public()
   @Post('logout')
   async logout(@Req() req: Request, @Res({ passthrough: true }) res: Response) {
     const rt = req.cookies?.['refresh_token'] as string | undefined;
@@ -121,6 +139,7 @@ export class AuthController {
     return { success: true };
   }
 
+  @Public()
   @Get('status')
   @ApiOperation({ summary: 'Check current auth health' })
   check(

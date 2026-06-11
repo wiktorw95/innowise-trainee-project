@@ -4,9 +4,10 @@ import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
 import { ValidationPipe } from '@nestjs/common';
 import helmet from 'helmet';
 import cookieParser from 'cookie-parser';
+import { NestExpressApplication } from '@nestjs/platform-express';
 
 async function bootstrap() {
-  const app = await NestFactory.create(AppModule);
+  const app = await NestFactory.create<NestExpressApplication>(AppModule);
   app.use(cookieParser());
   app.use(
     helmet({
@@ -27,9 +28,11 @@ async function bootstrap() {
   );
 
   app.enableCors({
-    origin: process.env.FRONTEND_URL || 'http://localhost:5173',
+    origin: process.env.CLIENT_URL || 'http://localhost:3001',
     credentials: true,
+    methods: 'GET,HEAD,PUT,PATCH,POST,DELETE,OPTIONS',
   });
+
 
   app.useGlobalPipes(
     new ValidationPipe({
@@ -54,7 +57,7 @@ async function bootstrap() {
     },
   });
   await app.listen(process.env.PORT ?? 3000);
-  console.log(`🚀 Core Service running on: http://localhost:3000 Siemka`);
+  console.log(`🚀 Core Service running on: http://localhost:3000`);
   console.log(`📖 Documentation: http://localhost:3000/api/docs`);
 }
 bootstrap().catch((err) => {

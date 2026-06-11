@@ -1,27 +1,24 @@
-FROM node:22-alpine AS pruner
+FROM node:22-alpine
 WORKDIR /app
-RUN npm install -g turbo
-COPY . .
-RUN turbo prune client_app --docker
 
-FROM node:18-alpine AS builder
-WORKDIR /app
-COPY --from=pruner /app/out/json/ .
-COPY --from=pruner /app/out/package-lock.json ./
+
+COPY package*.json turbo.json ./
+COPY packages ./packages
+COPY apps/client_app ./apps/client_app
+COPY apps/core_microservice/package.json ./apps/core_microservice/package.json
+COPY apps/auth_microservice/package.json ./apps/auth_microservice/package.json
+
+
 RUN npm install
 
-COPY --from=pruner /app/out/full/ .
+
 RUN npx turbo run build --filter=@innogram/client
 
-FROM node:18-alpine AS runner
-WORKDIR /app
-
+# 4. Expose the port
+EXPOSE 3001
+ENV PORT=3001
 ENV NODE_ENV=production
 
-COPY --from=builder /app/apps/client_app/.next/standalone ./
-COPY --from=builder /app/apps/client_app/.next/static ./apps/client_app/.next/static
-COPY --from=builder /app/apps/client_app/public ./apps/client_app/public
 
-EXPOSE 3001
-
-CMD ["node", "apps/client_app/server.js"]
+WORKDIR /app/apps/client_app
+CMD ["npm", "run", "start"]

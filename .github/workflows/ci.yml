@@ -7,8 +7,24 @@ on:
     branches: [ "main", "dev", "feature/**" ]
   workflow_dispatch:
 
+env:
+  # Backend Envs
+  DATABASE_URL: "postgresql://innogram_user:innogram_password@localhost:5432/innogram"
+  REDIS_HOST: "localhost"
+  REDIS_PORT: 6379
+  JWT_SECRET: "ci-dummy-jwt-secret-key-1234567890"
+  JWT_REFRESH_SECRET: "ci-dummy-refresh-secret-key-1234567890"
+  GOOGLE_CLIENT_ID: "ci-dummy-google-client-id"
+  GOOGLE_CLIENT_SECRET: "ci-dummy-google-client-secret"
+  NODE_ENV: "test"
+
+  # Frontend Envs
+  NEXT_PUBLIC_API_URL: "http://localhost:3000"
+  CLIENT_URL: "http://localhost:3001"
+
 jobs:
   quality-gate:
+    name: Lint & Type-Check
     runs-on: ubuntu-latest
     steps:
       - name: Checkout Code
@@ -23,6 +39,14 @@ jobs:
       - name: Install Dependencies
         run: npm ci
 
+      - name: Cache Turborepo
+        uses: actions/cache@v4
+        with:
+          path: .turbo
+          key: ${{ runner.os }}-turbo-${{ github.sha }}
+          restore-keys: |
+            ${{ runner.os }}-turbo-
+
       - name: Generate Prisma Client
         working-directory: packages/shared
         run: npx prisma generate
@@ -31,22 +55,9 @@ jobs:
         run: npx turbo run lint type-check
 
   build-and-test:
+    name: Build & Test
     needs: quality-gate
     runs-on: ubuntu-latest
-
-    env:
-      DATABASE_URL: "postgresql://innogram_user:innogram_password@localhost:5432/innogram"
-      REDIS_URL: "redis://localhost:6379"
-      REDIS_HOST: "localhost"
-      REDIS_PORT: 6379
-
-      GOOGLE_CLIENT_SECRET: ${{ secrets.GOOGLE_CLIENT_SECRET }}
-      GOOGLE_CLIENT_ID: ${{ secrets.GOOGLE_CLIENT_ID }}
-      JWT_SECRET: ${{ secrets.JWT_SECRET }}
-      JWT_REFRESH_SECRET: ${{ secrets.JWT_REFRESH_SECRET }}
-
-      NODE_ENV: test
-      CLIENT_URL: "http://localhost:3001"
 
     services:
       postgres:
@@ -78,11 +89,13 @@ jobs:
       - name: Install Dependencies
         run: npm ci
 
-      - name: Create .env for testing
-        run: |
-          echo "DATABASE_URL=${{ env.DATABASE_URL }}" >> .env
-          echo "GOOGLE_CLIENT_SECRET=${{ secrets.GOOGLE_CLIENT_SECRET }}" >> .env
-          echo "JWT_SECRET=${{ secrets.JWT_SECRET }}" >> .env
+      - name: Cache Turborepo
+        uses: actions/cache@v4
+        with:
+          path: .turbo
+          key: ${{ runner.os }}-turbo-${{ github.sha }}
+          restore-keys: |
+            ${{ runner.os }}-turbo-
 
       - name: Sync Database Schema
         working-directory: packages/shared
@@ -90,5 +103,8 @@ jobs:
           npx prisma generate
           npx prisma db push --accept-data-loss
 
-      - name: Turbo Build
+      - name: Build Projects
         run: npx turbo run build
+
+      - name: Run Tests
+        run: npx turbo run test
