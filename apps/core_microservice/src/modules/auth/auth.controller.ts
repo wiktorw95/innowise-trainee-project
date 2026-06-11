@@ -53,7 +53,7 @@ export class AuthController {
       maxAge: 7 * 24 * 60 * 60 * 1000,
     });
 
-    const clientUrl = process.env.CLIENT_URL || 'http://localhost:3000';
+    const clientUrl = process.env.CLIENT_URL || 'http://localhost:3001';
 
     if (source === 'GOOGLE') {
       return res.redirect(`${clientUrl}/app/feed`);

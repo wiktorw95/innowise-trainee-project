@@ -2,6 +2,7 @@ import {
   Injectable,
   NotFoundException,
   ForbiddenException,
+  BadRequestException,
 } from '@nestjs/common';
 import { PrismaService } from '@innogram/shared';
 import { CreateCommentDto, UpdateCommentDto } from './dto/comments.dto.js';
@@ -22,6 +23,11 @@ export class CommentsService {
         where: { id: dto.parentCommentId },
       });
       if (!parent) throw new NotFoundException('Parent comment not found');
+      if (parent.post_id !== postId) {
+        throw new BadRequestException(
+          'Parent comment does not belong to this post',
+        );
+      }
     }
 
     // const mentions =

@@ -85,6 +85,14 @@ export class ChatsService {
       where: { username: { in: dto.participantUsernames } },
     });
 
+    const foundUsernames = new Set(targetProfiles.map((p) => p.username));
+    const missing = dto.participantUsernames.filter(
+      (u) => !foundUsernames.has(u),
+    );
+    if (missing.length > 0) {
+      throw new NotFoundException(`Users not found: ${missing.join(', ')}`);
+    }
+
     if (targetProfiles.length < 2)
       throw new BadRequestException(
         'Group chats require at least 3 total participants',
@@ -128,6 +136,13 @@ export class ChatsService {
         message: { orderBy: { created_at: 'desc' }, take: 1 },
       },
       orderBy: { updated_at: 'desc' },
+    });
+  }
+
+  async updateChatActivity(chatId: string) {
+    return this.prisma.chat.update({
+      where: { id: chatId },
+      data: { updated_at: new Date() },
     });
   }
 
@@ -239,10 +254,10 @@ export class ChatsService {
           tx.asset.create({
             data: {
               file_name: file.filename,
-              file_path: file.path,
+              file_path: `uploads/${file.filename}`,
               file_type: file.mimetype,
               file_size: file.size,
-              order_index: message.messagesAssets.length + i,
+              order_index: i,
               created_by: userId,
             },
           }),

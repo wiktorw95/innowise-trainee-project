@@ -11,6 +11,7 @@ import {
   Query,
   UseInterceptors,
   UploadedFiles,
+  BadRequestException,
 } from '@nestjs/common';
 import { FilesInterceptor } from '@nestjs/platform-express';
 import { PostsService } from './posts.service.js';
@@ -25,7 +26,7 @@ import { Request } from 'express';
 interface RequestWithUser extends Request {
   user: {
     id: string;
-    email: string;
+    email?: string;
   };
 }
 
@@ -35,7 +36,16 @@ const uploadInterceptor = FilesInterceptor('files', 10, {
     filename: (_, file, cb) =>
       cb(null, `${uuid()}${extname(file.originalname)}`),
   }),
-  limits: { fileSize: parseInt(process.env.MAX_FILE_SIZE || '10485760') },
+  limits: { fileSize: parseInt(process.env.MAX_FILE_SIZE || '10485760', 10) },
+  fileFilter: (req, file, cb) => {
+    if (!file.mimetype.match(/\/(jpg|jpeg|png|gif|mp4|webm)$/)) {
+      return cb(
+        new BadRequestException('Only image and video files are allowed!'),
+        false,
+      );
+    }
+    cb(null, true);
+  },
 });
 
 @ApiTags('Posts')

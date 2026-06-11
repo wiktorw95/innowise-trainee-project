@@ -89,11 +89,7 @@ export class ChatsGateway implements OnGatewayConnection, OnGatewayDisconnect {
         payload.chatId,
         payload.dto,
       );
-
-      await this.chatsService['prisma'].chat.update({
-        where: { id: payload.chatId },
-        data: { updated_at: new Date() },
-      });
+      await this.chatsService.updateChatActivity(payload.chatId);
 
       this.server.to(payload.chatId).emit('newMessage', message);
       AppLogger.success(
@@ -156,6 +152,7 @@ export class ChatsGateway implements OnGatewayConnection, OnGatewayDisconnect {
     @ConnectedSocket() client: AuthenticatedSocket,
     @MessageBody() chatId: string,
   ) {
+    if (!client.rooms.has(chatId)) return;
     client
       .to(chatId)
       .emit('userTyping', { userId: client.data.userId, chatId });

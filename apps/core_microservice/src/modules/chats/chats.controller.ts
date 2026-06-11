@@ -8,6 +8,7 @@ import {
   Req,
   UseInterceptors,
   UploadedFiles,
+  BadRequestException,
 } from '@nestjs/common';
 import { FilesInterceptor } from '@nestjs/platform-express';
 import { ChatsService } from './chats.service.js';
@@ -27,6 +28,15 @@ const uploadInterceptor = FilesInterceptor('files', 10, {
       cb(null, `${uuid()}${extname(file.originalname)}`),
   }),
   limits: { fileSize: parseInt(process.env.MAX_FILE_SIZE || '10485760') },
+  fileFilter: (req, file, cb) => {
+    if (!file.mimetype.match(/\/(jpg|jpeg|png|gif|mp4|webm)$/)) {
+      return cb(
+        new BadRequestException('Only image and video files are allowed!'),
+        false,
+      );
+    }
+    cb(null, true);
+  },
 });
 
 @ApiTags('Chats')

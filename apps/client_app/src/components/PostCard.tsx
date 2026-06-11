@@ -90,11 +90,16 @@ export function PostCard({
 
       {/* Post Image */}
       {post.postsAssets.length > 0 && (
-        <div className="w-full bg-gray-50">
+        <div className="w-full bg-gray-50 flex justify-center overflow-hidden">
           <img
-            src={`${MEDIA_URL}/${post.postsAssets[0].assets.file_path}`}
-            className="w-full h-auto max-h-[600px] object-cover"
+            src={encodeURI(
+              `${MEDIA_URL.replace(/\/$/, '')}/${post.postsAssets[0].assets.file_path.replace(/\\/g, '/').replace(/^\/?/, '')}`
+            )}
+            className="w-full h-auto max-h-[600px] object-contain"
             alt="Post content"
+            onError={(e) => {
+              e.currentTarget.style.display = 'none';
+            }}
           />
         </div>
       )}

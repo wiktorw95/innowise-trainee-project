@@ -329,10 +329,10 @@ export class PostsService {
           tx.asset.create({
             data: {
               file_name: file.filename,
-              file_path: file.path,
+              file_path: `uploads/${file.filename}`,
               file_type: file.mimetype,
               file_size: file.size,
-              order_index: startIndex + i,
+              order_index: i,
               created_by: userId,
             },
           }),
@@ -370,13 +370,20 @@ export class PostsService {
     if (postAsset.posts.created_by !== userId)
       throw new ForbiddenException('Not authorized');
 
-    if (fs.existsSync(postAsset.assets.file_path)) {
-      fs.unlinkSync(postAsset.assets.file_path);
+    try {
+      await fs.promises.unlink(postAsset.assets.file_path);
       AppLogger.debug(
         `Purged binary media file track off storage path: ${postAsset.assets.file_path}`,
         null,
         ctx,
       );
+    } catch (e: unknown) {
+      if (
+        e instanceof Error &&
+        (e as NodeJS.ErrnoException).code !== 'ENOENT'
+      ) {
+        throw e;
+      }
     }
 
     await this.prisma.$transaction([

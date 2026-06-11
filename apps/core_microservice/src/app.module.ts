@@ -11,6 +11,7 @@ import { ConfigModule } from '@nestjs/config';
 import { SharedPrismaModule } from '@innogram/shared';
 import { APP_GUARD } from '@nestjs/core';
 import { AccessGuard } from './modules/auth/access.guard.js';
+import { UploadsController } from './uploads.controller.js';
 
 @Module({
   imports: [
@@ -26,7 +27,7 @@ import { AccessGuard } from './modules/auth/access.guard.js';
     ChatsModule,
     NotificationsModule,
   ],
-  controllers: [AppController],
+  controllers: [AppController, UploadsController],
   providers: [
     AppService,
     {
