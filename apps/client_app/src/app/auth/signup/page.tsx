@@ -32,13 +32,10 @@ export default function SignUpPage() {
 
   const onSubmit = async (data: z.infer<typeof signupSchema>) => {
     try {
-      // 1. Send the data to your NestJS Core Gateway
       await api.post('/auth/signup', data);
 
-      // 2. Fetch the user profile to update Zustand state
       await checkAuth();
 
-      // 3. Force the browser to navigate to the feed
       router.push('/app/feed');
     } catch (e: unknown) {
       if (e instanceof Error) {

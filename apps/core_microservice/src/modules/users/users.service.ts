@@ -102,6 +102,7 @@ export class UsersService {
 
   async findOne(id: string) {
     AppLogger.debug(`Fetching user: ${id}`, null, 'UsersService:FindOne');
+
     const user = await this.prisma.user.findUnique({
       where: { id },
       include: {
@@ -117,7 +118,17 @@ export class UsersService {
       );
       throw new NotFoundException(`User with ID ${id} not found`);
     }
-    return user;
+
+    const postCount = user.profile
+      ? await this.prisma.post.count({ where: { profileId: user.profile.id } })
+      : 0;
+
+    return {
+      ...user,
+      _count: {
+        posts: postCount,
+      },
+    };
   }
 
   async update(id: string, dto: UpdateUserDto) {
@@ -141,5 +152,31 @@ export class UsersService {
       'UsersService:Remove',
     );
     return deleted;
+  }
+  async updateProfile(
+    userId: string,
+    updateData: { displayName?: string; bio?: string },
+  ) {
+    return this.prisma.profile.update({
+      where: { userId: userId },
+      data: {
+        displayName: updateData.displayName,
+        bio: updateData.bio,
+      },
+    });
+  }
+
+  async searchUsers(query: string) {
+    if (!query) return [];
+
+    return this.prisma.profile.findMany({
+      where: {
+        OR: [
+          { username: { contains: query, mode: 'insensitive' } },
+          { displayName: { contains: query, mode: 'insensitive' } },
+        ],
+      },
+      take: 10,
+    });
   }
 }

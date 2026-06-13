@@ -47,4 +47,8 @@ export class FeedQueryDto {
   @IsString()
   @IsOptional()
   search?: string;
+
+  @IsOptional()
+  @IsString()
+  tab?: string;
 }

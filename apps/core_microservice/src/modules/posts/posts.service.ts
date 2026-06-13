@@ -107,24 +107,15 @@ export class PostsService {
   async getFeed(userId: string, query: FeedQueryDto) {
     const ctx = 'PostsService:GetFeed';
     AppLogger.debug(
-      `Compiling home feed matrix for user: ${userId}`,
+      `Compiling global home feed matrix for user: ${userId}`,
       query,
       ctx,
     );
 
     const profile = await this.getUserProfile(userId);
-    const skip = (query.page! - 1) * query.limit!;
-
-    const following = await this.prisma.profiles_Follows.findMany({
-      where: { follower_profile_id: profile.id, accepted: true },
-      select: { followed_profile_id: true },
-    });
-
-    const followedIds = following.map((f) => f.followed_profile_id);
-    followedIds.push(profile.id);
+    const skip = (query.page - 1) * query.limit;
 
     const whereClause: Prisma.PostWhereInput = {
-      profileId: { in: followedIds },
       isArchived: false,
     };
 
@@ -144,17 +135,25 @@ export class PostsService {
           },
           postsAssets: { include: { assets: true } },
           _count: { select: { postsLikes: true, comment: true } },
+          postsLikes: { where: { profile_id: profile.id } },
         },
       }),
       this.prisma.post.count({ where: whereClause }),
     ]);
 
     AppLogger.success(
-      `Retrieved ${posts.length} feed posts (Total matched: ${total}) for user ${userId}`,
+      `Retrieved ${posts.length} global feed posts for user ${userId}`,
       ctx,
     );
+
+    const formattedPosts = posts.map((post) => ({
+      ...post,
+      isLikedByMe: post.postsLikes.length > 0,
+      postsLikes: undefined,
+    }));
+
     return {
-      data: posts,
+      data: formattedPosts,
       meta: { total, page: query.page, limit: query.limit },
     };
   }
@@ -165,14 +164,9 @@ export class PostsService {
     isArchived: boolean = false,
   ) {
     const ctx = 'PostsService:GetMyPosts';
-    AppLogger.debug(
-      `Fetching target personal posts for user: ${userId} (Archived state: ${isArchived})`,
-      query,
-      ctx,
-    );
-
+    AppLogger.debug(`Compiling My feed matrix for user: ${userId}`, query, ctx);
     const profile = await this.getUserProfile(userId);
-    const skip = (query.page! - 1) * query.limit!;
+    const skip = (query.page - 1) * query.limit;
 
     const whereClause: Prisma.PostWhereInput = {
       profileId: profile.id,
@@ -188,15 +182,47 @@ export class PostsService {
         orderBy: { created_at: 'desc' },
         skip,
         take: query.limit,
-        include: { postsAssets: { include: { assets: true } } },
+        include: {
+          profile: {
+            select: { username: true, displayName: true, avatarUrl: true },
+          },
+          postsAssets: { include: { assets: true } },
+          _count: { select: { postsLikes: true, comment: true } },
+          postsLikes: { where: { profile_id: profile.id } },
+        },
       }),
       this.prisma.post.count({ where: whereClause }),
     ]);
 
+    const formattedPosts = posts.map((post) => ({
+      ...post,
+      isLikedByMe: post.postsLikes.length > 0,
+      postsLikes: undefined,
+    }));
+
     return {
-      data: posts,
+      data: formattedPosts,
       meta: { total, page: query.page, limit: query.limit },
     };
+  }
+
+  async getUserPosts(targetUserId: string) {
+    const posts = await this.prisma.post.findMany({
+      where: {
+        created_by: targetUserId,
+        isArchived: false, // Don't show their archived posts to the public!
+      },
+      orderBy: { created_at: 'desc' },
+      include: {
+        postsAssets: { include: { assets: true } },
+        _count: { select: { postsLikes: true, comment: true } },
+      },
+    });
+
+    return posts.map((post) => ({
+      ...post,
+      postsLikes: undefined,
+    }));
   }
 
   async getInteractedPosts(
@@ -210,7 +236,7 @@ export class PostsService {
       'PostsService:Interacted',
     );
     const profile = await this.getUserProfile(userId);
-    const skip = (query.page! - 1) * query.limit!;
+    const skip = (query.page - 1) * query.limit;
 
     const whereClause: Prisma.PostWhereInput = { isArchived: false };
     if (type === 'liked')
@@ -225,14 +251,25 @@ export class PostsService {
         skip,
         take: query.limit,
         include: {
-          profile: { select: { username: true } },
+          profile: {
+            select: { username: true, displayName: true, avatarUrl: true },
+          },
           postsAssets: { include: { assets: true } },
+          _count: { select: { postsLikes: true, comment: true } },
+          postsLikes: { where: { profile_id: profile.id } },
         },
       }),
       this.prisma.post.count({ where: whereClause }),
     ]);
+
+    const formattedPosts = posts.map((post) => ({
+      ...post,
+      isLikedByMe: post.postsLikes.length > 0,
+      postsLikes: undefined,
+    }));
+
     return {
-      data: posts,
+      data: formattedPosts,
       meta: { total, page: query.page, limit: query.limit },
     };
   }
@@ -467,5 +504,141 @@ export class PostsService {
       );
       return { liked: true };
     }
+  }
+
+  async getComments(userId: string, postId: string) {
+    const profile = await this.getUserProfile(userId);
+
+    const comments = await this.prisma.comment.findMany({
+      where: { post_id: postId, parent_comment_id: null },
+      orderBy: { created_at: 'asc' },
+      include: {
+        profile: {
+          select: { username: true, displayName: true, avatarUrl: true },
+        },
+        _count: { select: { commentsLikes: true, replies: true } },
+        commentsLikes: { where: { profile_id: profile.id } },
+
+        replies: {
+          orderBy: { created_at: 'asc' },
+          include: {
+            profile: {
+              select: { username: true, displayName: true, avatarUrl: true },
+            },
+            _count: { select: { commentsLikes: true } },
+            commentsLikes: { where: { profile_id: profile.id } },
+          },
+        },
+      },
+    });
+
+    return comments.map((comment) => ({
+      ...comment,
+      isLikedByMe: comment.commentsLikes.length > 0,
+      commentsLikes: undefined,
+      replies: comment.replies.map((reply) => ({
+        ...reply,
+        isLikedByMe: reply.commentsLikes.length > 0,
+        commentsLikes: undefined,
+      })),
+    }));
+  }
+
+  async addComment(
+    userId: string,
+    postId: string,
+    content: string,
+    parentCommentId?: string,
+  ) {
+    const ctx = 'PostsService:AddComment';
+    AppLogger.info(`User ${userId} commenting on post ${postId}`, ctx);
+
+    const profile = await this.getUserProfile(userId);
+
+    const post = await this.prisma.post.findUnique({ where: { id: postId } });
+    if (!post) throw new NotFoundException('Post not found');
+
+    const newComment = await this.prisma.comment.create({
+      data: {
+        post_id: postId,
+        profile_id: profile.id,
+        content: content,
+        created_by: userId,
+        parent_comment_id: parentCommentId || null,
+      },
+      include: {
+        profile: {
+          select: { username: true, displayName: true, avatarUrl: true },
+        },
+        _count: { select: { commentsLikes: true, replies: true } },
+      },
+    });
+
+    AppLogger.success(`Comment added to post ${postId}`, ctx);
+    return newComment;
+  }
+
+  async toggleCommentLike(userId: string, commentId: string) {
+    const profile = await this.getUserProfile(userId);
+    const existingLike = await this.prisma.comments_Likes.findUnique({
+      where: {
+        comment_id_profile_id: {
+          comment_id: commentId,
+          profile_id: profile.id,
+        },
+      },
+    });
+
+    if (existingLike) {
+      await this.prisma.comments_Likes.delete({
+        where: {
+          comment_id_profile_id: {
+            comment_id: commentId,
+            profile_id: profile.id,
+          },
+        },
+      });
+      return { liked: false };
+    } else {
+      await this.prisma.comments_Likes.create({
+        data: {
+          comment_id: commentId,
+          profile_id: profile.id,
+          created_by: userId,
+        },
+      });
+      return { liked: true };
+    }
+  }
+
+  async updateComment(userId: string, commentId: string, content: string) {
+    const comment = await this.prisma.comment.findUnique({
+      where: { id: commentId },
+    });
+    if (!comment) throw new NotFoundException('Comment not found');
+    if (comment.created_by !== userId)
+      throw new ForbiddenException('Not authorized');
+
+    return this.prisma.comment.update({
+      where: { id: commentId },
+      data: { content },
+      include: {
+        profile: {
+          select: { username: true, displayName: true, avatarUrl: true },
+        },
+      },
+    });
+  }
+
+  async deleteComment(userId: string, commentId: string) {
+    const comment = await this.prisma.comment.findUnique({
+      where: { id: commentId },
+    });
+    if (!comment) throw new NotFoundException('Comment not found');
+    if (comment.created_by !== userId)
+      throw new ForbiddenException('Not authorized');
+
+    await this.prisma.comment.delete({ where: { id: commentId } });
+    return { success: true };
   }
 }

@@ -17,7 +17,13 @@ import { FilesInterceptor } from '@nestjs/platform-express';
 import { PostsService } from './posts.service.js';
 import { CreatePostDto, UpdatePostDto, FeedQueryDto } from './dto/posts.dto.js';
 import { AccessGuard } from '../auth/access.guard.js';
-import { ApiTags, ApiBearerAuth, ApiConsumes, ApiBody } from '@nestjs/swagger';
+import {
+  ApiTags,
+  ApiBearerAuth,
+  ApiConsumes,
+  ApiBody,
+  ApiOperation,
+} from '@nestjs/swagger';
 import { diskStorage } from 'multer';
 import { extname } from 'path';
 import { v4 as uuid } from 'uuid';
@@ -80,7 +86,26 @@ export class PostsController {
   }
 
   @Get('feed')
-  getFeed(@Req() req: RequestWithUser, @Query() query: FeedQueryDto) {
+  @ApiOperation({ summary: 'Get user home feed with optional tab filtering' })
+  async getFeed(@Req() req: RequestWithUser, @Query() query: FeedQueryDto) {
+    const { tab } = query;
+
+    if (tab === 'liked') {
+      return this.postsService.getInteractedPosts(req.user.id, query, 'liked');
+    }
+
+    if (tab === 'commented') {
+      return this.postsService.getInteractedPosts(
+        req.user.id,
+        query,
+        'commented',
+      );
+    }
+
+    if (tab === 'archived') {
+      return this.postsService.getMyPosts(req.user.id, query, true);
+    }
+
     return this.postsService.getFeed(req.user.id, query);
   }
 
@@ -106,6 +131,12 @@ export class PostsController {
       query,
       'commented',
     );
+  }
+
+  @Get('user/:userId')
+  @ApiOperation({ summary: 'Get public posts for a specific user' })
+  getUserPosts(@Param('userId') userId: string) {
+    return this.postsService.getUserPosts(userId);
   }
 
   @Get(':id')
@@ -162,5 +193,62 @@ export class PostsController {
   @Post(':id/like')
   toggleLike(@Req() req: RequestWithUser, @Param('id') id: string) {
     return this.postsService.toggleLike(req.user.id, id);
+  }
+
+  @Get(':id/comments')
+  @ApiOperation({ summary: 'Get comments and replies for a post' })
+  getComments(@Param('id') id: string, @Req() req: RequestWithUser) {
+    return this.postsService.getComments(req.user.id, id);
+  }
+
+  @Post(':id/comments')
+  @ApiOperation({ summary: 'Add a comment or reply to a post' })
+  addComment(
+    @Param('id') id: string,
+    @Req() req: RequestWithUser,
+    @Body() body: { content: string; parent_comment_id?: string },
+  ) {
+    if (!body.content?.trim())
+      throw new BadRequestException('Comment cannot be empty');
+    return this.postsService.addComment(
+      req.user.id,
+      id,
+      body.content,
+      body.parent_comment_id,
+    );
+  }
+
+  @Post('comments/:commentId/like')
+  @ApiOperation({ summary: 'Toggle like on a comment' })
+  toggleCommentLike(
+    @Req() req: RequestWithUser,
+    @Param('commentId') commentId: string,
+  ) {
+    return this.postsService.toggleCommentLike(req.user.id, commentId);
+  }
+
+  @Patch('comments/:commentId')
+  @ApiOperation({ summary: 'Edit a comment' })
+  updateComment(
+    @Req() req: RequestWithUser,
+    @Param('commentId') commentId: string,
+    @Body() body: { content: string },
+  ) {
+    if (!body.content?.trim())
+      throw new BadRequestException('Content cannot be empty');
+    return this.postsService.updateComment(
+      req.user.id,
+      commentId,
+      body.content,
+    );
+  }
+
+  @Delete('comments/:commentId')
+  @ApiOperation({ summary: 'Delete a comment' })
+  deleteComment(
+    @Req() req: RequestWithUser,
+    @Param('commentId') commentId: string,
+  ) {
+    return this.postsService.deleteComment(req.user.id, commentId);
   }
 }

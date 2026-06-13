@@ -1,14 +1,17 @@
 'use client';
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { useAuth } from '@/store/useAuth';
 import { Home, Search, PlusSquare, User as UserIcon } from 'lucide-react';
 import Link from 'next/link';
 import { useRouter, usePathname } from 'next/navigation';
+import { SearchModal } from '@/components/SearchModal';
 
 export default function AppLayout({ children }: { children: React.ReactNode }) {
   const { checkAuth, isLoading, isAuthenticated, logout } = useAuth();
   const router = useRouter();
   const pathname = usePathname();
+
+  const [isSearchOpen, setIsSearchOpen] = useState(false);
 
   useEffect(() => {
     checkAuth();
@@ -21,7 +24,7 @@ export default function AppLayout({ children }: { children: React.ReactNode }) {
 
   return (
     <div className="min-h-screen bg-gray-50 flex flex-col md:flex-row">
-      <nav className="fixed bottom-0 w-full md:relative md:w-[244px] md:min-h-screen bg-white border-t md:border-t-0 md:border-r border-gray-300 z-50">
+      <nav className="fixed bottom-0 w-full md:relative md:w-[244px] md:min-h-screen bg-white border-t md:border-t-0 md:border-r border-gray-300 z-40">
         <div className="flex md:flex-col justify-between md:justify-start h-full p-3 md:p-6">
           <div className="hidden md:block font-serif text-2xl mb-10 pt-4 px-2">
             Innogram
@@ -34,13 +37,15 @@ export default function AppLayout({ children }: { children: React.ReactNode }) {
               <Home className="w-6 h-6" />{' '}
               <span className="hidden md:block">Home</span>
             </Link>
-            <Link
-              href="#"
-              className="flex items-center gap-4 p-3 rounded-lg hover:bg-gray-100"
+
+            <button
+              onClick={() => setIsSearchOpen(true)}
+              className="flex items-center gap-4 p-3 rounded-lg hover:bg-gray-100 w-full text-left"
             >
               <Search className="w-6 h-6" />{' '}
               <span className="hidden md:block">Search</span>
-            </Link>
+            </button>
+
             <Link
               href="/app/feed"
               className="flex items-center gap-4 p-3 rounded-lg hover:bg-gray-100"
@@ -66,7 +71,14 @@ export default function AppLayout({ children }: { children: React.ReactNode }) {
           </div>
         </div>
       </nav>
+
       <main className="flex-1 pb-16 md:pb-0 overflow-y-auto">{children}</main>
+
+      {/* --- NEW: Render the Search Modal --- */}
+      <SearchModal
+        isOpen={isSearchOpen}
+        onClose={() => setIsSearchOpen(false)}
+      />
     </div>
   );
 }

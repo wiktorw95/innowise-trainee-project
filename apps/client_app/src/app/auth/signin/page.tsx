@@ -34,9 +34,8 @@ export default function SignInPage() {
       await checkAuth();
       router.push('/app/feed');
     } catch (e: unknown) {
-      // ---> MODIFIED: Changed 'any' to 'unknown'
+
       if (isAxiosError(e)) {
-        // ---> MODIFIED: Safely checking if the error is from Axios
         setError(e.response?.data?.message || 'Login failed');
       } else {
         setError('An unexpected error occurred during login');
@@ -48,7 +47,6 @@ export default function SignInPage() {
     try {
       const apiUrl = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3000';
 
-      // 2. FORCE a full page navigation. Do NOT use api.get() here!
       window.location.href = `${apiUrl}/auth/login/google`;
     } catch (error) {
       console.error('Failed to init Google OAuth', error);
@@ -65,7 +63,6 @@ export default function SignInPage() {
         )}
 
         <form onSubmit={handleSubmit(onSubmit)} className="w-full">
-          {/* ... Rest remains unchanged ... */}
           <Input
             type="email"
             placeholder="Email"

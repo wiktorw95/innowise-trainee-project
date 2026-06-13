@@ -9,6 +9,7 @@ import {
   UseGuards,
   Req,
   NotFoundException,
+  Query,
 } from '@nestjs/common';
 import { UsersService } from './users.service.js';
 import { CreateUserDto } from './dto/create-user.dto.js';
@@ -50,6 +51,16 @@ export class UsersController {
     };
   }
 
+  @Patch('me')
+  @ApiOperation({ summary: 'Update current user profile' })
+  @ApiResponse({ status: 200, description: 'Profile successfully updated.' })
+  async updateProfile(
+    @Req() req: RequestWithUser,
+    @Body() updateData: { displayName?: string; bio?: string },
+  ) {
+    return this.usersService.updateProfile(req.user.id, updateData);
+  }
+
   @Post()
   @ApiOperation({ summary: 'Create a new base user' })
   @ApiResponse({
@@ -66,6 +77,12 @@ export class UsersController {
   @ApiResponse({ status: 200, description: 'Successfully found users.' })
   findAll() {
     return this.usersService.findAll();
+  }
+
+  @Get('search')
+  @ApiOperation({ summary: 'Search profiles by username or display name' })
+  async searchUsers(@Query('q') query: string) {
+    return this.usersService.searchUsers(query);
   }
 
   @Get(':id')
